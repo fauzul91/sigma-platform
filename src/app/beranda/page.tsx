@@ -1,5 +1,5 @@
 import HomeView from "@/components/HomeView";
 
-export default function Home() {
+export default function BerandaPage() {
   return <HomeView />;
 }
