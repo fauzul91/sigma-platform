@@ -497,7 +497,7 @@ export default function HomeView() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             <div className="lg:col-span-8 space-y-4 text-center lg:text-left">
-              <span className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-primary text-xs font-bold uppercase tracking-wider">
+              <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-primary text-xs font-bold uppercase tracking-wider">
                 Mini Gamifikasi
               </span>
               <h2 className="text-2xl md:text-3xl font-extrabold">Uji Pengetahuan Kesehatan Reproduksimu!</h2>

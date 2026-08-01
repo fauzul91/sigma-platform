@@ -168,22 +168,24 @@ export default function Navbar() {
                       <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180 duration-200" />
                     </button>
                     
-                    {/* CSS Dropdown Overlay */}
-                    <div className="absolute left-0 mt-1 hidden group-hover:block w-64 bg-white border border-slate-100 rounded-2xl shadow-xl p-2.5 animate-in fade-in slide-in-from-top-2 duration-150">
-                      {menu.items?.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block px-4 py-2.5 hover:bg-emerald-50/60 rounded-xl transition-colors group/item"
-                        >
-                          <p className="text-xs font-bold text-neutral-dark group-hover/item:text-primary transition-colors">
-                            {item.label}
-                          </p>
-                          <p className="text-[10px] text-slate-400 mt-0.5 font-medium leading-normal">
-                            {item.desc}
-                          </p>
-                        </Link>
-                      ))}
+                    {/* CSS Dropdown Overlay with Hover Bridge */}
+                    <div className="absolute left-0 pt-3 -mt-2 hidden group-hover:block w-64 z-50">
+                      <div className="bg-white border border-slate-100 rounded-2xl shadow-xl p-2.5 animate-in fade-in slide-in-from-top-2 duration-150">
+                        {menu.items?.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block px-4 py-2.5 hover:bg-emerald-50/60 rounded-xl transition-colors group/item"
+                          >
+                            <p className="text-xs font-bold text-neutral-dark group-hover/item:text-primary transition-colors">
+                              {item.label}
+                            </p>
+                            <p className="text-[10px] text-slate-400 mt-0.5 font-medium leading-normal">
+                              {item.desc}
+                            </p>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   </>
                 )}

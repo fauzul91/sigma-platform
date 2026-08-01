@@ -352,7 +352,7 @@ export default function KuisView() {
       {activeScreen === "topic" && (
         <div className="max-w-4xl w-full space-y-8 animate-in fade-in duration-300">
           <div className="text-center space-y-3">
-            <span className="px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-primary text-xs font-black uppercase tracking-wider">
+            <span className="inline-block px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-primary text-xs font-black uppercase tracking-wider">
               Mulai Petualangan Belajar
             </span>
             <h1 className="text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight">

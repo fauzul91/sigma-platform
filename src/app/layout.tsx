@@ -41,12 +41,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Kader GARUDA & Tim SIGMA" }],
   icons: {
     icon: [
-      { url: "/assets/icon-16.jpg", sizes: "16x16", type: "image/jpeg" },
-      { url: "/assets/icon-32.jpg", sizes: "32x32", type: "image/jpeg" },
-      { url: "/assets/icon-192.jpg", sizes: "192x192", type: "image/jpeg" }
+      { url: "/assets/logo_app.png", sizes: "32x32", type: "image/png" },
+      { url: "/assets/logo_app.png", sizes: "192x192", type: "image/png" }
     ],
     apple: [
-      { url: "/assets/apple-touch-icon.jpg", sizes: "180x180", type: "image/jpeg" }
+      { url: "/assets/logo_app.png", sizes: "180x180", type: "image/png" }
     ]
   },
   openGraph: {

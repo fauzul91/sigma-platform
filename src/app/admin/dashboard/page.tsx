@@ -74,8 +74,9 @@ export default function AdminDashboardPage() {
   const [editingQuiz, setEditingQuiz] = useState<Partial<QuizQuestion> | null>(null);
   const [editingCounselor, setEditingCounselor] = useState<Partial<Counselor> | null>(null);
   const [editingStat, setEditingStat] = useState<Partial<StatRecord> & { index?: number } | null>(null);
+  const [editingUgc, setEditingUgc] = useState<Partial<UgcItem> | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<{
-    type: "module" | "media" | "quiz" | "stat" | "counselor";
+    type: "module" | "media" | "quiz" | "stat" | "counselor" | "ugc";
     id: string | number;
     title: string;
   } | null>(null);
@@ -98,9 +99,10 @@ export default function AdminDashboardPage() {
   }, [router]);
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
     sessionStorage.removeItem("adminAuth");
+    setIsAuthenticated(false);
     triggerToast("Berhasil keluar dari sesi.", "info");
+    router.push("/admin/login");
   };
 
   // 1. Repropedia CRUD
@@ -147,6 +149,9 @@ export default function AdminDashboardPage() {
     } else if (type === "counselor") {
       setCounselors(prev => prev.filter(c => c.id !== id));
       triggerToast("Kontak rujukan dihapus.", "danger");
+    } else if (type === "ugc") {
+      setUgc(prev => prev.filter(u => u.id !== id));
+      triggerToast("Karya siswa berhasil dihapus.", "danger");
     }
     setDeleteTarget(null);
   };
@@ -251,6 +256,29 @@ export default function AdminDashboardPage() {
   };
 
   // Counselor deletion handled by executeDelete
+
+  const handleSaveUgc = () => {
+    if (editingUgc?.title && editingUgc?.creatorName) {
+      if (editingUgc.id) {
+        setUgc(prev => prev.map(item => item.id === editingUgc.id ? { ...item, ...editingUgc } as UgcItem : item));
+        triggerToast("Karya berhasil diperbarui!", "success");
+      } else {
+        const newUgc: UgcItem = {
+          id: `u-gen-${Date.now()}`,
+          title: editingUgc.title,
+          description: editingUgc.description || "",
+          mediaUrl: editingUgc.mediaUrl || "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800",
+          creatorName: editingUgc.creatorName,
+          school: editingUgc.school || "Sekolah Umum",
+          type: (editingUgc.type || "poster") as any,
+          likes: editingUgc.likes || 0
+        };
+        setUgc(prev => [newUgc, ...prev]);
+        triggerToast("Karya baru ditambahkan!", "success");
+      }
+      setEditingUgc(null);
+    }
+  };
 
   const handleModerationUgc = (id: string, action: "approve" | "reject") => {
     if (action === "reject") {
@@ -813,15 +841,26 @@ export default function AdminDashboardPage() {
           {/* TAB 4: UGC MODERATION */}
           {activeTab === "ugc" && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              <div className="relative w-full sm:max-w-xs mb-4">
-                <input
-                  type="text"
-                  placeholder="Cari nama siswa..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none"
-                />
-                <Search className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-400" />
+              
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/50 pb-4">
+                <div className="relative w-full sm:max-w-xs">
+                  <input
+                    type="text"
+                    placeholder="Cari karya/kreator..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none"
+                  />
+                  <Search className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-400" />
+                </div>
+
+                <button
+                  onClick={() => setEditingUgc({ type: "poster", likes: 0 })}
+                  className="w-full sm:w-auto px-4.5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm active:scale-98 transition-all cursor-pointer"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Karya Baru</span>
+                </button>
               </div>
 
               <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm overflow-hidden">
@@ -832,30 +871,37 @@ export default function AdminDashboardPage() {
                       <th className="py-3.5 px-4">Kreator</th>
                       <th className="py-3.5 px-4">Sekolah</th>
                       <th className="py-3.5 px-4">Tipe</th>
-                      <th className="py-3.5 px-4 text-right">Moderasi</th>
+                      <th className="py-3.5 px-4">Likes</th>
+                      <th className="py-3.5 px-4 text-right">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {ugc
-                      .filter(u => u.creatorName.toLowerCase().includes(searchTerm.toLowerCase()))
+                      .filter(u => u.title.toLowerCase().includes(searchTerm.toLowerCase()) || u.creatorName.toLowerCase().includes(searchTerm.toLowerCase()))
                       .map((item) => (
                         <tr key={item.id} className="hover:bg-slate-50/50">
-                          <td className="py-3.5 px-4 font-bold text-neutral-dark">{item.title}</td>
+                          <td className="py-3.5 px-4 font-bold text-neutral-dark">
+                            <div className="flex items-center space-x-3">
+                              <img src={item.mediaUrl} alt={item.title} className="w-10 h-7 object-cover rounded-md border border-slate-100" />
+                              <span>{item.title}</span>
+                            </div>
+                          </td>
                           <td className="py-3.5 px-4">{item.creatorName}</td>
                           <td className="py-3.5 px-4">{item.school}</td>
                           <td className="py-3.5 px-4 uppercase">{item.type}</td>
+                          <td className="py-3.5 px-4">{item.likes}</td>
                           <td className="py-3.5 px-4 text-right flex justify-end space-x-2">
                             <button
-                              onClick={() => handleModerationUgc(item.id, "approve")}
-                              className="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-[10px]"
+                              onClick={() => setEditingUgc(item)}
+                              className="px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-[10px] cursor-pointer"
                             >
-                              Setujui
+                              Edit
                             </button>
                             <button
-                              onClick={() => handleModerationUgc(item.id, "reject")}
-                              className="px-3.5 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl font-bold text-[10px]"
+                              onClick={() => setDeleteTarget({ type: "ugc", id: item.id, title: item.title })}
+                              className="px-3.5 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl font-bold text-[10px] cursor-pointer"
                             >
-                              Tolak
+                              Hapus
                             </button>
                           </td>
                         </tr>
@@ -1426,6 +1472,127 @@ export default function AdminDashboardPage() {
           )}
 
         </main>
+
+        {/* Overlay Modal for UGC CRUD */}
+        {editingUgc && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="w-full max-w-xl bg-white rounded-3xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+              
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-4">
+                <h3 className="font-extrabold text-neutral-dark text-lg">
+                  {editingUgc.id ? "Edit Karya Siswa" : "Tambah Karya Siswa Baru"}
+                </h3>
+                <button
+                  onClick={() => setEditingUgc(null)}
+                  className="text-slate-400 hover:text-slate-600 font-bold p-1 rounded-full hover:bg-slate-50 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Judul Karya</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingUgc.title || ""}
+                      onChange={(e) => setEditingUgc(prev => ({ ...prev, title: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Nama Kreator</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingUgc.creatorName || ""}
+                      onChange={(e) => setEditingUgc(prev => ({ ...prev, creatorName: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Asal Sekolah</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingUgc.school || ""}
+                      onChange={(e) => setEditingUgc(prev => ({ ...prev, school: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Jenis Karya</label>
+                    <select
+                      value={editingUgc.type || "poster"}
+                      onChange={(e) => setEditingUgc(prev => ({ ...prev, type: e.target.value as any }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none bg-white font-bold"
+                    >
+                      <option value="poster">Poster Kampanye</option>
+                      <option value="infografis">Infografis Data</option>
+                      <option value="video">Video Edukasi</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">URL Media Gambar</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="https://..."
+                      value={editingUgc.mediaUrl || ""}
+                      onChange={(e) => setEditingUgc(prev => ({ ...prev, mediaUrl: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Jumlah Likes</label>
+                    <input
+                      type="number"
+                      required
+                      value={editingUgc.likes ?? 0}
+                      onChange={(e) => setEditingUgc(prev => ({ ...prev, likes: Number(e.target.value) }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Deskripsi Karya</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Gagasan atau pesan dari karya ini..."
+                    value={editingUgc.description || ""}
+                    onChange={(e) => setEditingUgc(prev => ({ ...prev, description: e.target.value }))}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end space-x-3">
+                <button
+                  onClick={() => setEditingUgc(null)}
+                  className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 cursor-pointer"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleSaveUgc}
+                  className="px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover shadow-md cursor-pointer"
+                >
+                  Simpan Karya
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* Custom Delete Confirmation Modal */}
         {deleteTarget && (
