@@ -15,13 +15,34 @@
   --color-sos-hover: #be123c;
   --color-neutral-dark: #1e293b;
   --color-neutral-light: #f1f5f9;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
+  --font-heading: var(--font-heading), ui-sans-serif, system-ui;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6, nav a, .font-heading {
+  font-family: var(--font-heading), sans-serif;
+}
+
+/* Custom scrolling partner logo marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 /* Glassmorphism custom classes */
@@ -52,4 +73,21 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+@keyframes drawOutline {
+  0% {
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+  }
+  100% {
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-outline {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: drawOutline 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
