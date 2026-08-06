@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
-import GlobalLayoutWrapper from "@/components/GlobalLayoutWrapper";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-heading",
@@ -80,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${bricolage.variable} ${hanken.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
-        <GlobalLayoutWrapper>{children}</GlobalLayoutWrapper>
+        {children}
       </body>
     </html>
   );
