@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
-import { Search, Plus, Edit2, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { Search, Plus, Edit2, Trash2, UploadCloud } from "lucide-react";
 import { UgcItem } from "@/types";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
 interface AdminKaryaKaderViewProps {
   ugc: UgcItem[];
@@ -23,6 +24,40 @@ export default function AdminKaryaKaderView({
   onSave,
   onDelete,
 }: AdminKaryaKaderViewProps) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUploadError(null);
+    setUploadSuccess(false);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const maxBytes = 10 * 1024 * 1024; // 10 MB
+    if (file.size > maxBytes) {
+      setUploadError("File terlalu besar. Maksimal 10 MB.");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const secureUrl = await uploadToCloudinary(file);
+      setEditingUgc({ ...(editingUgc || {}), mediaUrl: secureUrl });
+      setUploadSuccess(true);
+    } catch (err) {
+      setUploadError("Gagal mengunggah. Coba lagi.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+  const isFormValid = () => {
+    const titleValid = (editingUgc?.title || "").toString().trim().length > 0;
+    const creatorValid = (editingUgc?.creatorName || "").toString().trim().length > 0;
+    const mediaUrlValid = (editingUgc?.mediaUrl || "").toString().trim().length > 0;
+    return titleValid && creatorValid && mediaUrlValid && !isUploading;
+  };
+  const saveDisabled = !isFormValid();
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/50 pb-4">
@@ -196,16 +231,45 @@ export default function AdminKaryaKaderView({
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
                     URL Media Gambar
                   </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="https://..."
-                    value={editingUgc.mediaUrl || ""}
-                    onChange={(e) =>
-                      setEditingUgc({ ...editingUgc, mediaUrl: e.target.value })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
-                  />
+                  {editingUgc.type === "video" ? (
+                    <input
+                      type="text"
+                      required
+                      placeholder="https://..."
+                      value={editingUgc.mediaUrl || ""}
+                      onChange={(e) =>
+                        setEditingUgc({
+                          ...editingUgc,
+                          mediaUrl: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                    />
+                  ) : (
+                    <div className="flex flex-col">
+                      <label className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs cursor-pointer form-input hover:bg-slate-50">
+                        <UploadCloud className="h-4 w-4 text-slate-600" />
+                        <span className="font-bold text-xs text-slate-700">
+                          {isUploading ? "Mengunggah..." : "Unggah Gambar"}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handleFileChange}
+                        />
+                      </label>
+                      <div className="mt-2">
+                        <span className="text-[11px] text-slate-400">Catatan: Maks 10 MB. Unggah file desain (JPG/PNG).</span>
+                        {uploadError && (
+                          <div className="text-[11px] text-rose-600 mt-1">{uploadError}</div>
+                        )}
+                        {uploadSuccess && !isUploading && (
+                          <div className="text-[12px] text-emerald-600 mt-1">Unggah berhasil.</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
@@ -253,8 +317,9 @@ export default function AdminKaryaKaderView({
                 Batal
               </button>
               <button
-                onClick={onSave}
-                className="px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover shadow-md cursor-pointer"
+                onClick={() => { if (!saveDisabled) onSave(); }}
+                disabled={saveDisabled}
+                className={`${saveDisabled ? 'px-5 py-2.5 rounded-xl bg-primary/40 text-white text-xs font-bold cursor-not-allowed' : 'px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover shadow-md cursor-pointer'}`}
               >
                 Simpan Karya
               </button>

@@ -25,14 +25,25 @@ body {
   font-family: var(--font-sans);
 }
 
-h1, h2, h3, h4, h5, h6, nav a, .font-heading {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+nav a,
+.font-heading {
   font-family: var(--font-heading), sans-serif;
 }
 
 /* Custom scrolling partner logo marquee */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-33.33%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
 }
 
 .animate-marquee {
@@ -90,4 +101,36 @@ h1, h2, h3, h4, h5, h6, nav a, .font-heading {
   stroke-dasharray: 1200;
   stroke-dashoffset: 1200;
   animation: drawOutline 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Consistent form input shadow across the app */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+textarea,
+select {
+  box-shadow: 0 1px 2px rgba(2, 6, 23, 0.06);
+  transition:
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
+  outline: none;
+}
+
+/* Reusable form control class to apply the same shadow to custom controls (labels/buttons) */
+.form-input {
+  box-shadow: 0 1px 2px rgba(2, 6, 23, 0.06);
+  transition:
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+.form-input:focus-within {
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
 }
