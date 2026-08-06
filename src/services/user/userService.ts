@@ -229,6 +229,52 @@ export const userService = {
     }
   },
 
+  async recordLike(ugcId: string) {
+    try {
+      // read current likes then increment (best-effort, may have race conditions)
+      const { data: current, error: readErr } = await supabase
+        .from("ugc_submissions")
+        .select("likes")
+        .eq("id", ugcId)
+        .single();
+
+      if (readErr || !current) return false;
+
+      const newCount = (current.likes || 0) + 1;
+      const { error: updateErr } = await supabase
+        .from("ugc_submissions")
+        .update({ likes: newCount })
+        .eq("id", ugcId);
+
+      if (updateErr) return false;
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  async recordUnlike(ugcId: string) {
+    try {
+      const { data: current, error: readErr } = await supabase
+        .from("ugc_submissions")
+        .select("likes")
+        .eq("id", ugcId)
+        .single();
+
+      if (readErr || !current) return false;
+
+      const newCount = Math.max(0, (current.likes || 0) - 1);
+      const { error: updateErr } = await supabase
+        .from("ugc_submissions")
+        .update({ likes: newCount })
+        .eq("id", ugcId);
+
+      if (updateErr) return false;
+      return true;
+    } catch {
+      return false;
+    }
+  },
+
   async getGeneralSettings() {
     try {
       const { data, error } = await supabase

@@ -21,11 +21,10 @@ export default function AdminKaryaKaderView({
   editingUgc,
   setEditingUgc,
   onSave,
-  onDelete
+  onDelete,
 }: AdminKaryaKaderViewProps) {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/50 pb-4">
         <div className="relative w-full sm:max-w-xs">
           <input
@@ -62,12 +61,22 @@ export default function AdminKaryaKaderView({
           </thead>
           <tbody className="divide-y divide-slate-100">
             {ugc
-              .filter(u => u.title.toLowerCase().includes(searchTerm.toLowerCase()) || u.creatorName.toLowerCase().includes(searchTerm.toLowerCase()))
+              .filter(
+                (u) =>
+                  u.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  u.creatorName
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()),
+              )
               .map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50/50">
                   <td className="py-3.5 px-4 font-bold text-neutral-dark">
                     <div className="flex items-center space-x-3">
-                      <img src={item.mediaUrl} alt={item.title} className="w-10 h-7 object-cover rounded-md border border-slate-100" />
+                      <img
+                        src={item.mediaUrl}
+                        alt={item.title}
+                        className="w-10 h-7 object-cover rounded-md border border-slate-100"
+                      />
                       <span>{item.title}</span>
                     </div>
                   </td>
@@ -78,15 +87,15 @@ export default function AdminKaryaKaderView({
                   <td className="py-3.5 px-4 text-right flex justify-end space-x-2">
                     <button
                       onClick={() => setEditingUgc(item)}
-                      className="px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-[10px] cursor-pointer"
+                      className="p-2 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer"
                     >
-                      Edit
+                      <Edit2 className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => onDelete(item.id, item.title)}
-                      className="px-3.5 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl font-bold text-[10px] cursor-pointer"
+                      className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 cursor-pointer"
                     >
-                      Hapus
+                      <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </td>
                 </tr>
@@ -99,7 +108,6 @@ export default function AdminKaryaKaderView({
       {editingUgc && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-xl bg-white rounded-3xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
-            
             <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-4">
               <h3 className="font-extrabold text-neutral-dark text-lg">
                 {editingUgc.id ? "Edit Karya Siswa" : "Tambah Karya Siswa Baru"}
@@ -115,22 +123,33 @@ export default function AdminKaryaKaderView({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Judul Karya</label>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    Judul Karya
+                  </label>
                   <input
                     type="text"
                     required
                     value={editingUgc.title || ""}
-                    onChange={(e) => setEditingUgc({ ...editingUgc, title: e.target.value })}
+                    onChange={(e) =>
+                      setEditingUgc({ ...editingUgc, title: e.target.value })
+                    }
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Nama Kreator</label>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    Nama Kreator
+                  </label>
                   <input
                     type="text"
                     required
                     value={editingUgc.creatorName || ""}
-                    onChange={(e) => setEditingUgc({ ...editingUgc, creatorName: e.target.value })}
+                    onChange={(e) =>
+                      setEditingUgc({
+                        ...editingUgc,
+                        creatorName: e.target.value,
+                      })
+                    }
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                   />
                 </div>
@@ -138,20 +157,31 @@ export default function AdminKaryaKaderView({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Asal Sekolah</label>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    Asal Sekolah
+                  </label>
                   <input
                     type="text"
                     required
                     value={editingUgc.school || ""}
-                    onChange={(e) => setEditingUgc({ ...editingUgc, school: e.target.value })}
+                    onChange={(e) =>
+                      setEditingUgc({ ...editingUgc, school: e.target.value })
+                    }
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Jenis Karya</label>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    Jenis Karya
+                  </label>
                   <select
                     value={editingUgc.type || "poster"}
-                    onChange={(e) => setEditingUgc({ ...editingUgc, type: e.target.value as any })}
+                    onChange={(e) =>
+                      setEditingUgc({
+                        ...editingUgc,
+                        type: e.target.value as any,
+                      })
+                    }
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none bg-white font-bold"
                   >
                     <option value="poster">Poster Kampanye</option>
@@ -163,35 +193,53 @@ export default function AdminKaryaKaderView({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">URL Media Gambar</label>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    URL Media Gambar
+                  </label>
                   <input
                     type="text"
                     required
                     placeholder="https://..."
                     value={editingUgc.mediaUrl || ""}
-                    onChange={(e) => setEditingUgc({ ...editingUgc, mediaUrl: e.target.value })}
+                    onChange={(e) =>
+                      setEditingUgc({ ...editingUgc, mediaUrl: e.target.value })
+                    }
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Jumlah Likes</label>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    Jumlah Likes
+                  </label>
                   <input
                     type="number"
                     required
                     value={editingUgc.likes ?? 0}
-                    onChange={(e) => setEditingUgc({ ...editingUgc, likes: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setEditingUgc({
+                        ...editingUgc,
+                        likes: Number(e.target.value),
+                      })
+                    }
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Deskripsi Karya</label>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                  Deskripsi Karya
+                </label>
                 <textarea
                   rows={3}
                   placeholder="Gagasan atau pesan dari karya ini..."
                   value={editingUgc.description || ""}
-                  onChange={(e) => setEditingUgc({ ...editingUgc, description: e.target.value })}
+                  onChange={(e) =>
+                    setEditingUgc({
+                      ...editingUgc,
+                      description: e.target.value,
+                    })
+                  }
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                 />
               </div>
@@ -211,11 +259,9 @@ export default function AdminKaryaKaderView({
                 Simpan Karya
               </button>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 }
