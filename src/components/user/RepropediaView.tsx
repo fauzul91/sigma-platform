@@ -6,6 +6,7 @@ import { BookOpen, FileText, Download, Eye, ArrowLeft, Search, Calendar, User } 
 import { userService } from "@/services/user/userService";
 import { RepropediaItem } from "@/types";
 import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
+import UserPagination from "@/components/shared/UserPagination";
 
 export default function RepropediaView() {
   const searchParams = useSearchParams();
@@ -17,6 +18,12 @@ export default function RepropediaView() {
   const [activeCategory, setActiveCategory] = useState<string>("semua");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedModule, setSelectedModule] = useState<RepropediaItem | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 6;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, searchQuery]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,6 +60,11 @@ export default function RepropediaView() {
       module.content.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const slicedModules = filteredModules.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const selectModule = (module: RepropediaItem | null) => {
     if (module) {
@@ -239,34 +251,42 @@ export default function RepropediaView() {
                 <CardSkeleton />
               </div>
             ) : filteredModules.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredModules.map((module) => (
-                  <div
-                    key={module.id}
-                    onClick={() => selectModule(module)}
-                    className="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between hover:border-emerald-100 group"
-                  >
-                    <div>
-                      <span className="inline-block px-2.5 py-1 rounded bg-emerald-50 text-primary text-[10px] font-extrabold uppercase tracking-wide mb-4">
-                        {module.category.replace("-", " ")}
-                      </span>
-                      <h3 className="font-bold text-neutral-dark text-lg leading-snug group-hover:text-primary transition-colors">
-                        {module.title}
-                      </h3>
-                      <p className="text-xs text-slate-500 mt-2.5 line-clamp-3 leading-relaxed">
-                        {module.synopsis}
-                      </p>
-                    </div>
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {slicedModules.map((module) => (
+                    <div
+                      key={module.id}
+                      onClick={() => selectModule(module)}
+                      className="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between hover:border-emerald-100 group"
+                    >
+                      <div>
+                        <span className="inline-block px-2.5 py-1 rounded bg-emerald-50 text-primary text-[10px] font-extrabold uppercase tracking-wide mb-4">
+                          {module.category.replace("-", " ")}
+                        </span>
+                        <h3 className="font-bold text-neutral-dark text-lg leading-snug group-hover:text-primary transition-colors">
+                          {module.title}
+                        </h3>
+                        <p className="text-xs text-slate-500 mt-2.5 line-clamp-3 leading-relaxed">
+                          {module.synopsis}
+                        </p>
+                      </div>
 
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                      <span>{module.readTime} Baca</span>
-                      <span className="text-primary group-hover:underline flex items-center space-x-1">
-                        <span>Buka Materi</span>
-                        <BookOpen className="h-3.5 w-3.5" />
-                      </span>
+                      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
+                        <span>{module.readTime} Baca</span>
+                        <span className="text-primary group-hover:underline flex items-center space-x-1">
+                          <span>Buka Materi</span>
+                          <BookOpen className="h-3.5 w-3.5" />
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <UserPagination
+                  currentPage={currentPage}
+                  totalItems={filteredModules.length}
+                  pageSize={pageSize}
+                  onPageChange={setCurrentPage}
+                />
               </div>
             ) : (
               <div className="text-center py-16 bg-white rounded-3xl border border-slate-100 shadow-sm">

@@ -5,6 +5,7 @@ import { Heart, UserCheck, School, Filter } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { UgcItem } from "@/types";
 import { CardSkeleton } from "@/components/shared/Skeletons";
+import UserPagination from "@/components/shared/UserPagination";
 
 export default function KaryaKaderView() {
   const [ugcList, setUgcList] = useState<UgcItem[]>([]);
@@ -14,6 +15,12 @@ export default function KaryaKaderView() {
   >("semua");
   const [selectedUgc, setSelectedUgc] = useState<UgcItem | null>(null);
   const [likedSet, setLikedSet] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 6;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -106,6 +113,11 @@ export default function KaryaKaderView() {
     return activeFilter === "semua" || item.type === activeFilter;
   });
 
+  const slicedItems = filteredItems.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <div className="bg-slate-50 min-h-screen py-8 md:py-12">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
@@ -156,70 +168,80 @@ export default function KaryaKaderView() {
               <CardSkeleton />
             </>
           ) : (
-            filteredItems.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setSelectedUgc(item)}
-              className="rounded-2xl bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between hover:border-emerald-100 group h-full"
-            >
-              <div>
-                {/* Fixed aspect ratio for uniform image sizes */}
-                <div className="relative rounded-xl overflow-hidden bg-slate-100 mb-4 aspect-[4/3] w-full">
-                  <img
-                    src={item.mediaUrl}
-                    alt={`Poster karya: ${item.title}`}
-                    className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-300"
-                  />
-                  <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-primary/95 text-white text-[9px] font-extrabold uppercase tracking-widest">
-                    {item.type}
-                  </span>
-                </div>
+            <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {slicedItems.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setSelectedUgc(item)}
+                    className="rounded-2xl bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between hover:border-emerald-100 group h-full"
+                  >
+                    <div>
+                      {/* Fixed aspect ratio for uniform image sizes */}
+                      <div className="relative rounded-xl overflow-hidden bg-slate-100 mb-4 aspect-[4/3] w-full">
+                        <img
+                          src={item.mediaUrl}
+                          alt={`Poster karya: ${item.title}`}
+                          className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-300"
+                        />
+                        <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-primary/95 text-white text-[9px] font-extrabold uppercase tracking-widest">
+                          {item.type}
+                        </span>
+                      </div>
 
-                {/* Truncated title */}
-                <h3
-                  className="font-bold text-neutral-dark text-base leading-snug group-hover:text-primary transition-colors truncate"
-                  title={item.title}
-                >
-                  {item.title}
-                </h3>
+                      {/* Truncated title */}
+                      <h3
+                        className="font-bold text-neutral-dark text-base leading-snug group-hover:text-primary transition-colors truncate"
+                        title={item.title}
+                      >
+                        {item.title}
+                      </h3>
 
-                {/* Clamped description text */}
-                <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                  {item.description}
-                </p>
+                      {/* Clamped description text */}
+                      <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    {/* Creator details and Like trigger */}
+                    <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
+                      <div className="space-y-0.5 min-w-0">
+                        <span className="flex items-center space-x-1 text-slate-700 font-bold min-w-0">
+                          <UserCheck className="h-3.5 w-3.5 text-primary shrink-0" />
+                          <span className="truncate">{item.creatorName}</span>
+                        </span>
+                        <span className="flex items-center space-x-1 text-[10px] text-slate-400 font-semibold truncate">
+                          <School className="h-3 w-3 shrink-0" />
+                          <span className="truncate">{item.school}</span>
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={(e) => handleLike(item.id, e)}
+                        className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                          likedSet.has(item.id)
+                            ? "bg-rose-50 text-rose-600"
+                            : "text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                        }`}
+                      >
+                        <Heart
+                          className={`h-4 w-4 ${likedSet.has(item.id) ? "text-rose-600" : "text-slate-400"}`}
+                        />
+                        <span>{item.likes}</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-
-              {/* Creator details and Like trigger */}
-              <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                <div className="space-y-0.5 min-w-0">
-                  <span className="flex items-center space-x-1 text-slate-700 font-bold min-w-0">
-                    <UserCheck className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span className="truncate">{item.creatorName}</span>
-                  </span>
-                  <span className="flex items-center space-x-1 text-[10px] text-slate-400 font-semibold truncate">
-                    <School className="h-3 w-3 shrink-0" />
-                    <span className="truncate">{item.school}</span>
-                  </span>
-                </div>
-
-                <button
-                  onClick={(e) => handleLike(item.id, e)}
-                  className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                    likedSet.has(item.id)
-                      ? "bg-rose-50 text-rose-600"
-                      : "text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                  }`}
-                >
-                  <Heart
-                    className={`h-4 w-4 ${likedSet.has(item.id) ? "text-rose-600" : "text-slate-400"}`}
-                  />
-                  <span>{item.likes}</span>
-                </button>
-              </div>
+              <UserPagination
+                currentPage={currentPage}
+                totalItems={filteredItems.length}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+              />
             </div>
-          ))
-        )}
-      </div>
+          )}
+        </div>
 
         {/* ZOOM MODAL VIEW */}
         {selectedUgc && (

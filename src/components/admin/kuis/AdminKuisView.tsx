@@ -1,8 +1,7 @@
-"use client";
-
 import React from "react";
 import { Search, Plus, Edit2, Trash2 } from "lucide-react";
 import { QuizQuestion } from "@/types";
+import AdminPagination from "@/components/admin/shared/AdminPagination";
 
 interface AdminKuisViewProps {
   quizzes: QuizQuestion[];
@@ -12,6 +11,9 @@ interface AdminKuisViewProps {
   setEditingQuiz: (val: Partial<QuizQuestion> | null) => void;
   onSave: () => void;
   onDelete: (id: string, title: string) => void;
+  currentPage: number;
+  totalItems: number;
+  onPageChange: (page: number) => void;
 }
 
 export default function AdminKuisView({
@@ -22,6 +24,9 @@ export default function AdminKuisView({
   setEditingQuiz,
   onSave,
   onDelete,
+  currentPage,
+  totalItems,
+  onPageChange,
 }: AdminKuisViewProps) {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -32,7 +37,7 @@ export default function AdminKuisView({
             placeholder="Cari pertanyaan..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none"
+            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
           />
           <Search className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-400" />
         </div>
@@ -60,37 +65,42 @@ export default function AdminKuisView({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {quizzes
-              .filter((q) =>
-                q.questionText.toLowerCase().includes(searchTerm.toLowerCase()),
-              )
-              .map((q) => (
-                <tr key={q.id} className="hover:bg-slate-50/50">
-                  <td className="py-3.5 px-4 font-bold text-neutral-dark truncate max-w-xs">
-                    {q.questionText}
-                  </td>
-                  <td className="py-3.5 px-4 capitalize">{q.category}</td>
-                  <td className="py-3.5 px-4">
-                    Opsi {String.fromCharCode(65 + q.correctAnswer)}
-                  </td>
-                  <td className="py-3.5 px-4 text-right flex justify-end space-x-2">
-                    <button
-                      onClick={() => setEditingQuiz(q)}
-                      className="p-2 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer"
-                    >
-                      <Edit2 className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      onClick={() => onDelete(q.id, q.questionText)}
-                      className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 cursor-pointer"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            {quizzes.map((q) => (
+              <tr key={q.id} className="hover:bg-slate-50/50">
+                <td className="py-3.5 px-4 font-bold text-neutral-dark truncate max-w-xs">
+                  {q.questionText}
+                </td>
+                <td className="py-3.5 px-4 capitalize">{q.category}</td>
+                <td className="py-3.5 px-4">
+                  Opsi {String.fromCharCode(65 + q.correctAnswer)}
+                </td>
+                <td className="py-3.5 px-4 text-right flex justify-end space-x-2">
+                  <button
+                    onClick={() => setEditingQuiz(q)}
+                    className="p-2 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer"
+                  >
+                    <Edit2 className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    onClick={() => onDelete(q.id, q.questionText)}
+                    className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 cursor-pointer"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
+        {/* Reusable premium pagination controls */}
+        <div className="p-4 bg-slate-50/50 border-t border-slate-100">
+          <AdminPagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            pageSize={5}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
 
       {/* Overlay Modal for Quiz Question CRUD */}

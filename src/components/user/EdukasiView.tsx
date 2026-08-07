@@ -6,6 +6,7 @@ import { Search, Play, FileText, ArrowLeft, Calendar, User, Tag, Sparkles, BookO
 import { userService } from "@/services/user/userService";
 import { MediaItem } from "@/types";
 import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
+import UserPagination from "@/components/shared/UserPagination";
 
 export default function EdukasiView() {
   const searchParams = useSearchParams();
@@ -19,6 +20,12 @@ export default function EdukasiView() {
   const [activeTab, setActiveTab] = useState<"semua" | "article" | "video">("semua");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPost, setSelectedPost] = useState<MediaItem | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 6;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchQuery]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -49,10 +56,16 @@ export default function EdukasiView() {
     const matchesTab = activeTab === "semua" || item.type === activeTab;
     const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      (item.tags && item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())));
     return matchesTab && matchesSearch;
   });
+
+  const slicedItems = filteredItems.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const selectPost = (item: MediaItem | null) => {
     if (item) {
@@ -306,62 +319,70 @@ export default function EdukasiView() {
                 <CardSkeleton />
               </div>
             ) : filteredItems.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredItems.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => selectPost(item)}
-                    className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row cursor-pointer hover:border-emerald-100 group"
-                  >
-                    
-                    {/* Media representation */}
-                    <div className="relative w-full sm:w-48 h-48 shrink-0 bg-slate-100">
-                      {item.type === "video" ? (
-                        <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
-                          <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                            <Play className="h-5 w-5 fill-current text-white pl-0.5" />
-                          </div>
-                          <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">
-                            Video {item.duration}
-                          </span>
-                        </div>
-                      ) : (
-                        <img
-                          src={item.mediaUrl}
-                          alt={`Thumbnail artikel: ${item.title}`}
-                          className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
-                        />
-                      )}
-                      <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest">
-                        {item.type}
-                      </span>
-                    </div>
-
-                    {/* Content text */}
-                    <div className="p-5 flex flex-col justify-between flex-grow">
-                      <div>
-                        <span className="inline-block px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[9px] font-extrabold uppercase tracking-wide mb-2">
-                          {item.category}
-                        </span>
-                        <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                          {item.title}
-                        </h3>
-                        <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                          {item.content}
-                        </p>
-                      </div>
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {slicedItems.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => selectPost(item)}
+                      className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row cursor-pointer hover:border-emerald-100 group"
+                    >
                       
-                      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
-                        <span className="flex items-center space-x-1">
-                          <User className="h-3 w-3" />
-                          <span>{item.author}</span>
+                      {/* Media representation */}
+                      <div className="relative w-full sm:w-48 h-48 shrink-0 bg-slate-100">
+                        {item.type === "video" ? (
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
+                            <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                              <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                            </div>
+                            <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">
+                              Video {item.duration}
+                            </span>
+                          </div>
+                        ) : (
+                          <img
+                            src={item.mediaUrl}
+                            alt={`Thumbnail artikel: ${item.title}`}
+                            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+                          />
+                        )}
+                        <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest">
+                          {item.type}
                         </span>
-                        <span>{item.date}</span>
                       </div>
-                    </div>
 
-                  </div>
-                ))}
+                      {/* Content text */}
+                      <div className="p-5 flex flex-col justify-between flex-grow">
+                        <div>
+                          <span className="inline-block px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[9px] font-extrabold uppercase tracking-wide mb-2">
+                            {item.category}
+                          </span>
+                          <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                            {item.title}
+                          </h3>
+                          <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+                            {item.content}
+                          </p>
+                        </div>
+                        
+                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
+                          <span className="flex items-center space-x-1">
+                            <User className="h-3 w-3" />
+                            <span>{item.author}</span>
+                          </span>
+                          <span>{item.date}</span>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+                <UserPagination
+                  currentPage={currentPage}
+                  totalItems={filteredItems.length}
+                  pageSize={pageSize}
+                  onPageChange={setCurrentPage}
+                />
               </div>
             ) : (
               <div className="text-center py-16 bg-white rounded-3xl border border-slate-100 shadow-sm">

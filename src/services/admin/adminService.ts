@@ -26,12 +26,19 @@ import {
 } from "@/types";
 
 // --- REPROPEDIA CRUD ---
-export async function fetchModules(): Promise<RepropediaItem[]> {
+export async function fetchModules(page?: number, limit?: number): Promise<RepropediaItem[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("repropedia")
-      .select("id, title, slug, category, synopsis, content, pdf_url, read_time, author, date")
-      .order("created_at", { ascending: false });
+      .select("id, title, slug, category, synopsis, content, pdf_url, read_time, author, date");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: false });
     if (error || !data || data.length === 0) return initialModules;
     return data.map((item) => ({
       id: item.id,
@@ -119,12 +126,19 @@ export async function deleteModule(id: string): Promise<boolean> {
 }
 
 // --- MEDIA CRUD ---
-export async function fetchMedia(): Promise<MediaItem[]> {
+export async function fetchMedia(page?: number, limit?: number): Promise<MediaItem[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("media")
-      .select("id, title, slug, type, category, tags, content, media_url, read_time, duration, author, date")
-      .order("created_at", { ascending: false });
+      .select("id, title, slug, type, category, tags, content, media_url, read_time, duration, author, date");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: false });
     if (error || !data || data.length === 0) return initialMedia;
     return data.map((item) => ({
       id: item.id,
@@ -215,12 +229,19 @@ export async function deleteMedia(id: string): Promise<boolean> {
 }
 
 // --- UGC CRUD ---
-export async function fetchUgc(): Promise<UgcItem[]> {
+export async function fetchUgc(page?: number, limit?: number): Promise<UgcItem[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("ugc_submissions")
-      .select("id, title, description, media_url, creator_name, school, type, likes")
-      .order("created_at", { ascending: false });
+      .select("id, title, description, media_url, creator_name, school, type, likes");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: false });
     if (error || !data || data.length === 0) return initialUgc;
     return data.map((item) => ({
       id: item.id,
@@ -294,12 +315,19 @@ export async function deleteUgc(id: string): Promise<boolean> {
 }
 
 // --- COUNSELORS CRUD ---
-export async function fetchCounselors(): Promise<Counselor[]> {
+export async function fetchCounselors(page?: number, limit?: number): Promise<Counselor[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("counselors")
-      .select("id, name, role, whatsapp_number, operational_hours, location_name, location_map_url")
-      .order("created_at", { ascending: true });
+      .select("id, name, role, whatsapp_number, operational_hours, location_name, location_map_url");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: true });
     if (error || !data || data.length === 0) return initialCounselors;
     return data.map((item) => ({
       id: item.id,
@@ -370,12 +398,19 @@ export async function deleteCounselor(id: string): Promise<boolean> {
 }
 
 // --- STATS CRUD ---
-export async function fetchStats(): Promise<StatRecord[]> {
+export async function fetchStats(page?: number, limit?: number): Promise<StatRecord[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("statistics_cases")
-      .select("year, sukamaju, harapan, mekarjaya, kertajaya")
-      .order("year", { ascending: true });
+      .select("year, sukamaju, harapan, mekarjaya, kertajaya");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("year", { ascending: true });
     if (error || !data || data.length === 0) return initialStats;
     return data.map((item) => ({
       year: item.year,
@@ -423,12 +458,19 @@ export async function deleteStat(year: number): Promise<boolean> {
 }
 
 // --- QUIZZES CRUD ---
-export async function fetchQuizzes(): Promise<QuizQuestion[]> {
+export async function fetchQuizzes(page?: number, limit?: number): Promise<QuizQuestion[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("quizzes")
-      .select("id, category, question_text, options, correct_answer, explanation")
-      .order("created_at", { ascending: true });
+      .select("id, category, question_text, options, correct_answer, explanation");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: true });
     if (error || !data || data.length === 0) return initialQuiz;
     return data.map((item) => ({
       id: item.id,
@@ -496,12 +538,19 @@ export async function deleteQuiz(id: string): Promise<boolean> {
 }
 
 // --- EVENTS CRUD ---
-export async function fetchEvents(): Promise<EventItem[]> {
+export async function fetchEvents(page?: number, limit?: number): Promise<EventItem[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("events")
-      .select("id, title, description, date, location, images, attendees")
-      .order("created_at", { ascending: false });
+      .select("id, title, description, date, location, images, attendees");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: false });
     if (error || !data || data.length === 0) return initialEvents;
     return data.map((item) => ({
       id: item.id,
@@ -564,12 +613,19 @@ export async function deleteEvent(id: string): Promise<boolean> {
 }
 
 // --- ORG MEMBERS CRUD ---
-export async function fetchOrgMembers(): Promise<OrgMember[]> {
+export async function fetchOrgMembers(page?: number, limit?: number): Promise<OrgMember[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("organization_members")
-      .select("id, key, role, name, description, sort_order")
-      .order("sort_order", { ascending: true });
+      .select("id, key, role, name, description, sort_order");
+
+    if (page !== undefined && limit !== undefined) {
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query.order("sort_order", { ascending: true });
     if (error || !data || data.length === 0) return initialOrgMembers;
     return data.map((item) => ({
       id: item.id,

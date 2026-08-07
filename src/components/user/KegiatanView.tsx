@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { EventItem } from "@/types";
+import UserPagination from "@/components/shared/UserPagination";
 
 export default function KegiatanView() {
   const [eventItems, setEventItems] = useState<EventItem[]>([]);
@@ -18,6 +19,8 @@ export default function KegiatanView() {
   const [carouselIndices, setCarouselIndices] = useState<
     Record<string, number>
   >({});
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 4;
 
   useEffect(() => {
     setIsLoading(true);
@@ -102,113 +105,123 @@ export default function KegiatanView() {
               </div>
             </>
           ) : (
-            eventItems.map((event) => {
-            const currentImgIndex = carouselIndices[event.id] || 0;
-            const imagesCount = event.images.length;
+            <div className="space-y-12">
+              {eventItems
+                .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                .map((event) => {
+                  const currentImgIndex = carouselIndices[event.id] || 0;
+                  const imagesCount = event.images.length;
 
-            return (
-              <div
-                key={event.id}
-                className="overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 grid grid-cols-1 md:grid-cols-12 animate-in fade-in"
-              >
-                {/* Visual Carousel Column */}
-                <div className="relative md:col-span-5 bg-slate-950 h-64 md:h-auto min-h-[250px] flex items-center justify-center group">
-                  <img
-                    src={event.images[currentImgIndex]}
-                    alt={`Dokumentasi kegiatan ${event.title}: Foto ke-${currentImgIndex + 1}`}
-                    className="w-full h-full object-cover transition-all duration-300"
-                  />
+                  return (
+                    <div
+                      key={event.id}
+                      className="overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 grid grid-cols-1 md:grid-cols-12 animate-in fade-in"
+                    >
+                      {/* Visual Carousel Column */}
+                      <div className="relative md:col-span-5 bg-slate-950 h-64 md:h-auto min-h-[250px] flex items-center justify-center group">
+                        <img
+                          src={event.images[currentImgIndex]}
+                          alt={`Dokumentasi kegiatan ${event.title}: Foto ke-${currentImgIndex + 1}`}
+                          className="w-full h-full object-cover transition-all duration-300"
+                        />
 
-                  {imagesCount > 1 && (
-                    <>
-                      {/* Left arrow */}
-                      <button
-                        onClick={() => handlePrevImage(event.id, imagesCount)}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                        aria-label="Foto Sebelumnya"
-                      >
-                        <ChevronLeft className="h-5 w-5" />
-                      </button>
+                        {imagesCount > 1 && (
+                          <>
+                            {/* Left arrow */}
+                            <button
+                              onClick={() => handlePrevImage(event.id, imagesCount)}
+                              className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                              aria-label="Foto Sebelumnya"
+                            >
+                              <ChevronLeft className="h-5 w-5" />
+                            </button>
 
-                      {/* Right arrow */}
-                      <button
-                        onClick={() => handleNextImage(event.id, imagesCount)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                        aria-label="Foto Selanjutnya"
-                      >
-                        <ChevronRight className="h-5 w-5" />
-                      </button>
+                            {/* Right arrow */}
+                            <button
+                              onClick={() => handleNextImage(event.id, imagesCount)}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                              aria-label="Foto Selanjutnya"
+                            >
+                              <ChevronRight className="h-5 w-5" />
+                            </button>
 
-                      {/* Pagination Indicator */}
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-1.5 bg-black/30 px-2.5 py-1 rounded-full">
-                        {event.images.map((_, idx) => (
-                          <div
-                            key={idx}
-                            className={`h-1.5 w-1.5 rounded-full transition-all ${
-                              currentImgIndex === idx
-                                ? "bg-white w-3"
-                                : "bg-white/50"
-                            }`}
-                          />
-                        ))}
+                            {/* Pagination Indicator */}
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-1.5 bg-black/30 px-2.5 py-1 rounded-full">
+                              {event.images.map((_, idx) => (
+                                <div
+                                  key={idx}
+                                  className={`h-1.5 w-1.5 rounded-full transition-all ${
+                                    currentImgIndex === idx
+                                      ? "bg-white w-3"
+                                      : "bg-white/50"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </>
+                        )}
                       </div>
-                    </>
-                  )}
-                </div>
 
-                {/* Content description column */}
-                <div className="p-6 md:p-8 md:col-span-7 flex flex-col justify-between space-y-6">
-                  <div className="space-y-3">
-                    <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[10px] font-extrabold uppercase tracking-wide">
-                      <Sparkles className="h-3 w-3" />
-                      <span>Sosialisasi</span>
-                    </span>
-                    <h2 className="text-xl md:text-2xl font-extrabold text-neutral-dark leading-snug">
-                      {event.title}
-                    </h2>
-                    <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-semibold">
-                      {event.description}
-                    </p>
-                  </div>
+                      {/* Content description column */}
+                      <div className="p-6 md:p-8 md:col-span-7 flex flex-col justify-between space-y-6">
+                        <div className="space-y-3">
+                          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[10px] font-extrabold uppercase tracking-wide">
+                            <Sparkles className="h-3 w-3" />
+                            <span>Sosialisasi</span>
+                          </span>
+                          <h2 className="text-xl md:text-2xl font-extrabold text-neutral-dark leading-snug">
+                            {event.title}
+                          </h2>
+                          <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-semibold">
+                            {event.description}
+                          </p>
+                        </div>
 
-                  {/* Meta fields */}
-                  <div className="pt-4 border-t border-slate-100 grid grid-cols-3 gap-4 text-slate-500 text-[10px] sm:text-xs font-semibold">
-                    <div className="space-y-1">
-                      <span className="flex items-center space-x-1.5 text-slate-400">
-                        <Calendar className="h-3.5 w-3.5" />
-                        <span>Tanggal</span>
-                      </span>
-                      <p className="text-neutral-dark truncate">{event.date}</p>
+                        {/* Meta fields */}
+                        <div className="pt-4 border-t border-slate-100 grid grid-cols-3 gap-4 text-slate-500 text-[10px] sm:text-xs font-semibold">
+                          <div className="space-y-1">
+                            <span className="flex items-center space-x-1.5 text-slate-400">
+                              <Calendar className="h-3.5 w-3.5" />
+                              <span>Tanggal</span>
+                            </span>
+                            <p className="text-neutral-dark truncate">{event.date}</p>
+                          </div>
+
+                          <div className="space-y-1">
+                            <span className="flex items-center space-x-1.5 text-slate-400">
+                              <MapPin className="h-3.5 w-3.5" />
+                              <span>Lokasi</span>
+                            </span>
+                            <p
+                              className="text-neutral-dark truncate"
+                              title={event.location}
+                            >
+                              {event.location}
+                            </p>
+                          </div>
+
+                          <div className="space-y-1">
+                            <span className="flex items-center space-x-1.5 text-slate-400">
+                              <Users className="h-3.5 w-3.5" />
+                              <span>Kehadiran</span>
+                            </span>
+                            <p className="text-neutral-dark truncate">
+                              {event.attendees} Remaja
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-
-                    <div className="space-y-1">
-                      <span className="flex items-center space-x-1.5 text-slate-400">
-                        <MapPin className="h-3.5 w-3.5" />
-                        <span>Lokasi</span>
-                      </span>
-                      <p
-                        className="text-neutral-dark truncate"
-                        title={event.location}
-                      >
-                        {event.location}
-                      </p>
-                    </div>
-
-                    <div className="space-y-1">
-                      <span className="flex items-center space-x-1.5 text-slate-400">
-                        <Users className="h-3.5 w-3.5" />
-                        <span>Kehadiran</span>
-                      </span>
-                      <p className="text-neutral-dark truncate">
-                        {event.attendees} Remaja
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        )}
+                  );
+                })}
+              <UserPagination
+                currentPage={currentPage}
+                totalItems={eventItems.length}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

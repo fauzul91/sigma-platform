@@ -1,8 +1,7 @@
-"use client";
-
 import React from "react";
 import { Search, Plus, Edit2, Trash2 } from "lucide-react";
 import { RepropediaItem } from "@/types";
+import AdminPagination from "@/components/admin/shared/AdminPagination";
 
 interface AdminRepropediaViewProps {
   modules: RepropediaItem[];
@@ -12,6 +11,9 @@ interface AdminRepropediaViewProps {
   setEditingModule: (val: Partial<RepropediaItem> | null) => void;
   onSave: () => void;
   onDelete: (id: string, title: string) => void;
+  currentPage: number;
+  totalItems: number;
+  onPageChange: (page: number) => void;
 }
 
 export default function AdminRepropediaView({
@@ -21,7 +23,10 @@ export default function AdminRepropediaView({
   editingModule,
   setEditingModule,
   onSave,
-  onDelete
+  onDelete,
+  currentPage,
+  totalItems,
+  onPageChange,
 }: AdminRepropediaViewProps) {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -60,31 +65,38 @@ export default function AdminRepropediaView({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {modules
-              .filter(m => m.title.toLowerCase().includes(searchTerm.toLowerCase()))
-              .map((m) => (
-                <tr key={m.id} className="hover:bg-slate-50/50">
-                  <td className="py-3.5 px-4 font-bold text-neutral-dark">{m.title}</td>
-                  <td className="py-3.5 px-4 capitalize">{m.category.replace("-", " ")}</td>
-                  <td className="py-3.5 px-4">{m.author}</td>
-                  <td className="py-3.5 px-4 text-right flex justify-end space-x-2">
-                    <button
-                      onClick={() => setEditingModule(m)}
-                      className="p-2 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer"
-                    >
-                      <Edit2 className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      onClick={() => onDelete(m.id, m.title)}
-                      className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 cursor-pointer"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            {modules.map((m) => (
+              <tr key={m.id} className="hover:bg-slate-50/50">
+                <td className="py-3.5 px-4 font-bold text-neutral-dark">{m.title}</td>
+                <td className="py-3.5 px-4 capitalize">{m.category.replace("-", " ")}</td>
+                <td className="py-3.5 px-4">{m.author}</td>
+                <td className="py-3.5 px-4 text-right flex justify-end space-x-2">
+                  <button
+                    onClick={() => setEditingModule(m)}
+                    className="p-2 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer"
+                  >
+                    <Edit2 className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    onClick={() => onDelete(m.id, m.title)}
+                    className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 cursor-pointer"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
+        {/* Reusable premium pagination controls */}
+        <div className="p-4 bg-slate-50/50 border-t border-slate-100">
+          <AdminPagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            pageSize={5}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
 
       {/* Overlay Modal for Module CRUD */}
