@@ -5,6 +5,7 @@ import {
   ADMIN_SESSION_COOKIE,
   verifyAdminSessionCookie,
 } from "@/lib/adminSession";
+import { fetchDashboardStats } from "@/services/admin/adminService";
 import AdminDashboardClient from "@/components/admin/dashboard/AdminDashboardClient";
 
 export default async function AdminDashboardPage() {
@@ -17,5 +18,7 @@ export default async function AdminDashboardPage() {
     redirect("/admin/login");
   }
 
-  return <AdminDashboardClient />;
+  const stats = await fetchDashboardStats();
+
+  return <AdminDashboardClient initialStats={stats} />;
 }

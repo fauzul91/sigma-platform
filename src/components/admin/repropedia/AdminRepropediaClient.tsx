@@ -5,8 +5,13 @@ import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminRepropediaView from "@/components/admin/repropedia/AdminRepropediaView";
 import AdminDeleteModal from "@/components/admin/shared/AdminDeleteModal";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { RepropediaItem } from "@/types";
 
-export default function AdminRepropediaClient() {
+export default function AdminRepropediaClient({
+  initialModules,
+}: {
+  initialModules: RepropediaItem[];
+}) {
   const {
     modules,
     searchTerm,
@@ -18,7 +23,9 @@ export default function AdminRepropediaClient() {
     setDeleteTarget,
     executeDelete,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialModules,
+  });
 
   return (
     <>

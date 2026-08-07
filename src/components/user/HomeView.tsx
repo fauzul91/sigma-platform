@@ -16,11 +16,13 @@ import {
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { RepropediaItem, MediaItem } from "@/types";
+import { CardSkeleton } from "@/components/shared/Skeletons";
 
 export default function HomeView() {
   const [modulesList, setModulesList] = useState<RepropediaItem[]>([]);
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
   const [activeCounselorCount, setActiveCounselorCount] = useState(12);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
 
   // Simple counter animation trigger
   const [counts, setCounts] = useState({ modules: 0, articles: 0, users: 0 });
@@ -30,6 +32,7 @@ export default function HomeView() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    setIsDataLoading(true);
     Promise.all([
       userService.getRepropediaModules(),
       userService.getMediaItems(),
@@ -38,6 +41,7 @@ export default function HomeView() {
       setModulesList(mods);
       setMediaList(meds);
       setActiveCounselorCount(stats.activeCounselors);
+      setIsDataLoading(false);
 
       const duration = 1500;
       const steps = 30;
@@ -362,36 +366,44 @@ export default function HomeView() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {modulesList.slice(0, 3).map((module) => (
-            <div
-              key={module.id}
-              className="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                <span className="inline-block px-2.5 py-1 rounded-md bg-emerald-50 text-primary text-[10px] font-extrabold uppercase tracking-wider mb-4">
-                  {module.category.replace("-", " ")}
-                </span>
-                <h3 className="font-bold text-neutral-dark text-lg leading-snug hover:text-primary transition-colors">
-                  <Link href={`/repropedia?module=${module.slug}`}>
-                    {module.title}
+          {isDataLoading ? (
+            <>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </>
+          ) : (
+            modulesList.slice(0, 3).map((module) => (
+              <div
+                key={module.id}
+                className="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <span className="inline-block px-2.5 py-1 rounded-md bg-emerald-50 text-primary text-[10px] font-extrabold uppercase tracking-wider mb-4">
+                    {module.category.replace("-", " ")}
+                  </span>
+                  <h3 className="font-bold text-neutral-dark text-lg leading-snug hover:text-primary transition-colors">
+                    <Link href={`/repropedia?module=${module.slug}`}>
+                      {module.title}
+                    </Link>
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-2.5 line-clamp-3 leading-relaxed">
+                    {module.synopsis}
+                  </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
+                  <span>{module.readTime} Baca</span>
+                  <Link
+                    href={`/repropedia?module=${module.slug}`}
+                    className="text-primary hover:underline flex items-center space-x-1"
+                  >
+                    <span>Mulai Baca</span>
+                    <ArrowRight className="h-3 w-3" />
                   </Link>
-                </h3>
-                <p className="text-xs text-slate-500 mt-2.5 line-clamp-3 leading-relaxed">
-                  {module.synopsis}
-                </p>
+                </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                <span>{module.readTime} Baca</span>
-                <Link
-                  href={`/repropedia?module=${module.slug}`}
-                  className="text-primary hover:underline flex items-center space-x-1"
-                >
-                  <span>Mulai Baca</span>
-                  <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </section>
 
@@ -413,52 +425,59 @@ export default function HomeView() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {mediaList.slice(0, 2).map((item) => (
-              <div
-                key={item.id}
-                className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row"
-              >
-                {/* Media Image/Thumbnail */}
-                <div className="relative w-full md:w-44 h-44 shrink-0 bg-slate-100">
-                  {item.type === "video" ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
-                      <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-lg">
-                        <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+            {isDataLoading ? (
+              <>
+                <CardSkeleton />
+                <CardSkeleton />
+              </>
+            ) : (
+              mediaList.slice(0, 2).map((item) => (
+                <div
+                  key={item.id}
+                  className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row"
+                >
+                  {/* Media Image/Thumbnail */}
+                  <div className="relative w-full md:w-44 h-44 shrink-0 bg-slate-100">
+                    {item.type === "video" ? (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
+                        <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                          <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">Video {item.duration}</span>
                       </div>
-                      <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">Video {item.duration}</span>
-                    </div>
-                  ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={item.mediaUrl}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                  <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest">
-                    {item.type}
-                  </span>
-                </div>
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={item.mediaUrl}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest">
+                      {item.type}
+                    </span>
+                  </div>
 
-                {/* Content */}
-                <div className="p-5 flex flex-col justify-between flex-grow">
-                  <div>
-                    <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 hover:text-primary transition-colors">
-                      <Link href={`/edukasi?post=${item.slug}`}>
-                        {item.title}
-                      </Link>
-                    </h3>
-                    <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                      {item.content}
-                    </p>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                    <span>{item.author}</span>
-                    <span>{item.date}</span>
+                  {/* Content */}
+                  <div className="p-5 flex flex-col justify-between flex-grow">
+                    <div>
+                      <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 hover:text-primary transition-colors">
+                        <Link href={`/edukasi?post=${item.slug}`}>
+                          {item.title}
+                        </Link>
+                      </h3>
+                      <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+                        {item.content}
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+                      <span>{item.author}</span>
+                      <span>{item.date}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>

@@ -76,6 +76,12 @@ export default function Navbar() {
     },
   ];
 
+  useEffect(() => {
+    if (!isOpen) {
+      setOpenMobileDropdown(null);
+    }
+  }, [isOpen]);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -86,11 +92,20 @@ export default function Navbar() {
 
   const isActive = (menu: MenuItem) => {
     if (menu.type === "link" && menu.href) {
-      if (menu.href === "/beranda" && pathname === "/") return true;
-      return pathname.startsWith(menu.href);
+      if (menu.href === "/beranda") {
+        return pathname === "/beranda" || pathname === "/";
+      }
+      return pathname === menu.href || pathname.startsWith(menu.href + "/");
     }
     if (menu.type === "dropdown" && menu.items) {
-      return menu.items.some((item) => pathname.startsWith(item.href.split('#')[0]));
+      return menu.items.some((item) => {
+        const itemPath = item.href.split('#')[0];
+        // Exclude /beranda or / from activating dropdown menus (like Bantuan's FAQ)
+        if (itemPath === "/beranda" || itemPath === "/") {
+          return false;
+        }
+        return pathname === itemPath || pathname.startsWith(itemPath + "/");
+      });
     }
     return false;
   };

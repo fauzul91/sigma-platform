@@ -4,15 +4,22 @@ import React from "react";
 import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminOrganisasiView from "@/components/admin/organisasi/AdminOrganisasiView";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { OrgMember } from "@/types";
 
-export default function AdminOrganisasiClient() {
+export default function AdminOrganisasiClient({
+  initialMembers,
+}: {
+  initialMembers: OrgMember[];
+}) {
   const {
     orgMembers,
     editingMember,
     setEditingMember,
     handleSaveMember,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialOrgMembers: initialMembers,
+  });
 
   return (
     <>

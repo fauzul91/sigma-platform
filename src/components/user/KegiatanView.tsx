@@ -14,13 +14,16 @@ import { EventItem } from "@/types";
 
 export default function KegiatanView() {
   const [eventItems, setEventItems] = useState<EventItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [carouselIndices, setCarouselIndices] = useState<
     Record<string, number>
   >({});
 
   useEffect(() => {
+    setIsLoading(true);
     userService.getEventItems().then((data) => {
       setEventItems(data);
+      setIsLoading(false);
     });
   }, []);
 
@@ -57,7 +60,49 @@ export default function KegiatanView() {
 
         {/* Events list */}
         <div className="space-y-12">
-          {eventItems.map((event) => {
+          {isLoading ? (
+            <>
+              {/* Event Skeleton 1 */}
+              <div className="overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-sm grid grid-cols-1 md:grid-cols-12 min-h-[250px] animate-pulse">
+                <div className="md:col-span-5 bg-slate-200 min-h-[250px]" />
+                <div className="p-6 md:p-8 md:col-span-7 flex flex-col justify-between space-y-6">
+                  <div className="space-y-3">
+                    <div className="h-4 bg-slate-200 rounded w-20" />
+                    <div className="h-6 bg-slate-200 rounded w-3/4" />
+                    <div className="space-y-2">
+                      <div className="h-3 bg-slate-200 rounded w-full" />
+                      <div className="h-3 bg-slate-200 rounded w-5/6" />
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-slate-100 grid grid-cols-3 gap-4">
+                    <div className="h-3 bg-slate-200 rounded" />
+                    <div className="h-3 bg-slate-200 rounded" />
+                    <div className="h-3 bg-slate-200 rounded" />
+                  </div>
+                </div>
+              </div>
+              {/* Event Skeleton 2 */}
+              <div className="overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-sm grid grid-cols-1 md:grid-cols-12 min-h-[250px] animate-pulse">
+                <div className="md:col-span-5 bg-slate-200 min-h-[250px]" />
+                <div className="p-6 md:p-8 md:col-span-7 flex flex-col justify-between space-y-6">
+                  <div className="space-y-3">
+                    <div className="h-4 bg-slate-200 rounded w-20" />
+                    <div className="h-6 bg-slate-200 rounded w-3/4" />
+                    <div className="space-y-2">
+                      <div className="h-3 bg-slate-200 rounded w-full" />
+                      <div className="h-3 bg-slate-200 rounded w-5/6" />
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-slate-100 grid grid-cols-3 gap-4">
+                    <div className="h-3 bg-slate-200 rounded" />
+                    <div className="h-3 bg-slate-200 rounded" />
+                    <div className="h-3 bg-slate-200 rounded" />
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            eventItems.map((event) => {
             const currentImgIndex = carouselIndices[event.id] || 0;
             const imagesCount = event.images.length;
 
@@ -162,7 +207,8 @@ export default function KegiatanView() {
                 </div>
               </div>
             );
-          })}
+          })
+        )}
         </div>
       </div>
     </div>

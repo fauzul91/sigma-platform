@@ -5,8 +5,13 @@ import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminEdukasiView from "@/components/admin/edukasi/AdminEdukasiView";
 import AdminDeleteModal from "@/components/admin/shared/AdminDeleteModal";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { MediaItem } from "@/types";
 
-export default function AdminEdukasiClient() {
+export default function AdminEdukasiClient({
+  initialMedia,
+}: {
+  initialMedia: MediaItem[];
+}) {
   const {
     media,
     searchTerm,
@@ -18,7 +23,9 @@ export default function AdminEdukasiClient() {
     setDeleteTarget,
     executeDelete,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialMedia,
+  });
 
   return (
     <>

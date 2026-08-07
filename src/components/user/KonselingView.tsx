@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { Counselor } from "@/types";
+import { ListSkeleton } from "@/components/shared/Skeletons";
 
 interface FlowNode {
   id: string;
@@ -24,10 +25,13 @@ export default function KonselingView() {
   const [counselingDirectory, setCounselingDirectory] = useState<Counselor[]>(
     [],
   );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setIsLoading(true);
     userService.getCounselors().then((data) => {
       setCounselingDirectory(data);
+      setIsLoading(false);
     });
   }, []);
 
@@ -173,7 +177,15 @@ export default function KonselingView() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {counselingDirectory.map((contact) => (
+            {isLoading ? (
+              <>
+                <ListSkeleton />
+                <ListSkeleton />
+                <ListSkeleton />
+                <ListSkeleton />
+              </>
+            ) : (
+              counselingDirectory.map((contact) => (
               <div
                 key={contact.id}
                 className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-205"
@@ -255,7 +267,8 @@ export default function KonselingView() {
                   ) : null}
                 </div>
               </div>
-            ))}
+            ))
+          )}
           </div>
         </div>
       </div>

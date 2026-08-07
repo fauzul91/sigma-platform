@@ -5,8 +5,13 @@ import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminKaryaKaderView from "@/components/admin/karya-kader/AdminKaryaKaderView";
 import AdminDeleteModal from "@/components/admin/shared/AdminDeleteModal";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { UgcItem } from "@/types";
 
-export default function AdminKaryaKaderClient() {
+export default function AdminKaryaKaderClient({
+  initialUgc,
+}: {
+  initialUgc: UgcItem[];
+}) {
   const {
     ugc,
     searchTerm,
@@ -18,7 +23,9 @@ export default function AdminKaryaKaderClient() {
     setDeleteTarget,
     executeDelete,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialUgc,
+  });
 
   return (
     <>

@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { BookOpen, FileText, Download, Eye, ArrowLeft, Search, Calendar, User } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { RepropediaItem } from "@/types";
+import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
 
 export default function RepropediaView() {
   const searchParams = useSearchParams();
@@ -12,13 +13,16 @@ export default function RepropediaView() {
   const moduleSlug = searchParams.get("module");
 
   const [modules, setModules] = useState<RepropediaItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeCategory, setActiveCategory] = useState<string>("semua");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedModule, setSelectedModule] = useState<RepropediaItem | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     userService.getRepropediaModules().then((data) => {
       setModules(data);
+      setIsLoading(false);
     });
   }, []);
 
@@ -63,7 +67,23 @@ export default function RepropediaView() {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         
         {/* VIEW 1: MODULE DETAIL VIEW */}
-        {selectedModule ? (
+        {moduleSlug && isLoading ? (
+          <div className="space-y-6">
+            <button className="inline-flex items-center space-x-2 text-sm font-bold text-slate-400 cursor-not-allowed">
+              <ArrowLeft className="h-4.5 w-4.5" />
+              <span>Memuat Konten...</span>
+            </button>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-8">
+                <DetailSkeleton />
+              </div>
+              <div className="lg:col-span-4 space-y-6">
+                <CardSkeleton />
+                <CardSkeleton />
+              </div>
+            </div>
+          </div>
+        ) : selectedModule ? (
           <div className="space-y-6 animate-in fade-in duration-300">
             {/* Back button */}
             <button
@@ -209,7 +229,16 @@ export default function RepropediaView() {
             </div>
 
             {/* Modules Grid */}
-            {filteredModules.length > 0 ? (
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+              </div>
+            ) : filteredModules.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredModules.map((module) => (
                   <div

@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Search, Play, FileText, ArrowLeft, Calendar, User, Tag, Sparkles, BookOpen } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { MediaItem } from "@/types";
+import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
 
 export default function EdukasiView() {
   const searchParams = useSearchParams();
@@ -14,13 +15,16 @@ export default function EdukasiView() {
   const urlSearchQuery = searchParams.get("search") || "";
 
   const [items, setItems] = useState<MediaItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<"semua" | "article" | "video">("semua");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPost, setSelectedPost] = useState<MediaItem | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     userService.getMediaItems().then((data) => {
       setItems(data);
+      setIsLoading(false);
     });
   }, []);
 
@@ -79,7 +83,23 @@ export default function EdukasiView() {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         
         {/* VIEW 1: DETAILED POST VIEW */}
-        {selectedPost ? (
+        {postSlug && isLoading ? (
+          <div className="space-y-10">
+            <button className="inline-flex items-center space-x-2 text-sm font-bold text-slate-400 cursor-not-allowed">
+              <ArrowLeft className="h-4.5 w-4.5" />
+              <span>Memuat Konten...</span>
+            </button>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-8">
+                <DetailSkeleton />
+              </div>
+              <div className="lg:col-span-4 space-y-6">
+                <CardSkeleton />
+                <CardSkeleton />
+              </div>
+            </div>
+          </div>
+        ) : selectedPost ? (
           <div className="space-y-10 animate-in fade-in duration-300">
             {/* Back trigger */}
             <button
@@ -278,7 +298,14 @@ export default function EdukasiView() {
             </div>
 
             {/* Media list grid */}
-            {filteredItems.length > 0 ? (
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+              </div>
+            ) : filteredItems.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {filteredItems.map((item) => (
                   <div

@@ -5,8 +5,13 @@ import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminKuisView from "@/components/admin/kuis/AdminKuisView";
 import AdminDeleteModal from "@/components/admin/shared/AdminDeleteModal";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { QuizQuestion } from "@/types";
 
-export default function AdminKuisClient() {
+export default function AdminKuisClient({
+  initialQuizzes,
+}: {
+  initialQuizzes: QuizQuestion[];
+}) {
   const {
     quizzes,
     searchTerm,
@@ -18,7 +23,9 @@ export default function AdminKuisClient() {
     setDeleteTarget,
     executeDelete,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialQuizzes,
+  });
 
   return (
     <>

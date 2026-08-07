@@ -59,7 +59,7 @@ export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
             const isActive =
               pathname === item.href ||
               (item.href !== "/admin/dashboard" &&
-                pathname.startsWith(item.href));
+                pathname.startsWith(item.href + "/"));
             return (
               <Link
                 key={item.href}

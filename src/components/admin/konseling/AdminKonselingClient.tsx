@@ -5,8 +5,13 @@ import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminKonselingView from "@/components/admin/konseling/AdminKonselingView";
 import AdminDeleteModal from "@/components/admin/shared/AdminDeleteModal";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { Counselor } from "@/types";
 
-export default function AdminKonselingClient() {
+export default function AdminKonselingClient({
+  initialCounselors,
+}: {
+  initialCounselors: Counselor[];
+}) {
   const {
     counselors,
     searchTerm,
@@ -18,7 +23,9 @@ export default function AdminKonselingClient() {
     setDeleteTarget,
     executeDelete,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialCounselors,
+  });
 
   return (
     <>

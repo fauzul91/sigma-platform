@@ -5,8 +5,13 @@ import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminStatistikView from "@/components/admin/statistik/AdminStatistikView";
 import AdminDeleteModal from "@/components/admin/shared/AdminDeleteModal";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { StatRecord } from "@/types";
 
-export default function AdminStatistikClient() {
+export default function AdminStatistikClient({
+  initialStats,
+}: {
+  initialStats: StatRecord[];
+}) {
   const {
     stats,
     searchTerm,
@@ -18,7 +23,9 @@ export default function AdminStatistikClient() {
     setDeleteTarget,
     executeDelete,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialStats,
+  });
 
   return (
     <>

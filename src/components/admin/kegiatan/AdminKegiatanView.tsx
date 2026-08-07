@@ -47,7 +47,7 @@ export default function AdminKegiatanView({
       </div>
 
       {/* Events Data Table */}
-      <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm overflow-hidden overflow-x-auto">
         <table className="w-full text-left text-xs font-semibold text-slate-500">
           <thead className="bg-slate-50 text-neutral-dark font-extrabold uppercase tracking-wide border-b border-slate-200">
             <tr>

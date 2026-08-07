@@ -4,8 +4,13 @@ import React from "react";
 import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminPengaturanView from "@/components/admin/pengaturan/AdminPengaturanView";
 import AdminToast from "@/components/admin/shared/AdminToast";
+import { AdminGeneralSettings } from "@/types";
 
-export default function AdminPengaturanClient() {
+export default function AdminPengaturanClient({
+  initialSettings,
+}: {
+  initialSettings: AdminGeneralSettings | null;
+}) {
   const {
     vision,
     setVision,
@@ -15,7 +20,9 @@ export default function AdminPengaturanClient() {
     setKetuaName,
     handleSaveSettings,
     toast,
-  } = useAdminDashboard();
+  } = useAdminDashboard({
+    initialSettings,
+  });
 
   return (
     <>

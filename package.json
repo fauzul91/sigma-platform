@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.1",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.10.0",
     "framer-motion": "^12.43.0",
     "lucide-react": "^1.28.0",
     "next": "16.2.12",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

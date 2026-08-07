@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import { Heart, UserCheck, School, Filter } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { UgcItem } from "@/types";
+import { CardSkeleton } from "@/components/shared/Skeletons";
 
 export default function KaryaKaderView() {
   const [ugcList, setUgcList] = useState<UgcItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeFilter, setActiveFilter] = useState<
     "semua" | "poster" | "infografis" | "video"
   >("semua");
@@ -14,8 +16,10 @@ export default function KaryaKaderView() {
   const [likedSet, setLikedSet] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    setIsLoading(true);
     userService.getUgcItems().then((data) => {
       setUgcList(data);
+      setIsLoading(false);
     });
     // load liked IDs from localStorage to prevent spam likes per browser
     try {
@@ -142,7 +146,17 @@ export default function KaryaKaderView() {
 
         {/* Uniform Grid Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
+          {isLoading ? (
+            <>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </>
+          ) : (
+            filteredItems.map((item) => (
             <div
               key={item.id}
               onClick={() => setSelectedUgc(item)}
@@ -203,8 +217,9 @@ export default function KaryaKaderView() {
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+          ))
+        )}
+      </div>
 
         {/* ZOOM MODAL VIEW */}
         {selectedUgc && (
