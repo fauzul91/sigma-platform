@@ -74,9 +74,6 @@ function clearThrottle(req: Request, username: string) {
 }
 
 export async function POST(req: Request) {
-  console.log("[Login] NODE_ENV:", process.env.NODE_ENV);
-  console.log("[Login] Has ADMIN_AUTH_SECRET:", !!getAdminAuthSecret());
-  
   try {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       return NextResponse.json({ ok: false, error: "Supabase belum dikonfigurasi." }, { status: 500 });

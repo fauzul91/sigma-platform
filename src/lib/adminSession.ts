@@ -8,7 +8,6 @@ type AdminSessionPayload = {
 
 export function getAdminAuthSecret() {
   const secret = process.env.ADMIN_AUTH_SECRET;
-  console.log("[getAdminAuthSecret] env value:", secret ? "SET (" + secret.length + " chars)" : "EMPTY");
   if (secret && secret.length > 0) {
     return secret;
   }
@@ -77,12 +76,10 @@ export async function createAdminSessionCookie(username: string) {
     username,
     expiresAt: Date.now() + ADMIN_SESSION_TTL_SECONDS * 1000,
   };
-  console.log("[createAdminSessionCookie] Creating for:", username);
   const encodedPayload = encodeBase64Url(
     new TextEncoder().encode(JSON.stringify(payload)),
   );
   const signature = await sign(encodedPayload);
-  console.log("[createAdminSessionCookie] Created cookie:", encodedPayload.length + signature.length + 1, "chars");
 
   return `${encodedPayload}.${signature}`;
 }
@@ -90,21 +87,17 @@ export async function createAdminSessionCookie(username: string) {
 export async function verifyAdminSessionCookie(
   cookieValue: string | undefined,
 ) {
-  console.log("[verifyAdminSessionCookie] Cookie value:", cookieValue ? cookieValue.substring(0, 50) + "..." : "NULL");
-  
   if (!cookieValue) {
     return null;
   }
 
   const secret = getAdminAuthSecret();
-  console.log("[verifyAdminSessionCookie] Has secret:", !!secret);
   if (!secret) {
     return null;
   }
 
   const separatorIndex = cookieValue.lastIndexOf(".");
   if (separatorIndex <= 0) {
-    console.log("[verifyAdminSessionCookie] Invalid format - no dot found");
     return null;
   }
 
@@ -120,9 +113,6 @@ export async function verifyAdminSessionCookie(
   );
 
   if (signature !== expectedSignature) {
-    console.log("[verifyAdminSessionCookie] SIGNATURE MISMATCH!");
-    console.log("[verifyAdminSessionCookie] Expected:", expectedSignature);
-    console.log("[verifyAdminSessionCookie] Got:", signature);
     return null;
   }
 
@@ -135,14 +125,11 @@ export async function verifyAdminSessionCookie(
       !payload.expiresAt ||
       payload.expiresAt < Date.now()
     ) {
-      console.log("[verifyAdminSessionCookie] Invalid payload or expired");
       return null;
     }
 
-    console.log("[verifyAdminSessionCookie] SUCCESS:", payload.username);
     return payload;
   } catch (e) {
-    console.log("[verifyAdminSessionCookie] Parse error:", e);
     return null;
   }
 }
