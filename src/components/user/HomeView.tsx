@@ -177,8 +177,8 @@ export default function HomeView() {
           </div>
 
           {/* Hero Illustration / Graphical Box */}
-          <div className="lg:col-span-5 relative flex justify-center">
-            <div className="relative w-full max-w-md h-[340px] md:h-[400px] rounded-3xl overflow-hidden shadow-2xl glass-card border border-white p-6 flex flex-col justify-between">
+          <div className="lg:col-span-5 relative flex justify-center w-full">
+            <div className="relative w-full max-w-md h-auto min-h-[380px] md:min-h-[400px] rounded-3xl shadow-2xl glass-card border border-white p-6 flex flex-col justify-between gap-6">
               
               {/* Decorative design within the card */}
               <div className="absolute top-0 right-0 bg-primary/10 h-32 w-32 rounded-bl-full -z-10" />
