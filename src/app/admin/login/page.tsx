@@ -1,13 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Lock, ArrowRight, ShieldCheck, AlertCircle } from "lucide-react";
+import {
+  Lock,
+  ArrowRight,
+  ShieldCheck,
+  AlertCircle,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -15,16 +21,27 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg("");
-
-    setTimeout(() => {
-      if (username === "admin" && password === "admin123") {
-        sessionStorage.setItem("adminAuth", "true");
-        router.push("/admin/dashboard");
-      } else {
-        setErrorMsg("Username atau Password salah! (Default: admin / admin123)");
+    
+    fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ username, password }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.ok) {
+          // Full page reload to ensure cookie is properly set and middleware runs
+          window.location.href = "/admin/dashboard";
+        } else {
+          setErrorMsg(data?.error || "Username atau kata sandi salah.");
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        setErrorMsg("Terjadi kesalahan. Coba lagi.");
         setIsLoading(false);
-      }
-    }, 800);
+      });
   };
 
   return (
@@ -32,13 +49,16 @@ export default function AdminLoginPage() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20 relative z-10 space-y-6">
-        
         <div className="text-center space-y-2">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-3">
             <Lock className="h-7 w-7" />
           </div>
-          <h1 className="text-2xl font-extrabold text-neutral-dark tracking-tight">Portal CMS Admin</h1>
-          <p className="text-xs text-slate-500 font-medium">Masuk untuk mengelola modul edukasi dan data rujukan SIGMA</p>
+          <h1 className="text-2xl font-extrabold text-neutral-dark tracking-tight">
+            Portal CMS Admin
+          </h1>
+          <p className="text-xs text-slate-500 font-medium">
+            Masuk untuk mengelola modul edukasi dan data rujukan SIGMA
+          </p>
         </div>
 
         {errorMsg && (
@@ -50,7 +70,9 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Username Admin</label>
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+              Username Admin
+            </label>
             <input
               type="text"
               required
@@ -62,15 +84,35 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Kata Sandi</label>
-            <input
-              type="password"
-              required
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-semibold"
-            />
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+              Kata Sandi
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-semibold pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
+                aria-label={
+                  showPassword
+                    ? "Sembunyikan kata sandi"
+                    : "Tampilkan kata sandi"
+                }
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
@@ -93,7 +135,6 @@ export default function AdminLoginPage() {
           <ShieldCheck className="h-3.5 w-3.5 text-primary" />
           <span>Akses Terenkripsi untuk Pengurus SIGMA</span>
         </div>
-
       </div>
     </div>
   );

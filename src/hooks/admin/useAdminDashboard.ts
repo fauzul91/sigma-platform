@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -19,8 +19,8 @@ import {
 
 export function useAdminDashboard() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated] = useState(true); // Always true since middleware handles auth
+  const [isLoading, setIsLoading] = useState(false);
 
   // Dynamic session datasets initialized via adminService
   const [modules, setModules] = useState<RepropediaItem[]>(() =>
@@ -152,19 +152,10 @@ export function useAdminDashboard() {
     }
   }, []);
 
-  useEffect(() => {
-    const authStatus = sessionStorage.getItem("adminAuth") === "true";
-    if (authStatus) {
-      setIsAuthenticated(true);
-      loadSupabaseData();
-    } else {
-      router.push("/admin/login");
-    }
-  }, [router, loadSupabaseData]);
+  useEffect(() => { loadSupabaseData(); }, [loadSupabaseData]);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("adminAuth");
-    setIsAuthenticated(false);
+    // sessionStorage handled by cookie-based auth
     triggerToast("Berhasil keluar dari sesi.", "info");
     router.push("/admin/login");
   };
@@ -468,3 +459,5 @@ export function useAdminDashboard() {
     refreshData: loadSupabaseData,
   };
 }
+
+

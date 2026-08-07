@@ -1,42 +1,7 @@
-"use client";
+import { requireAdminSession } from "@/lib/requireAdminSession";
+import AdminEdukasiClient from "@/components/admin/edukasi/AdminEdukasiClient";
 
-import React from "react";
-import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
-import AdminEdukasiView from "@/components/admin/edukasi/AdminEdukasiView";
-import AdminDeleteModal from "@/components/admin/shared/AdminDeleteModal";
-import AdminToast from "@/components/admin/shared/AdminToast";
-
-export default function AdminEdukasiPage() {
-  const {
-    media,
-    searchTerm,
-    setSearchTerm,
-    editingMedia,
-    setEditingMedia,
-    handleSaveMedia,
-    deleteTarget,
-    setDeleteTarget,
-    executeDelete,
-    toast
-  } = useAdminDashboard();
-
-  return (
-    <>
-      <AdminToast toast={toast} />
-      <AdminEdukasiView
-        media={media}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        editingMedia={editingMedia}
-        setEditingMedia={setEditingMedia}
-        onSave={handleSaveMedia}
-        onDelete={(id, title) => setDeleteTarget({ type: "media", id, title })}
-      />
-      <AdminDeleteModal
-        deleteTarget={deleteTarget}
-        onCancel={() => setDeleteTarget(null)}
-        onConfirm={executeDelete}
-      />
-    </>
-  );
+export default async function AdminEdukasiPage() {
+  await requireAdminSession();
+  return <AdminEdukasiClient />;
 }

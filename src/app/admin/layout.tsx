@@ -15,9 +15,15 @@ export default function AdminLayout({
 
   const isLoginPage = pathname === "/admin/login";
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("adminAuth");
-    router.push("/admin/login");
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } finally {
+      router.push("/admin/login");
+    }
   };
 
   if (isLoginPage) {
@@ -27,11 +33,9 @@ export default function AdminLayout({
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col lg:flex-row font-sans">
       <AdminSidebar onLogout={handleLogout} />
-      <div className="flex-grow lg:pl-64 min-h-screen flex flex-col">
+      <div className="grow lg:pl-64 min-h-screen flex flex-col">
         <AdminTopbar />
-        <main className="flex-grow p-6 md:p-8 space-y-6">
-          {children}
-        </main>
+        <main className="grow p-6 md:p-8 space-y-6">{children}</main>
       </div>
     </div>
   );

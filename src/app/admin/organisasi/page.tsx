@@ -1,28 +1,7 @@
-"use client";
+import { requireAdminSession } from "@/lib/requireAdminSession";
+import AdminOrganisasiClient from "@/components/admin/organisasi/AdminOrganisasiClient";
 
-import React from "react";
-import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
-import AdminOrganisasiView from "@/components/admin/organisasi/AdminOrganisasiView";
-import AdminToast from "@/components/admin/shared/AdminToast";
-
-export default function AdminOrganisasiPage() {
-  const {
-    orgMembers,
-    editingMember,
-    setEditingMember,
-    handleSaveMember,
-    toast,
-  } = useAdminDashboard();
-
-  return (
-    <>
-      <AdminToast toast={toast} />
-      <AdminOrganisasiView
-        members={orgMembers}
-        editingMember={editingMember}
-        setEditingMember={setEditingMember}
-        onSave={handleSaveMember}
-      />
-    </>
-  );
+export default async function AdminOrganisasiPage() {
+  await requireAdminSession();
+  return <AdminOrganisasiClient />;
 }
