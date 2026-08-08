@@ -7,8 +7,8 @@ interface AdminStatistikViewProps {
   stats: StatRecord[];
   searchTerm: string;
   setSearchTerm: (val: string) => void;
-  editingStat: (Partial<StatRecord> & { index?: number }) | null;
-  setEditingStat: (val: (Partial<StatRecord> & { index?: number }) | null) => void;
+  editingStat: (Partial<StatRecord> & { index?: number; _isEdit?: boolean }) | null;
+  setEditingStat: (val: (Partial<StatRecord> & { index?: number; _isEdit?: boolean }) | null) => void;
   onSave: () => void;
   onDelete: (year: number, title: string) => void;
   currentPage: number;
@@ -75,7 +75,7 @@ export default function AdminStatistikView({
                 <td className="py-3.5 px-4">{s["Desa Kertajaya"]} kasus</td>
                 <td className="py-3.5 px-4 text-right flex justify-end space-x-2">
                   <button
-                    onClick={() => setEditingStat({ ...s })}
+                    onClick={() => setEditingStat({ ...s, _isEdit: true })}
                     className="p-2 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer"
                   >
                     <Edit2 className="h-3.5 w-3.5" />
@@ -109,7 +109,7 @@ export default function AdminStatistikView({
             
             <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-4">
               <h3 className="font-extrabold text-neutral-dark text-lg">
-                {editingStat.index !== undefined ? "Edit Baris Kasus" : "Tambah Baris Kasus Baru"}
+                {editingStat._isEdit ? "Edit Data Statistik" : "Tambah Data Statistik Baru"}
               </h3>
               <button
                 onClick={() => setEditingStat(null)}
@@ -126,8 +126,18 @@ export default function AdminStatistikView({
                   type="number"
                   required
                   value={editingStat.year || ""}
-                  onChange={(e) => setEditingStat({ ...editingStat, year: Number(e.target.value) })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+                  onChange={(e) =>
+                    // Jika mode edit (year sudah ada di state asli), tahun tidak boleh diubah
+                    editingStat._isEdit
+                      ? undefined
+                      : setEditingStat({ ...editingStat, year: Number(e.target.value) })
+                  }
+                  readOnly={Boolean(editingStat._isEdit)}
+                  className={`w-full px-3.5 py-2.5 rounded-xl border text-xs focus:outline-none ${
+                    editingStat._isEdit
+                      ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed"
+                      : "border-slate-200 focus:ring-2 focus:ring-primary/20"
+                  }`}
                 />
               </div>
 

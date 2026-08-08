@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard";
 import AdminStatistikView from "@/components/admin/statistik/AdminStatistikView";
@@ -42,6 +42,17 @@ export default function AdminStatistikClient({
     (page - 1) * pageSize,
     page * pageSize
   );
+
+  // Auto-redirect ke page terakhir yang valid jika page sekarang kosong setelah delete
+  useEffect(() => {
+    if (filteredStats.length === 0) return; // tidak ada data sama sekali, biarkan
+    const maxPage = Math.ceil(filteredStats.length / pageSize);
+    if (page > maxPage) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", maxPage.toString());
+      router.replace(`${pathname}?${params.toString()}`);
+    }
+  }, [filteredStats.length, page, pageSize, pathname, router, searchParams]);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
