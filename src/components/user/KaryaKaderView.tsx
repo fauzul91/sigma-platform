@@ -156,8 +156,8 @@ export default function KaryaKaderView() {
           </div>
         </div>
 
-        {/* Uniform Grid Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Card Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {isLoading ? (
             <>
               <CardSkeleton />
@@ -168,80 +168,78 @@ export default function KaryaKaderView() {
               <CardSkeleton />
             </>
           ) : (
-            <div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {slicedItems.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => setSelectedUgc(item)}
-                    className="rounded-2xl bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between hover:border-emerald-100 group h-full"
+            slicedItems.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedUgc(item)}
+                className="rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col hover:border-emerald-100 group overflow-hidden"
+              >
+                {/* Image — aspect 4/3, full width */}
+                <div className="relative overflow-hidden bg-slate-100 aspect-[4/3] w-full">
+                  <img
+                    src={item.mediaUrl}
+                    alt={`Poster karya: ${item.title}`}
+                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                  />
+                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-primary/95 text-white text-[10px] font-extrabold uppercase tracking-widest shadow">
+                    {item.type}
+                  </span>
+                </div>
+
+                {/* Card body */}
+                <div className="flex flex-col flex-1 p-5">
+                  <h3
+                    className="font-bold text-neutral-dark text-base md:text-lg leading-snug group-hover:text-primary transition-colors line-clamp-2 mb-2"
+                    title={item.title}
                   >
-                    <div>
-                      {/* Fixed aspect ratio for uniform image sizes */}
-                      <div className="relative rounded-xl overflow-hidden bg-slate-100 mb-4 aspect-[4/3] w-full">
-                        <img
-                          src={item.mediaUrl}
-                          alt={`Poster karya: ${item.title}`}
-                          className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-300"
-                        />
-                        <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-primary/95 text-white text-[9px] font-extrabold uppercase tracking-widest">
-                          {item.type}
-                        </span>
-                      </div>
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed flex-1">
+                    {item.description}
+                  </p>
 
-                      {/* Truncated title */}
-                      <h3
-                        className="font-bold text-neutral-dark text-base leading-snug group-hover:text-primary transition-colors truncate"
-                        title={item.title}
-                      >
-                        {item.title}
-                      </h3>
-
-                      {/* Clamped description text */}
-                      <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                        {item.description}
-                      </p>
+                  {/* Footer */}
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between">
+                    <div className="space-y-0.5 min-w-0 mr-3">
+                      <span className="flex items-center gap-1.5 text-slate-700 font-bold text-sm min-w-0">
+                        <UserCheck className="h-4 w-4 text-primary shrink-0" />
+                        <span className="truncate">{item.creatorName}</span>
+                      </span>
+                      <span className="flex items-center gap-1 text-xs text-slate-400 font-semibold truncate">
+                        <School className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">{item.school}</span>
+                      </span>
                     </div>
 
-                    {/* Creator details and Like trigger */}
-                    <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                      <div className="space-y-0.5 min-w-0">
-                        <span className="flex items-center space-x-1 text-slate-700 font-bold min-w-0">
-                          <UserCheck className="h-3.5 w-3.5 text-primary shrink-0" />
-                          <span className="truncate">{item.creatorName}</span>
-                        </span>
-                        <span className="flex items-center space-x-1 text-[10px] text-slate-400 font-semibold truncate">
-                          <School className="h-3 w-3 shrink-0" />
-                          <span className="truncate">{item.school}</span>
-                        </span>
-                      </div>
-
-                      <button
-                        onClick={(e) => handleLike(item.id, e)}
-                        className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                          likedSet.has(item.id)
-                            ? "bg-rose-50 text-rose-600"
-                            : "text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                        }`}
-                      >
-                        <Heart
-                          className={`h-4 w-4 ${likedSet.has(item.id) ? "text-rose-600" : "text-slate-400"}`}
-                        />
-                        <span>{item.likes}</span>
-                      </button>
-                    </div>
+                    <button
+                      onClick={(e) => handleLike(item.id, e)}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors cursor-pointer shrink-0 ${
+                        likedSet.has(item.id)
+                          ? "bg-rose-50 text-rose-600"
+                          : "text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                      }`}
+                    >
+                      <Heart
+                        className={`h-4 w-4 ${likedSet.has(item.id) ? "fill-rose-500 text-rose-600" : "text-slate-400"}`}
+                      />
+                      <span className="text-xs font-bold">{item.likes}</span>
+                    </button>
                   </div>
-                ))}
+                </div>
               </div>
-              <UserPagination
-                currentPage={currentPage}
-                totalItems={filteredItems.length}
-                pageSize={pageSize}
-                onPageChange={setCurrentPage}
-              />
-            </div>
+            ))
           )}
         </div>
+
+        {/* Pagination — di luar grid */}
+        {!isLoading && (
+          <UserPagination
+            currentPage={currentPage}
+            totalItems={filteredItems.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+          />
+        )}
 
         {/* ZOOM MODAL VIEW */}
         {selectedUgc && (
