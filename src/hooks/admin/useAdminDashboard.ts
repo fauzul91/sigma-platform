@@ -107,7 +107,7 @@ export function useAdminDashboard({
   const [editingMedia, setEditingMedia] = useState<Partial<MediaItem> | null>(null);
   const [editingQuiz, setEditingQuiz] = useState<Partial<QuizQuestion> | null>(null);
   const [editingCounselor, setEditingCounselor] = useState<Partial<Counselor> | null>(null);
-  const [editingStat, setEditingStat] = useState<(Partial<StatRecord> & { index?: number }) | null>(null);
+  const [editingStat, setEditingStat] = useState<(Partial<StatRecord> & { index?: number; _isEdit?: boolean }) | null>(null);
   const [editingUgc, setEditingUgc] = useState<Partial<UgcItem> | null>(null);
   const [editingEvent, setEditingEvent] = useState<Partial<EventItem> | null>(null);
   const [editingMember, setEditingMember] = useState<Partial<OrgMember> | null>(null);
@@ -139,13 +139,11 @@ export function useAdminDashboard({
           isEdit ? prev.map((m) => (m.id === saved.id ? saved : m)) : [saved, ...prev]
         );
         triggerToast(
-          isEdit
-            ? "Modul berhasil diperbarui di Supabase!"
-            : "Modul baru berhasil ditambahkan ke Supabase!",
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
           "success",
         );
       } else {
-        triggerToast("Gagal menyimpan modul ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingModule(null);
     }
@@ -161,13 +159,11 @@ export function useAdminDashboard({
           isEdit ? prev.map((m) => (m.id === saved.id ? saved : m)) : [saved, ...prev]
         );
         triggerToast(
-          isEdit
-            ? "Media berhasil diperbarui di Supabase!"
-            : "Media baru berhasil ditambahkan ke Supabase!",
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
           "success",
         );
       } else {
-        triggerToast("Gagal menyimpan media ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingMedia(null);
     }
@@ -183,13 +179,11 @@ export function useAdminDashboard({
           isEdit ? prev.map((q) => (q.id === saved.id ? saved : q)) : [saved, ...prev]
         );
         triggerToast(
-          isEdit
-            ? "Pertanyaan kuis diperbarui di Supabase!"
-            : "Pertanyaan kuis ditambahkan ke Supabase!",
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
           "success",
         );
       } else {
-        triggerToast("Gagal menyimpan kuis ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingQuiz(null);
     }
@@ -198,17 +192,21 @@ export function useAdminDashboard({
   // 4. Statistics CRUD
   const handleSaveStat = async () => {
     if (editingStat?.year) {
+      const isEdit = stats.some((s) => s.year === Number(editingStat.year));
       const saved = await saveStat(editingStat);
       if (saved) {
         setStats((prev) => {
           const exists = prev.some((s) => s.year === saved.year);
           return exists
             ? prev.map((s) => (s.year === saved.year ? saved : s))
-            : [saved, ...prev].sort((a, b) => a.year - b.year);
+            : [...prev, saved].sort((a, b) => a.year - b.year);
         });
-        triggerToast("Data statistik disimpan ke Supabase!", "success");
+        triggerToast(
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
+          "success",
+        );
       } else {
-        triggerToast("Gagal menyimpan statistik ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingStat(null);
     }
@@ -224,13 +222,11 @@ export function useAdminDashboard({
           isEdit ? prev.map((c) => (c.id === saved.id ? saved : c)) : [...prev, saved]
         );
         triggerToast(
-          isEdit
-            ? "Kontak pendamping diperbarui di Supabase!"
-            : "Pendamping baru ditambahkan ke Supabase!",
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
           "success",
         );
       } else {
-        triggerToast("Gagal menyimpan pendamping ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingCounselor(null);
     }
@@ -246,11 +242,11 @@ export function useAdminDashboard({
           isEdit ? prev.map((u) => (u.id === saved.id ? saved : u)) : [saved, ...prev]
         );
         triggerToast(
-          isEdit ? "Karya diperbarui di Supabase!" : "Karya baru ditambahkan ke Supabase!",
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
           "success",
         );
       } else {
-        triggerToast("Gagal menyimpan karya ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingUgc(null);
     }
@@ -264,9 +260,9 @@ export function useAdminDashboard({
       ketuaName,
     });
     if (success) {
-      triggerToast("Pengaturan berhasil disimpan ke Supabase!", "success");
+      triggerToast("Pengaturan Berhasil Disimpan", "success");
     } else {
-      triggerToast("Gagal menyimpan pengaturan ke Supabase.", "danger");
+      triggerToast("Gagal menyimpan pengaturan. Silakan coba lagi.", "danger");
     }
   };
 
@@ -280,11 +276,11 @@ export function useAdminDashboard({
           isEdit ? prev.map((e) => (e.id === saved.id ? saved : e)) : [saved, ...prev]
         );
         triggerToast(
-          isEdit ? "Kegiatan diperbarui di Supabase!" : "Kegiatan baru ditambahkan ke Supabase!",
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
           "success",
         );
       } else {
-        triggerToast("Gagal menyimpan kegiatan ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingEvent(null);
     }
@@ -302,13 +298,11 @@ export function useAdminDashboard({
             : [...prev, saved].sort((a, b) => a.sortOrder - b.sortOrder)
         );
         triggerToast(
-          isEdit
-            ? "Anggota organisasi diperbarui di Supabase!"
-            : "Anggota baru ditambahkan ke Supabase!",
+          isEdit ? "Data Berhasil Diubah" : "Data Berhasil Ditambah",
           "success",
         );
       } else {
-        triggerToast("Gagal menyimpan anggota ke Supabase.", "danger");
+        triggerToast("Gagal menyimpan data. Silakan coba lagi.", "danger");
       }
       setEditingMember(null);
     }
@@ -330,11 +324,9 @@ export function useAdminDashboard({
       success = await deleteQuiz(String(id));
       if (success) setQuizzes((prev) => prev.filter((q) => q.id !== id));
     } else if (type === "stat") {
-      const targetStat = stats.find((_, idx) => idx === id || _.year === id);
-      if (targetStat) {
-        success = await deleteStat(targetStat.year);
-        if (success) setStats((prev) => prev.filter((s) => s.year !== targetStat.year));
-      }
+      const year = Number(id);
+      success = await deleteStat(year);
+      if (success) setStats((prev) => prev.filter((s) => s.year !== year));
     } else if (type === "counselor") {
       success = await deleteCounselor(String(id));
       if (success) setCounselors((prev) => prev.filter((c) => c.id !== id));
@@ -350,9 +342,9 @@ export function useAdminDashboard({
     }
 
     if (success) {
-      triggerToast("Data berhasil dihapus dari Supabase.", "danger");
+      triggerToast("Data Berhasil Dihapus", "danger");
     } else {
-      triggerToast("Gagal menghapus data dari Supabase.", "danger");
+      triggerToast("Gagal menghapus data. Silakan coba lagi.", "danger");
     }
     setDeleteTarget(null);
   };
