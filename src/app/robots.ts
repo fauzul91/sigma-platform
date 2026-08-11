@@ -12,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         "/admin/login",
       ],
     },
-    sitemap: "https://sigma-repro.org/sitemap.xml",
+    sitemap: "https://sigmaplatform.vercel.app/sitemap.xml",
   };
 }

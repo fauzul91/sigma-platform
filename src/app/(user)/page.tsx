@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import HomeView from "@/components/user/HomeView";
 
 export const metadata: Metadata = {
-  title: "SIGMA | Edukasi Pencegahan Perkawinan Anak",
-  description: "SIGMA adalah platform edukasi digital interaktif mengenai kesehatan reproduksi remaja, pencegahan perkawinan anak, pemenuhan hak anak, kesehatan mental, dan pencegahan kekerasan seksual, terhubung langsung dengan rujukan konseling Kader GARUDA.",
+  title: {
+    absolute: "SIGMA | Platform Edukasi & Pemberdayaan Remaja",
+  },
+  description: "Platform edukasi kesehatan reproduksi, pencegahan perkawinan anak, dan ruang belajar serta berkarya bagi remaja.",
   alternates: {
-    canonical: "https://sigma-repro.org/",
+    canonical: "https://sigmaplatform.vercel.app/",
   }
 };
 
@@ -15,18 +17,18 @@ export default function Home() {
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://sigma-repro.org/#organization",
+        "@id": "https://sigmaplatform.vercel.app/#organization",
         "name": "Program SIGMA",
-        "url": "https://sigma-repro.org",
-        "logo": "https://sigma-repro.org/assets/icon-512.jpg",
+        "url": "https://sigmaplatform.vercel.app",
+        "logo": "https://sigmaplatform.vercel.app/assets/icon-512.jpg",
         "description": "Platform digital untuk edukasi kesehatan reproduksi remaja, pencegahan pernikahan usia anak, dan rujukan layanan konseling peer-to-peer."
       },
       {
         "@type": "WebSite",
-        "@id": "https://sigma-repro.org/#website",
-        "url": "https://sigma-repro.org",
+        "@id": "https://sigmaplatform.vercel.app/#website",
+        "url": "https://sigmaplatform.vercel.app",
         "name": "SIGMA",
-        "publisher": { "@id": "https://sigma-repro.org/#organization" }
+        "publisher": { "@id": "https://sigmaplatform.vercel.app/#organization" }
       }
     ]
   };

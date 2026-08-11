@@ -24,18 +24,19 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "SIGMA | Edukasi Pencegahan Perkawinan Anak",
+    default: "SIGMA | Platform Edukasi & Pemberdayaan Remaja",
     template: "%s | SIGMA"
   },
-  description: "Platform digital untuk edukasi kesehatan reproduksi remaja, pencegahan pernikahan usia anak, dan rujukan layanan konseling peer-to-peer.",
-  metadataBase: new URL("https://sigma-repro.org"),
+  description: "Platform edukasi kesehatan reproduksi, pencegahan perkawinan anak, dan ruang belajar serta berkarya bagi remaja.",
+  metadataBase: new URL("https://sigmaplatform.vercel.app"),
   alternates: {
     canonical: "./",
   },
   keywords: [
     "SIGMA", "Kesehatan Reproduksi", "Pencegahan Pernikahan Anak", 
+    "Pencegahan Perkawinan Anak", "Pernikahan Dini",
     "Hak Anak", "Kesehatan Mental Remaja", "Kekerasan Seksual", 
-    "Konseling Remaja", "Kader GARUDA"
+    "Konseling Remaja", "Kader GARUDA", "Repropedia", "Pemberdayaan Digital"
   ],
   authors: [{ name: "Kader GARUDA & Tim SIGMA" }],
   icons: {
@@ -48,9 +49,9 @@ export const metadata: Metadata = {
     ]
   },
   openGraph: {
-    title: "SIGMA | Edukasi Pencegahan Perkawinan Anak",
-    description: "Platform digital untuk edukasi kesehatan reproduksi remaja, pencegahan pernikahan usia anak, dan rujukan layanan konseling peer-to-peer.",
-    url: "https://sigma-repro.org",
+    title: "SIGMA | Platform Edukasi & Pemberdayaan Remaja",
+    description: "Platform edukasi kesehatan reproduksi, pencegahan perkawinan anak, dan ruang belajar serta berkarya bagi remaja.",
+    url: "https://sigmaplatform.vercel.app",
     siteName: "SIGMA",
     locale: "id_ID",
     type: "website",
@@ -59,14 +60,14 @@ export const metadata: Metadata = {
         url: "/assets/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "SIGMA - Edukasi Pencegahan Perkawinan Anak",
+        alt: "SIGMA - Platform Edukasi & Pemberdayaan Remaja",
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "SIGMA | Edukasi Pencegahan Perkawinan Anak",
-    description: "Platform digital untuk edukasi kesehatan reproduksi remaja, pencegahan pernikahan usia anak, dan rujukan layanan konseling peer-to-peer.",
+    title: "SIGMA | Platform Edukasi & Pemberdayaan Remaja",
+    description: "Platform edukasi kesehatan reproduksi, pencegahan perkawinan anak, dan ruang belajar serta berkarya bagi remaja.",
     images: ["/assets/og-image.jpg"],
   }
 };
