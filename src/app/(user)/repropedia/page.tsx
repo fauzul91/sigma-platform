@@ -1,45 +1,116 @@
 import type { Metadata } from "next";
 import React, { Suspense } from "react";
 import RepropediaView from "@/components/user/RepropediaView";
+import { userService } from "@/services/user/userService";
 
-export const metadata: Metadata = {
-  title: "Repropedia",
-  description: "Kamus literasi digital kesehatan reproduksi remaja, informasi pubertas, hak anak, serta panduan pencegahan perkawinan dini terpercaya.",
-  alternates: {
-    canonical: "https://sigma-repro.org/repropedia",
-  }
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default function RepropediaPage() {
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const resolvedSearchParams = await searchParams;
+  const moduleSlug = resolvedSearchParams.module;
+
+  if (typeof moduleSlug === "string" && moduleSlug) {
+    const modules = await userService.getRepropediaModules();
+    const foundModule = modules.find((m) => m.slug === moduleSlug);
+    if (foundModule) {
+      const cleanExcerpt = foundModule.synopsis || (foundModule.content.substring(0, 160).replace(/\r?\n|\r/g, " ") + "...");
+      return {
+        title: foundModule.title,
+        description: cleanExcerpt,
+        alternates: {
+          canonical: `https://sigmaplatform.vercel.app/repropedia?module=${moduleSlug}`,
+        },
+        openGraph: {
+          title: `${foundModule.title} | SIGMA`,
+          description: cleanExcerpt,
+          url: `https://sigmaplatform.vercel.app/repropedia?module=${moduleSlug}`,
+          type: "article",
+          images: [
+            {
+              url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+              width: 1200,
+              height: 630,
+              alt: foundModule.title,
+            },
+          ],
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: `${foundModule.title} | SIGMA`,
+          description: cleanExcerpt,
+          images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
+        },
+      };
+    }
+  }
+
+  return {
+    title: "Repropedia",
+    description: "Kamus literasi digital kesehatan reproduksi remaja, informasi pubertas, hak anak, serta panduan pencegahan perkawinan dini terpercaya.",
+    alternates: {
+      canonical: "https://sigmaplatform.vercel.app/repropedia",
+    },
+  };
+}
+
+export default async function RepropediaPage({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
+  const moduleSlug = resolvedSearchParams.module;
+
+  let activeModule = null;
+  if (typeof moduleSlug === "string" && moduleSlug) {
+    const modules = await userService.getRepropediaModules();
+    activeModule = modules.find((m) => m.slug === moduleSlug) || null;
+  }
+
+  const graphElements: Record<string, unknown>[] = [
+    {
+      "@type": "WebPage",
+      "@id": "https://sigmaplatform.vercel.app/repropedia/#webpage",
+      "url": "https://sigmaplatform.vercel.app/repropedia",
+      "name": "Repropedia | SIGMA",
+      "description": "Kamus literasi digital kesehatan reproduksi remaja, informasi pubertas, hak anak, serta panduan pencegahan perkawinan dini terpercaya."
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://sigmaplatform.vercel.app/repropedia/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "https://sigmaplatform.vercel.app/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Repropedia",
+          "item": "https://sigmaplatform.vercel.app/repropedia"
+        }
+      ]
+    }
+  ];
+
+  if (activeModule) {
+    graphElements.push({
+      "@type": "MedicalWebPage",
+      "@id": `https://sigmaplatform.vercel.app/repropedia?module=${activeModule.slug}#medicalpage`,
+      "headline": activeModule.title,
+      "description": activeModule.synopsis || activeModule.content.substring(0, 160),
+      "aspect": activeModule.category,
+      "datePublished": "2026-05-12", // fallback or use activeModule.date
+      "author": {
+        "@type": "Person",
+        "name": activeModule.author
+      }
+    });
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://sigma-repro.org/repropedia/#webpage",
-        "url": "https://sigma-repro.org/repropedia",
-        "name": "Repropedia | SIGMA",
-        "description": "Kamus literasi digital kesehatan reproduksi remaja, informasi pubertas, hak anak, serta panduan pencegahan perkawinan dini terpercaya."
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://sigma-repro.org/repropedia/#breadcrumb",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Beranda",
-            "item": "https://sigma-repro.org/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Repropedia",
-            "item": "https://sigma-repro.org/repropedia"
-          }
-        ]
-      }
-    ]
+    "@graph": graphElements
   };
 
   return (

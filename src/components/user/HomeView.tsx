@@ -592,9 +592,9 @@ export default function HomeView() {
               </div>
 
               {/* The Bold Logo Heading */}
-              <h1 className="text-5xl md:text-6xl font-black tracking-[0.25em] bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent leading-none select-none pl-4">
+              <div className="text-5xl md:text-6xl font-black tracking-[0.25em] bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent leading-none select-none pl-4">
                 SIGMA
-              </h1>
+              </div>
             </div>
 
             {/* 2. Loading State Information Section */}

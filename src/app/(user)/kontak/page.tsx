@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Hubungi Kami",
   description: "Hubungi tim pengurus Program SIGMA dan Kader GARUDA untuk saran, masukan, kerjasama instansi, atau undangan sosialisasi.",
   alternates: {
-    canonical: "https://sigma-repro.org/kontak",
+    canonical: "https://sigmaplatform.vercel.app/kontak",
   }
 };
 
@@ -16,26 +16,26 @@ export default function KontakPage() {
     "@graph": [
       {
         "@type": "WebPage",
-        "@id": "https://sigma-repro.org/kontak/#webpage",
-        "url": "https://sigma-repro.org/kontak",
+        "@id": "https://sigmaplatform.vercel.app/kontak/#webpage",
+        "url": "https://sigmaplatform.vercel.app/kontak",
         "name": "Hubungi Kami | SIGMA",
         "description": "Kader GARUDA terbuka terhadap saran, undangan sosialisasi sekolah, kolaborasi instansi, atau masukan platform."
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://sigma-repro.org/kontak/#breadcrumb",
+        "@id": "https://sigmaplatform.vercel.app/kontak/#breadcrumb",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "name": "Beranda",
-            "item": "https://sigma-repro.org/"
+            "item": "https://sigmaplatform.vercel.app/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Hubungi Kami",
-            "item": "https://sigma-repro.org/kontak"
+            "item": "https://sigmaplatform.vercel.app/kontak"
           }
         ]
       }
