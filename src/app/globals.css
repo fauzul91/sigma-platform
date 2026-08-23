@@ -36,6 +36,16 @@ nav a,
   font-family: var(--font-heading), sans-serif;
 }
 
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Custom scrolling partner logo marquee */
 @keyframes marquee {
   0% {

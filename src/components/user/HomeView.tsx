@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { 
-  BookOpen, 
-  MessageCircle, 
-  Award, 
-  ArrowRight, 
-  Users, 
-  ChevronRight, 
-  Play, 
+import {
+  BookOpen,
+  MessageCircle,
+  Award,
+  ArrowRight,
+  Users,
+  ChevronRight,
+  Play,
   Sparkles,
   HeartHandshake,
   Activity
@@ -18,10 +18,34 @@ import { userService } from "@/services/user/userService";
 import { RepropediaItem, MediaItem } from "@/types";
 import { CardSkeleton } from "@/components/shared/Skeletons";
 
+const PARTNERS = [
+  {
+    src: "/assets/logo_unej.png",
+    alt: "Universitas Jember",
+  },
+  {
+    src: "/assets/logo_kemendikbud.png",
+    alt: "Kementerian Pendidikan dan Kebudayaan",
+  },
+  {
+    src: "/assets/logo_kemendikti.png",
+    alt: "Kementerian Pendidikan Tinggi, Sains, dan Teknologi",
+  },
+  {
+    src: "/assets/logo_lppm.jpg",
+    alt: "LPPM Universitas Jember",
+    className: "rounded-md",
+  },
+  {
+    src: "/assets/logo_blu.png",
+    alt: "Badan Layanan Umum",
+  },
+];
+
 export default function HomeView() {
   const [modulesList, setModulesList] = useState<RepropediaItem[]>([]);
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
-  const [activeCounselorCount, setActiveCounselorCount] = useState(12);
+  const [activeCounselorCount, setActiveCounselorCount] = useState(15);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
 
   // Simple counter animation trigger
@@ -82,13 +106,13 @@ export default function HomeView() {
       const slideTimer = setTimeout(() => {
         setSplashTransition(true);
       }, 2200);
-      
+
       // Unmount splash completely after 2.8 seconds
       const unmountTimer = setTimeout(() => {
         setShowSplash(false);
         sessionStorage.setItem("hasSeenSplash", "true");
       }, 2800);
-      
+
       return () => {
         clearInterval(interval);
         clearTimeout(slideTimer);
@@ -129,7 +153,7 @@ export default function HomeView() {
 
   return (
     <div className="relative overflow-hidden bg-slate-50 min-h-screen">
-      
+
       {/* Decorative background blobs */}
       <div className="absolute top-0 left-1/4 -z-10 h-[400px] w-[400px] rounded-full bg-emerald-100/40 blur-3xl" />
       <div className="absolute top-1/3 right-10 -z-10 h-[300px] w-[300px] rounded-full bg-amber-100/30 blur-3xl" />
@@ -137,10 +161,10 @@ export default function HomeView() {
       {/* 1. HERO SECTION */}
       <section className="relative py-16 md:py-24 lg:py-28 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
+
           {/* Hero text content */}
           <div className="lg:col-span-7 space-y-6 md:space-y-8 text-center lg:text-left">
-            
+
             <div className="inline-flex items-center space-x-2 bg-emerald-50 border border-emerald-200/50 px-3.5 py-1.5 rounded-full text-primary text-xs font-bold uppercase tracking-wider shadow-sm animate-pulse">
               <Sparkles className="h-3.5 w-3.5" />
               <span>Bersama Kader GARUDA Indonesia</span>
@@ -165,7 +189,7 @@ export default function HomeView() {
                 <span>Mulai Belajar (Repropedia)</span>
                 <ArrowRight className="h-5 w-5" />
               </Link>
-              
+
               <Link
                 href="/konseling"
                 className="w-full sm:w-auto text-center px-8 py-4 rounded-xl bg-white border border-slate-200 text-neutral-dark font-bold hover:bg-slate-50 shadow-sm transition-all duration-200 flex items-center justify-center space-x-2"
@@ -179,17 +203,17 @@ export default function HomeView() {
           {/* Hero Illustration / Graphical Box */}
           <div className="lg:col-span-5 relative flex justify-center w-full">
             <div className="relative w-full max-w-md h-auto min-h-[380px] md:min-h-[400px] rounded-3xl shadow-2xl glass-card border border-white p-6 flex flex-col justify-between gap-6">
-              
+
               {/* Decorative design within the card */}
               <div className="absolute top-0 right-0 bg-primary/10 h-32 w-32 rounded-bl-full -z-10" />
-              
+
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <div className="h-3 w-3 rounded-full bg-red-500" />
                   <div className="h-3 w-3 rounded-full bg-yellow-500" />
                   <div className="h-3 w-3 rounded-full bg-green-500" />
                 </div>
-                
+
                 <div className="p-4 rounded-2xl bg-white/80 border border-slate-100 shadow-sm">
                   <h3 className="text-sm font-bold text-neutral-dark flex items-center space-x-2">
                     <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
@@ -230,73 +254,51 @@ export default function HomeView() {
       </section>
 
       {/* Mitra & Partner Kerja Sama Marquee Section */}
-      <section className="bg-emerald-600 py-10 overflow-hidden relative border-y border-emerald-700/30">
-        {/* Decorative background vectors */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent)] pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-center md:text-left">
-            <h3 className="text-white font-extrabold text-lg leading-tight">Mitra & Partner Kerja Sama</h3>
-            <p className="text-xs text-emerald-100/80 mt-1 font-semibold">SIGMA didukung oleh institusi pendidikan dan kesehatan terkemuka.</p>
+      <section className="relative overflow-hidden border-y border-emerald-700/30 bg-emerald-600 py-8 sm:py-10">
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent)]" />
+
+        {/* Section Header */}
+        <div className="relative mx-auto mb-6 sm:mb-7 flex max-w-7xl flex-col items-center justify-between gap-3 sm:gap-4 px-6 sm:px-10 lg:flex-row lg:px-16">
+          <div className="text-center lg:text-left">
+            <h3 className="text-lg sm:text-xl font-extrabold leading-tight text-white">
+              Mitra & Partner Kerja Sama
+            </h3>
+
+            <p className="mt-1 text-xs font-semibold text-emerald-100/80">
+              SIGMA didukung oleh institusi pendidikan dan kesehatan terkemuka.
+            </p>
           </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-800 bg-white/95 px-3 py-1 rounded-full border border-emerald-100 shrink-0">
+
+          <span className="shrink-0 rounded-full border border-emerald-100 bg-white/95 px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-emerald-800 shadow-sm">
             Kolaborasi Terpadu
           </span>
         </div>
-        
-        {/* Infinite Horizontal Marquee */}
-        <div className="relative w-full flex items-center overflow-hidden py-3">
-          <div className="animate-marquee flex items-center space-x-6 whitespace-nowrap">
-            {/* Set 1 */}
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_unej.png" alt="Universitas Jember Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_kemendikbud.png" alt="Kemendikbud Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_kemendikti.png" alt="Kemendikti Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_lppm.jpg" alt="LPPM Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_blu.png" alt="BLU Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
 
-            {/* Set 2 */}
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_unej.png" alt="Universitas Jember Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_kemendikbud.png" alt="Kemendikbud Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_kemendikti.png" alt="Kemendikti Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_lppm.jpg" alt="LPPM Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_blu.png" alt="BLU Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-
-            {/* Set 3 */}
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_unej.png" alt="Universitas Jember Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_kemendikbud.png" alt="Kemendikbud Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_kemendikti.png" alt="Kemendikti Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_lppm.jpg" alt="LPPM Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
-            <div className="inline-flex h-20 md:h-24 px-8 md:px-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-emerald-500/10 transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer duration-200 shrink-0">
-              <img src="/assets/logo_blu.png" alt="BLU Logo" className="h-10 md:h-12 w-auto object-contain" />
-            </div>
+        {/* Marquee */}
+        <div className="relative w-full overflow-hidden py-3 sm:py-4">
+          <div className="animate-marquee flex w-max items-center gap-5 sm:gap-6 md:gap-7">
+            {[1, 2, 3].map((group) => (
+              <div
+                key={group}
+                className="flex shrink-0 items-center gap-5 sm:gap-6 md:gap-7"
+                aria-hidden={group !== 1}
+              >
+                {PARTNERS.map((partner, index) => (
+                  <div
+                    key={`${group}-${index}`}
+                    className="group flex h-20 sm:h-24 md:h-28 min-w-[125px] sm:min-w-[145px] md:min-w-[165px] shrink-0 items-center justify-center rounded-2xl sm:rounded-3xl border border-emerald-500/10 bg-white px-5 sm:px-7 md:px-8 py-3 sm:py-4 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+                  >
+                    <img
+                      src={partner.src}
+                      alt={partner.alt}
+                      className={`h-12 sm:h-14 md:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105 ${partner.className || ""}`}
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -494,8 +496,8 @@ export default function HomeView() {
             {faqData.map((faq, index) => {
               const isOpen = openFaqIndex === index;
               return (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="border border-slate-100 rounded-2xl bg-slate-50/50 overflow-hidden transition-all duration-200 hover:border-emerald-100"
                 >
                   <button
@@ -550,19 +552,18 @@ export default function HomeView() {
 
       {/* Opening Splash Screen Animation */}
       {showSplash && (
-        <div 
-          className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-transform duration-[850ms] ease-in-out bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.1),rgba(255,255,255,1))] ${
-            splashTransition ? "-translate-y-full" : "translate-y-0"
-          }`}
+        <div
+          className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-transform duration-[850ms] ease-in-out bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.1),rgba(255,255,255,1))] ${splashTransition ? "-translate-y-full" : "translate-y-0"
+            }`}
         >
           {/* Subtle green grid lines background */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.04)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
           <div className="space-y-12 text-center w-full max-w-lg px-6 relative z-10">
-            
+
             {/* 1. Green Bounding Box wrapper around main title */}
             <div className="relative inline-block px-14 py-8 bg-white/40 backdrop-blur-[1px] select-none mx-auto">
-              
+
               {/* Dynamic SVG Animated Bounding Box Outline */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
                 <rect
@@ -614,11 +615,11 @@ export default function HomeView() {
                   <span className="animate-pulse">{getLoadingMessage(progress)}</span>
                   <span className="text-emerald-600 font-mono font-black">{progress}%</span>
                 </div>
-                
+
                 {/* Outer Line */}
                 <div className="w-full bg-slate-100 rounded-full h-1 overflow-hidden border border-slate-200/20">
                   {/* Inner Glowing Fill */}
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-emerald-500 to-teal-500 h-full rounded-full transition-all duration-75 ease-out shadow-[0_0_8px_#10b981]"
                     style={{ width: `${progress}%` }}
                   />

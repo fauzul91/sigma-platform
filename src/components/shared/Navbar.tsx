@@ -116,15 +116,14 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? "glass-nav shadow-md py-3"
-          : "bg-white/95 md:bg-transparent py-4 md:py-5"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled
+        ? "glass-nav shadow-md py-3"
+        : "bg-white/95 md:bg-transparent py-4 md:py-5"
+        }`}
     >
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
         <div className="flex items-center justify-between gap-4">
-          
+
           {/* Logo */}
           <Link href="/beranda" className="flex items-center space-x-2.5 shrink-0 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
@@ -162,27 +161,25 @@ export default function Navbar() {
                 {menu.type === "link" && menu.href ? (
                   <Link
                     href={menu.href}
-                    className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 block ${
-                      isActive(menu)
-                        ? "text-primary bg-primary-light"
-                        : "text-slate-600 hover:text-primary hover:bg-slate-50"
-                    }`}
+                    className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 block ${isActive(menu)
+                      ? "text-primary bg-primary-light"
+                      : "text-slate-600 hover:text-primary hover:bg-slate-50"
+                      }`}
                   >
                     {menu.label}
                   </Link>
                 ) : (
                   <>
                     <button
-                      className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-1 ${
-                        isActive(menu)
-                          ? "text-primary bg-primary-light"
-                          : "text-slate-600 hover:text-primary hover:bg-slate-50"
-                      }`}
+                      className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-1 ${isActive(menu)
+                        ? "text-primary bg-primary-light"
+                        : "text-slate-600 hover:text-primary hover:bg-slate-50"
+                        }`}
                     >
                       <span>{menu.label}</span>
                       <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180 duration-200" />
                     </button>
-                    
+
                     {/* CSS Dropdown Overlay with Hover Bridge */}
                     <div className="absolute left-0 pt-3 -mt-2 hidden group-hover:block w-64 z-50">
                       <div className="bg-white border border-slate-100 rounded-2xl shadow-xl p-2.5 animate-in fade-in slide-in-from-top-2 duration-150">
@@ -212,10 +209,10 @@ export default function Navbar() {
           <div className="flex items-center space-x-2 shrink-0">
             <Link
               href="/admin/login"
-              className="hidden sm:flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-neutral-dark text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm"
+              className="hidden sm:flex items-center space-x-1.5 px-4 py-2 rounded-full bg-neutral-dark text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm"
             >
               <Shield className="h-3.5 w-3.5" />
-              <span>Login Admin</span>
+              <span>Masuk</span>
             </Link>
 
             {/* Mobile Menu Button */}
@@ -232,9 +229,9 @@ export default function Navbar() {
 
       {/* Mobile Drawer Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 top-[60px] z-30 bg-white border-t border-slate-100 lg:hidden overflow-y-auto animate-in slide-in-from-top duration-200">
+        <div className="fixed inset-0 top-15 z-30 bg-white border-t border-slate-100 lg:hidden overflow-y-auto animate-in slide-in-from-top duration-200">
           <div className="p-4 space-y-4">
-            
+
             {/* Mobile Search */}
             <form onSubmit={handleSearchSubmit} className="relative w-full">
               <input
@@ -255,11 +252,10 @@ export default function Navbar() {
                     <Link
                       href={menu.href}
                       onClick={() => setIsOpen(false)}
-                      className={`px-4 py-3 rounded-xl text-base font-semibold transition-all block ${
-                        isActive(menu)
-                          ? "text-primary bg-primary-light"
-                          : "text-slate-600 hover:bg-slate-50"
-                      }`}
+                      className={`px-4 py-3 rounded-xl text-base font-semibold transition-all block ${isActive(menu)
+                        ? "text-primary bg-primary-light"
+                        : "text-slate-600 hover:bg-slate-50"
+                        }`}
                     >
                       {menu.label}
                     </Link>
@@ -267,17 +263,15 @@ export default function Navbar() {
                     <>
                       <button
                         onClick={() => toggleMobileDropdown(menu.label)}
-                        className={`w-full px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center justify-between ${
-                          isActive(menu)
-                            ? "text-primary bg-primary-light"
-                            : "text-slate-600 hover:bg-slate-50"
-                        }`}
+                        className={`w-full px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center justify-between ${isActive(menu)
+                          ? "text-primary bg-primary-light"
+                          : "text-slate-600 hover:bg-slate-50"
+                          }`}
                       >
                         <span>{menu.label}</span>
                         <ChevronDown
-                          className={`h-5 w-5 text-slate-400 transition-transform duration-200 ${
-                            openMobileDropdown === menu.label ? "rotate-180" : ""
-                          }`}
+                          className={`h-5 w-5 text-slate-400 transition-transform duration-200 ${openMobileDropdown === menu.label ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
 
@@ -300,7 +294,7 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-              
+
               {/* Admin CTA inside mobile menu */}
               <Link
                 href="/admin/login"
@@ -308,7 +302,7 @@ export default function Navbar() {
                 className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-neutral-dark text-base font-bold transition-all mt-4"
               >
                 <Shield className="h-5 w-5" />
-                <span>Masuk Admin</span>
+                <span>Masuk</span>
               </Link>
             </nav>
           </div>
