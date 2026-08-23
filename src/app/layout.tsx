@@ -72,6 +72,8 @@ export const metadata: Metadata = {
   }
 };
 
+import AnalyticsTracker from "@/components/shared/AnalyticsTracker";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -80,6 +82,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${bricolage.variable} ${hanken.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
+        <AnalyticsTracker />
         {children}
       </body>
     </html>

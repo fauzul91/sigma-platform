@@ -57,7 +57,7 @@ export default function AdminLayout({
       />
       <div className="grow lg:pl-64 min-h-screen flex flex-col">
         <AdminTopbar onToggleSidebar={() => setIsSidebarOpen(true)} />
-        <main className="grow p-6 md:p-8 space-y-6">{children}</main>
+        <main className="grow p-4 sm:p-6 lg:p-8 space-y-6">{children}</main>
       </div>
     </div>
   );

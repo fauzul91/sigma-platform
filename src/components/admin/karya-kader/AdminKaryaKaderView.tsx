@@ -5,6 +5,7 @@ import { Search, Plus, Edit2, Trash2, UploadCloud } from "lucide-react";
 import { UgcItem } from "@/types";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import AdminPagination from "@/components/admin/shared/AdminPagination";
+import DragDropUpload from "@/components/admin/shared/DragDropUpload";
 
 interface AdminKaryaKaderViewProps {
   ugc: UgcItem[];
@@ -258,29 +259,22 @@ export default function AdminKaryaKaderView({
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                     />
                   ) : (
-                    <div className="flex flex-col">
-                      <label className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs cursor-pointer form-input hover:bg-slate-50">
-                        <UploadCloud className="h-4 w-4 text-slate-600" />
-                        <span className="font-bold text-xs text-slate-700">
-                          {isUploading ? "Mengunggah..." : "Unggah Gambar"}
-                        </span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handleFileChange}
-                        />
-                      </label>
-                      <div className="mt-2">
-                        <span className="text-[11px] text-slate-400">Catatan: Maks 10 MB. Unggah file desain (JPG/PNG).</span>
-                        {uploadError && (
-                          <div className="text-[11px] text-rose-600 mt-1">{uploadError}</div>
-                        )}
-                        {uploadSuccess && !isUploading && (
-                          <div className="text-[12px] text-emerald-600 mt-1">Unggah berhasil.</div>
-                        )}
-                      </div>
-                    </div>
+                  <DragDropUpload
+                    label="Media Gambar Karya Siswa"
+                    currentUrl={editingUgc.mediaUrl}
+                    onUploadSuccess={(url) =>
+                      setEditingUgc({
+                        ...editingUgc,
+                        mediaUrl: url,
+                      })
+                    }
+                    onRemove={() =>
+                      setEditingUgc({
+                        ...editingUgc,
+                        mediaUrl: "",
+                      })
+                    }
+                  />
                   )}
                 </div>
                 <div className="space-y-1">
