@@ -1,5 +1,7 @@
 "use client";
 
+import { getYouTubeThumbnail } from "@/utils/mediaUtils";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
@@ -440,22 +442,42 @@ export default function HomeView() {
                 >
                   {/* Media Image/Thumbnail */}
                   <div className="relative w-full md:w-44 h-44 shrink-0 bg-slate-100">
-                    {item.type === "video" ? (
-                      <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
-                        <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-lg">
-                          <Play className="h-5 w-5 fill-current text-white pl-0.5" />
-                        </div>
-                        <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">Video {item.duration}</span>
-                      </div>
-                    ) : (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={item.mediaUrl}
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest">
+                    {(() => {
+                      const ytThumb = item.type === "video" ? getYouTubeThumbnail(item.mediaUrl) : null;
+                      if (ytThumb) {
+                        return (
+                          <div className="relative w-full h-full overflow-hidden">
+                            <img src={ytThumb} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-4">
+                              <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                              </div>
+                              <span className="text-[10px] font-bold text-white/90 mt-2 uppercase tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">
+                                Video {item.duration || "Edukasi"}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      }
+                      if (item.type === "video") {
+                        return (
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
+                            <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                              <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                            </div>
+                            <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">Video {item.duration}</span>
+                          </div>
+                        );
+                      }
+                      return (
+                        <img
+                          src={item.mediaUrl}
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                        />
+                      );
+                    })()}
+                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest z-10">
                       {item.type}
                     </span>
                   </div>

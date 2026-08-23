@@ -159,6 +159,8 @@ export async function fetchMedia(page?: number, limit?: number): Promise<MediaIt
   }
 }
 
+import { formatYouTubeEmbedUrl, formatImageUrl } from "@/utils/mediaUtils";
+
 export async function saveMedia(mediaData: Partial<MediaItem>): Promise<MediaItem | null> {
   await requireAdminSession(); // Security session check
 
@@ -168,6 +170,14 @@ export async function saveMedia(mediaData: Partial<MediaItem>): Promise<MediaIte
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)+/g, "")
     : `media-${Date.now()}`;
+
+  let processedMediaUrl = mediaData.mediaUrl || "";
+  if (mediaData.type === "video") {
+    processedMediaUrl = formatYouTubeEmbedUrl(processedMediaUrl);
+  } else if (processedMediaUrl) {
+    processedMediaUrl = formatImageUrl(processedMediaUrl).url;
+  }
+
   const payload = {
     title: mediaData.title,
     slug,
@@ -176,7 +186,7 @@ export async function saveMedia(mediaData: Partial<MediaItem>): Promise<MediaIte
     tags: mediaData.tags || ["Remaja"],
     content: mediaData.content || "",
     media_url:
-      mediaData.mediaUrl ||
+      processedMediaUrl ||
       "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800",
     read_time: mediaData.readTime,
     duration: mediaData.duration,
@@ -261,11 +271,18 @@ export async function fetchUgc(page?: number, limit?: number): Promise<UgcItem[]
 export async function saveUgc(ugcData: Partial<UgcItem>): Promise<UgcItem | null> {
   await requireAdminSession(); // Security session check
 
+  let processedMediaUrl = ugcData.mediaUrl || "";
+  if (ugcData.type === "video") {
+    processedMediaUrl = formatYouTubeEmbedUrl(processedMediaUrl);
+  } else if (processedMediaUrl) {
+    processedMediaUrl = formatImageUrl(processedMediaUrl).url;
+  }
+
   const payload = {
     title: ugcData.title,
     description: ugcData.description || "",
     media_url:
-      ugcData.mediaUrl ||
+      processedMediaUrl ||
       "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800",
     creator_name: ugcData.creatorName || "Siswa",
     school: ugcData.school || "Sekolah Umum",
@@ -569,12 +586,18 @@ export async function fetchEvents(page?: number, limit?: number): Promise<EventI
 export async function saveEvent(eventData: Partial<EventItem>): Promise<EventItem | null> {
   await requireAdminSession(); // Security session check
 
+  const formattedImages = (eventData.images || []).map((imgUrl) => {
+    if (!imgUrl) return imgUrl;
+    const res = formatImageUrl(imgUrl);
+    return res.isValid ? res.url : imgUrl;
+  });
+
   const payload = {
     title: eventData.title,
     description: eventData.description || "",
     date: eventData.date || "Hari ini",
     location: eventData.location || "Lokasi Umum",
-    images: eventData.images || [],
+    images: formattedImages,
     attendees: eventData.attendees || 0,
   };
 
