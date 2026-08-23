@@ -8,6 +8,8 @@ import { MediaItem } from "@/types";
 import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
 import UserPagination from "@/components/shared/UserPagination";
 
+import { getYouTubeThumbnail } from "@/utils/mediaUtils";
+
 export default function EdukasiView() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -92,7 +94,7 @@ export default function EdukasiView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12">
+    <div className="bg-slate-50 min-h-screen py-8 md:py-12 font-sans">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         
         {/* VIEW 1: DETAILED POST VIEW */}
@@ -117,7 +119,7 @@ export default function EdukasiView() {
             {/* Back trigger */}
             <button
               onClick={() => selectPost(null)}
-              className="inline-flex items-center space-x-2 text-sm font-bold text-slate-500 hover:text-primary transition-colors"
+              className="inline-flex items-center space-x-2 text-sm font-bold text-slate-500 hover:text-primary transition-colors cursor-pointer"
             >
               <ArrowLeft className="h-4.5 w-4.5" />
               <span>Kembali ke Galeri Edukasi</span>
@@ -207,35 +209,45 @@ export default function EdukasiView() {
 
                 <div className="space-y-4">
                   {getRelatedContent(selectedPost).length > 0 ? (
-                    getRelatedContent(selectedPost).map((related) => (
-                      <div
-                        key={related.id}
-                        onClick={() => selectPost(related)}
-                        className="flex space-x-3 cursor-pointer group"
-                      >
-                        <div className="relative h-16 w-16 bg-slate-100 rounded-xl overflow-hidden shrink-0">
-                          {related.type === "video" ? (
-                            <div className="w-full h-full flex items-center justify-center bg-slate-900 text-white">
-                              <Play className="h-4.5 w-4.5 fill-current text-white" />
-                            </div>
-                          ) : (
-                            <img
-                              src={related.mediaUrl}
-                              alt={`Cover rekomendasi: ${related.title}`}
-                              className="w-full h-full object-cover"
-                            />
-                          )}
+                    getRelatedContent(selectedPost).map((related) => {
+                      const ytThumb = related.type === "video" ? getYouTubeThumbnail(related.mediaUrl) : null;
+                      return (
+                        <div
+                          key={related.id}
+                          onClick={() => selectPost(related)}
+                          className="flex space-x-3 cursor-pointer group"
+                        >
+                          <div className="relative h-16 w-16 bg-slate-100 rounded-xl overflow-hidden shrink-0">
+                            {ytThumb ? (
+                              <div className="relative w-full h-full">
+                                <img src={ytThumb} alt={related.title} className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                  <Play className="h-4 w-4 fill-current text-white" />
+                                </div>
+                              </div>
+                            ) : related.type === "video" ? (
+                              <div className="w-full h-full flex items-center justify-center bg-slate-900 text-white">
+                                <Play className="h-4.5 w-4.5 fill-current text-white" />
+                              </div>
+                            ) : (
+                              <img
+                                src={related.mediaUrl}
+                                alt={`Cover rekomendasi: ${related.title}`}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                          <div className="flex-grow min-w-0">
+                            <h4 className="text-xs font-bold text-neutral-dark leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                              {related.title}
+                            </h4>
+                            <span className="text-[10px] text-slate-400 font-semibold mt-1 block">
+                              {related.date}
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex-grow min-w-0">
-                          <h4 className="text-xs font-bold text-neutral-dark leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                            {related.title}
-                          </h4>
-                          <span className="text-[10px] text-slate-400 font-semibold mt-1 block">
-                            {related.date}
-                          </span>
-                        </div>
-                      </div>
-                    ))
+                      );
+                    })
                   ) : (
                     <p className="text-xs text-slate-400 font-semibold text-center py-6">Tidak ada rekomendasi serupa.</p>
                   )}
@@ -264,7 +276,7 @@ export default function EdukasiView() {
               <div className="flex bg-slate-100 rounded-xl p-1 w-full md:w-auto">
                 <button
                   onClick={() => setActiveTab("semua")}
-                  className={`flex-1 md:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all ${
+                  className={`flex-1 md:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     activeTab === "semua"
                       ? "bg-white text-neutral-dark shadow-sm"
                       : "text-slate-500 hover:text-neutral-dark"
@@ -274,7 +286,7 @@ export default function EdukasiView() {
                 </button>
                 <button
                   onClick={() => setActiveTab("article")}
-                  className={`flex-1 md:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+                  className={`flex-1 md:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                     activeTab === "article"
                       ? "bg-white text-neutral-dark shadow-sm"
                       : "text-slate-500 hover:text-neutral-dark"
@@ -285,7 +297,7 @@ export default function EdukasiView() {
                 </button>
                 <button
                   onClick={() => setActiveTab("video")}
-                  className={`flex-1 md:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+                  className={`flex-1 md:flex-initial px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                     activeTab === "video"
                       ? "bg-white text-neutral-dark shadow-sm"
                       : "text-slate-500 hover:text-neutral-dark"
@@ -321,61 +333,80 @@ export default function EdukasiView() {
             ) : filteredItems.length > 0 ? (
               <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {slicedItems.map((item) => (
-                    <div
-                      key={item.id}
-                      onClick={() => selectPost(item)}
-                      className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row cursor-pointer hover:border-emerald-100 group"
-                    >
-                      
-                      {/* Media representation */}
-                      <div className="relative w-full sm:w-48 h-48 shrink-0 bg-slate-100">
-                        {item.type === "video" ? (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
-                            <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                              <Play className="h-5 w-5 fill-current text-white pl-0.5" />
-                            </div>
-                            <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">
-                              Video {item.duration}
-                            </span>
-                          </div>
-                        ) : (
-                          <img
-                            src={item.mediaUrl}
-                            alt={`Thumbnail artikel: ${item.title}`}
-                            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
-                          />
-                        )}
-                        <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest">
-                          {item.type}
-                        </span>
-                      </div>
-
-                      {/* Content text */}
-                      <div className="p-5 flex flex-col justify-between flex-grow">
-                        <div>
-                          <span className="inline-block px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[9px] font-extrabold uppercase tracking-wide mb-2">
-                            {item.category}
-                          </span>
-                          <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                            {item.title}
-                          </h3>
-                          <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                            {item.content}
-                          </p>
-                        </div>
+                  {slicedItems.map((item) => {
+                    const videoThumb = item.type === "video" ? getYouTubeThumbnail(item.mediaUrl) : null;
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => selectPost(item)}
+                        className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row cursor-pointer hover:border-emerald-100 group"
+                      >
                         
-                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
-                          <span className="flex items-center space-x-1">
-                            <User className="h-3 w-3" />
-                            <span>{item.author}</span>
+                        {/* Media representation */}
+                        <div className="relative w-full sm:w-48 h-48 shrink-0 bg-slate-100">
+                          {videoThumb ? (
+                            <div className="relative w-full h-full overflow-hidden">
+                              <img
+                                src={videoThumb}
+                                alt={`Thumbnail video: ${item.title}`}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-4">
+                                <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                  <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                                </div>
+                                <span className="text-[10px] font-bold text-white/90 mt-2 uppercase tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">
+                                  Video {item.duration || "Edukasi"}
+                                </span>
+                              </div>
+                            </div>
+                          ) : item.type === "video" ? (
+                            <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
+                              <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                                <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                              </div>
+                              <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">
+                                Video {item.duration}
+                              </span>
+                            </div>
+                          ) : (
+                            <img
+                              src={item.mediaUrl}
+                              alt={`Thumbnail artikel: ${item.title}`}
+                              className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+                            />
+                          )}
+                          <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest z-10">
+                            {item.type}
                           </span>
-                          <span>{item.date}</span>
                         </div>
-                      </div>
 
-                    </div>
-                  ))}
+                        {/* Content text */}
+                        <div className="p-5 flex flex-col justify-between flex-grow">
+                          <div>
+                            <span className="inline-block px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[9px] font-extrabold uppercase tracking-wide mb-2">
+                              {item.category}
+                            </span>
+                            <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                              {item.title}
+                            </h3>
+                            <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed font-medium">
+                              {item.content}
+                            </p>
+                          </div>
+                          
+                          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
+                            <span className="flex items-center space-x-1">
+                              <User className="h-3 w-3" />
+                              <span>{item.author}</span>
+                            </span>
+                            <span>{item.date}</span>
+                          </div>
+                        </div>
+
+                      </div>
+                    );
+                  })}
                 </div>
                 <UserPagination
                   currentPage={currentPage}

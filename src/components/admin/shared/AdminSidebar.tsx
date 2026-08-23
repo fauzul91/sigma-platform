@@ -76,9 +76,8 @@ export default function AdminSidebar({ onLogout, isOpen, onClose }: AdminSidebar
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-[#0d131f] text-slate-300 flex flex-col justify-between shrink-0 p-4 border-r border-slate-800/80 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-[#0d131f] text-slate-300 flex flex-col justify-between shrink-0 p-4 border-r border-slate-800/80 transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="space-y-5 flex flex-col grow overflow-hidden">
           {/* Logo & Brand Header */}
@@ -125,11 +124,10 @@ export default function AdminSidebar({ onLogout, isOpen, onClose }: AdminSidebar
                       <Link
                         key={item.href}
                         href={item.href}
-                        className={`px-3.5 py-2.5 rounded-xl flex items-center space-x-3 transition-all text-xs font-semibold cursor-pointer ${
-                          isActive
+                        className={`px-3.5 py-2.5 rounded-xl flex items-center space-x-3 transition-all text-xs font-semibold cursor-pointer ${isActive
                             ? "bg-primary text-white shadow-md shadow-emerald-500/20 font-bold"
                             : "text-slate-400 hover:text-white hover:bg-slate-800/60"
-                        }`}
+                          }`}
                       >
                         <Icon className={`h-4 w-4 shrink-0 ${isActive ? "text-white" : "text-slate-400"}`} />
                         <span className="truncate">{item.label}</span>

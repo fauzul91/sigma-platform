@@ -67,12 +67,9 @@ export default function Navbar() {
       ],
     },
     {
-      type: "dropdown",
+      type: "link",
       label: "Tentang",
-      items: [
-        { label: "Profil & Visi Misi", href: "/tentang", desc: "Profil Kader GARUDA" },
-        { label: "Statistik & Data", href: "/statistik", desc: "Data perkawinan anak" },
-      ],
+      href: "/tentang",
     },
   ];
 

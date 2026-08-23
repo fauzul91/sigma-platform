@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Heart, UserCheck, School, Filter } from "lucide-react";
+import { Heart, UserCheck, School, Filter, X, Share2, Sparkles } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { UgcItem } from "@/types";
 import { CardSkeleton } from "@/components/shared/Skeletons";
@@ -28,7 +28,6 @@ export default function KaryaKaderView() {
       setUgcList(data);
       setIsLoading(false);
     });
-    // load liked IDs from localStorage to prevent spam likes per browser
     try {
       const raw = localStorage.getItem("liked_ugc");
       if (raw) {
@@ -41,12 +40,11 @@ export default function KaryaKaderView() {
   }, []);
 
   const handleLike = async (id: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Avoid triggering details modal
+    e.stopPropagation();
 
     const isLiked = likedSet.has(id);
 
     if (isLiked) {
-      // optimistic decrement
       setUgcList((prev) =>
         prev.map((item) =>
           item.id === id
@@ -75,13 +73,12 @@ export default function KaryaKaderView() {
       try {
         await userService.recordUnlike(id);
       } catch {
-        // ignore backend failure
+        // ignore
       }
 
       return;
     }
 
-    // not liked yet -> optimistic increment
     setUgcList((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, likes: item.likes + 1 } : item,
@@ -97,7 +94,7 @@ export default function KaryaKaderView() {
       try {
         localStorage.setItem("liked_ugc", JSON.stringify(Array.from(next)));
       } catch {
-        // ignore storage errors
+        // ignore
       }
       return next;
     });
@@ -105,7 +102,7 @@ export default function KaryaKaderView() {
     try {
       await userService.recordLike(id);
     } catch {
-      // ignore backend failure
+      // ignore
     }
   };
 
@@ -119,7 +116,7 @@ export default function KaryaKaderView() {
   );
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12">
+    <div className="bg-slate-50 min-h-screen py-8 md:py-12 font-sans">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         {/* Header */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border-b border-slate-200/40 pb-6">
@@ -231,7 +228,7 @@ export default function KaryaKaderView() {
           )}
         </div>
 
-        {/* Pagination — di luar grid */}
+        {/* Pagination */}
         {!isLoading && (
           <UserPagination
             currentPage={currentPage}
@@ -241,62 +238,96 @@ export default function KaryaKaderView() {
           />
         )}
 
-        {/* ZOOM MODAL VIEW */}
+        {/* INSTAGRAM-STYLE PREVIEW MODAL */}
         {selectedUgc && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="relative max-w-2xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
-              {/* Topbar close */}
-              <div className="absolute top-4 right-4 z-10">
-                <button
-                  onClick={() => setSelectedUgc(null)}
-                  className="bg-black/60 hover:bg-black text-white p-2 rounded-full transition-colors cursor-pointer"
-                >
-                  ✕
-                </button>
-              </div>
+          <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row animate-in zoom-in-95 duration-200 border border-slate-200/80">
+              {/* Close Button Top Right Mobile/Desktop */}
+              <button
+                onClick={() => setSelectedUgc(null)}
+                className="absolute top-3 right-3 z-30 bg-slate-900/70 hover:bg-slate-950 text-white p-2 rounded-full transition-all cursor-pointer shadow-md"
+                aria-label="Tutup Detail"
+              >
+                <X className="h-4 w-4" />
+              </button>
 
-              <div className="relative aspect-video w-full bg-slate-900 flex items-center justify-center">
+              {/* Left Side: Media Container (Instagram Style Media Preview) */}
+              <div className="lg:w-3/5 bg-slate-950 flex items-center justify-center p-3 relative min-h-[300px] lg:min-h-[480px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={selectedUgc.mediaUrl}
-                  alt={`Detail gambar karya: ${selectedUgc.title}`}
-                  className="max-h-[380px] object-contain"
+                  alt={`Detail karya: ${selectedUgc.title}`}
+                  className="max-h-[75vh] w-auto object-contain rounded-xl"
                 />
+                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-md">
+                  {selectedUgc.type}
+                </span>
               </div>
 
-              <div className="p-6 space-y-4">
-                <div>
-                  <span className="px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[9px] font-extrabold uppercase tracking-wide">
-                    {selectedUgc.type}
-                  </span>
-                  <h2 className="text-xl font-bold text-neutral-dark mt-2">
-                    {selectedUgc.title}
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-2 font-semibold leading-relaxed">
-                    {selectedUgc.description}
-                  </p>
+              {/* Right Side: Creator Info & Description Sidebar */}
+              <div className="lg:w-2/5 p-6 flex flex-col justify-between overflow-y-auto max-h-[85vh] bg-white space-y-5">
+                {/* Header Profile Section */}
+                <div className="border-b border-slate-100 pb-4 space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-800 font-extrabold flex items-center justify-center border border-emerald-200 shrink-0">
+                      {selectedUgc.creatorName.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-extrabold text-neutral-dark text-sm truncate">
+                        {selectedUgc.creatorName}
+                      </h3>
+                      <p className="text-xs text-slate-400 font-semibold truncate flex items-center gap-1">
+                        <School className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+                        <span>{selectedUgc.school}</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-xs font-bold">
-                  <div className="space-y-0.5">
-                    <p className="text-neutral-dark">
-                      Kreator: {selectedUgc.creatorName}
-                    </p>
-                    <p className="text-slate-400 font-semibold">
-                      {selectedUgc.school}
-                    </p>
+                {/* Title & Scrollable Description Content */}
+                <div className="space-y-3 flex-1 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200">
+                  <h2 className="text-lg font-black text-neutral-dark leading-snug">
+                    {selectedUgc.title}
+                  </h2>
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600 font-medium leading-relaxed whitespace-pre-line">
+                    {selectedUgc.description}
                   </div>
+                </div>
+
+                {/* Footer Action Bar */}
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
                   <button
                     onClick={(e) => handleLike(selectedUgc.id, e)}
-                    className={`flex items-center space-x-1.5 px-4.5 py-2 rounded-xl transition-colors cursor-pointer ${
+                    className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all cursor-pointer text-xs font-extrabold border ${
                       likedSet.has(selectedUgc.id)
-                        ? "bg-rose-50 text-rose-600"
-                        : "bg-white text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                        ? "bg-rose-50 border-rose-200 text-rose-600"
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
                     }`}
                   >
                     <Heart
-                      className={`h-4 w-4 ${likedSet.has(selectedUgc.id) ? "text-rose-600" : "text-slate-400"}`}
+                      className={`h-4 w-4 ${
+                        likedSet.has(selectedUgc.id)
+                          ? "fill-rose-600 text-rose-600"
+                          : "text-slate-400"
+                      }`}
                     />
-                    <span>Sukai ({selectedUgc.likes})</span>
+                    <span>{selectedUgc.likes} Likes</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({
+                          title: selectedUgc.title,
+                          text: selectedUgc.description,
+                          url: window.location.href,
+                        }).catch(() => {});
+                      }
+                    }}
+                    className="p-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 transition-all cursor-pointer"
+                    title="Bagikan"
+                  >
+                    <Share2 className="h-4 w-4" />
                   </button>
                 </div>
               </div>
