@@ -46,14 +46,12 @@ export default function AdminOrganisasiView({
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      <div className="border-b border-slate-200/50 pb-4">
-        <h2 className="text-lg font-extrabold text-neutral-dark">
-          Badan Organisasi Kader GARUDA
-        </h2>
-        <p className="text-xs text-slate-400 font-semibold mt-1">
-          Klik ikon edit untuk memperbarui nama pemegang jabatan. Struktur
-          jabatan bersifat tetap.
-        </p>
+      
+      <div className="flex flex-col gap-2 pb-4 border-b border-slate-200/50">
+        <div>
+          <h1 className="text-xl font-extrabold text-neutral-dark">Badan Organisasi</h1>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Struktur kepengurusan platform SIGMA. Klik ikon edit untuk memperbarui nama pemegang jabatan. Struktur jabatan bersifat tetap.</p>
+        </div>
       </div>
 
       {/* Org Members Cards */}

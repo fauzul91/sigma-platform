@@ -30,16 +30,14 @@ export default function AdminKegiatanView({
 }: AdminKegiatanViewProps) {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/50 pb-4">
-        <div className="relative w-full sm:max-w-xs">
-          <input
-            type="text"
-            placeholder="Cari kegiatan..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-          />
-          <Search className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-400" />
+      
+
+
+      {/* Header with Title and Create Button aligned */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-extrabold text-neutral-dark">Manajemen Kegiatan & Event</h1>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Kelola jadwal sosialisasi dan event komunitas.</p>
         </div>
 
         <button
@@ -51,8 +49,26 @@ export default function AdminKegiatanView({
         </button>
       </div>
 
-      {/* Events Data Table */}
+      {/* Events Data Table Container */}
       <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm overflow-hidden overflow-x-auto">
+        
+        {/* Table Toolbar Header */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-b border-slate-100/80">
+          <div className="relative w-full sm:max-w-xs">
+            <input
+              type="text"
+              placeholder="Cari kegiatan..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+            />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+          </div>
+          <div className="text-xs font-bold text-slate-400">
+            Total <span className="text-neutral-dark">{totalItems}</span> Kegiatan
+          </div>
+        </div>
+
         <table className="w-full text-left text-xs font-semibold text-slate-500">
           <thead className="bg-slate-50 text-neutral-dark font-extrabold uppercase tracking-wide border-b border-slate-200">
             <tr>

@@ -24,6 +24,8 @@ export default function AdminPengaturanView({
   return (
     <div className="space-y-6 animate-in fade-in duration-300 max-w-2xl">
       
+
+
       <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/60 shadow-sm space-y-6">
         <div>
           <h2 className="text-lg font-bold text-neutral-dark">Pengaturan Konten Umum</h2>
