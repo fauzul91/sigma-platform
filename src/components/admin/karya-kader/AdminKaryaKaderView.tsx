@@ -71,21 +71,15 @@ export default function AdminKaryaKaderView({
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       
-      {/* Header Action Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/50 pb-4">
-        <div className="relative w-full sm:max-w-xs">
-          <input
-            type="text"
-            placeholder="Cari karya..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-          />
-          <Search className="absolute left-3 top-3 h-3.5 w-3.5 text-slate-400" />
+      {/* Header with Title and Create Button aligned (Meridian Style) */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-extrabold text-neutral-dark">Manajemen Karya Kader</h1>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Review dan publikasi karya edukasi dari kader.</p>
         </div>
-
+        
         <button
-          onClick={() => setEditingUgc({})}
+          onClick={() => setEditingUgc({ likes: 0 })}
           className="w-full sm:w-auto px-4.5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm active:scale-98 transition-all cursor-pointer"
         >
           <Plus className="h-4 w-4" />
@@ -93,8 +87,26 @@ export default function AdminKaryaKaderView({
         </button>
       </div>
 
-      {/* UGC Data Table */}
+      {/* UGC Data Table Container */}
       <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm overflow-hidden overflow-x-auto">
+        
+        {/* Table Toolbar Header */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-b border-slate-100/80">
+          <div className="relative w-full sm:max-w-xs">
+            <input
+              type="text"
+              placeholder="Cari karya..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+            />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+          </div>
+          <div className="text-xs font-bold text-slate-400">
+            Total <span className="text-neutral-dark">{totalItems}</span> Karya
+          </div>
+        </div>
+
         <table className="w-full text-left text-xs font-semibold text-slate-500">
           <thead className="bg-slate-50 text-neutral-dark font-extrabold uppercase tracking-wide border-b border-slate-200">
             <tr>
@@ -169,7 +181,7 @@ export default function AdminKaryaKaderView({
             </div>
 
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
                     Judul Karya
@@ -203,7 +215,7 @@ export default function AdminKaryaKaderView({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
                     Asal Sekolah
@@ -239,61 +251,43 @@ export default function AdminKaryaKaderView({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
-                    URL Media Gambar
-                  </label>
-                  {editingUgc.type === "video" ? (
-                    <input
-                      type="text"
-                      required
-                      placeholder="https://..."
-                      value={editingUgc.mediaUrl || ""}
-                      onChange={(e) =>
-                        setEditingUgc({
-                          ...editingUgc,
-                          mediaUrl: e.target.value,
-                        })
-                      }
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
-                    />
-                  ) : (
-                  <DragDropUpload
-                    label="Media Gambar Karya Siswa"
-                    currentUrl={editingUgc.mediaUrl}
-                    onUploadSuccess={(url) =>
-                      setEditingUgc({
-                        ...editingUgc,
-                        mediaUrl: url,
-                      })
-                    }
-                    onRemove={() =>
-                      setEditingUgc({
-                        ...editingUgc,
-                        mediaUrl: "",
-                      })
-                    }
-                  />
-                  )}
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
-                    Jumlah Likes
-                  </label>
+              {/* Full Width for Media Upload to give it more breathing room */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                  URL Media Gambar
+                </label>
+                {editingUgc.type === "video" ? (
                   <input
-                    type="number"
+                    type="text"
                     required
-                    value={editingUgc.likes ?? 0}
+                    placeholder="https://..."
+                    value={editingUgc.mediaUrl || ""}
                     onChange={(e) =>
                       setEditingUgc({
                         ...editingUgc,
-                        likes: Number(e.target.value),
+                        mediaUrl: e.target.value,
                       })
                     }
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
                   />
-                </div>
+                ) : (
+                <DragDropUpload
+                  label="Media Gambar Karya Siswa"
+                  currentUrl={editingUgc.mediaUrl}
+                  onUploadSuccess={(url) =>
+                    setEditingUgc({
+                      ...editingUgc,
+                      mediaUrl: url,
+                    })
+                  }
+                  onRemove={() =>
+                    setEditingUgc({
+                      ...editingUgc,
+                      mediaUrl: "",
+                    })
+                  }
+                />
+                )}
               </div>
 
               <div className="space-y-1">

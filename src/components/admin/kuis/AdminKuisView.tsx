@@ -138,7 +138,7 @@ export default function AdminKuisView({
       </div>
 
       {/* Category Section Selector Tabs (Visual Grid/Scroll) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
         {quizCategoryList.map((cat) => {
           const Icon = cat.icon;
           const isActive = selectedCategoryTab === cat.slug;
@@ -148,23 +148,25 @@ export default function AdminKuisView({
             <button
               key={cat.slug}
               onClick={() => setSelectedCategoryTab(cat.slug)}
-              className={`p-3 rounded-2xl border text-left flex flex-col justify-between space-y-2 transition-all cursor-pointer ${
+              className={`p-5 rounded-3xl border text-left flex flex-col justify-between space-y-4 transition-all duration-200 cursor-pointer ${
                 isActive
-                  ? `${cat.bgActive} shadow-md`
-                  : "bg-white border-slate-200/80 hover:bg-slate-50 text-slate-700 shadow-xs"
+                  ? `${cat.bgActive} shadow-lg scale-[1.02]`
+                  : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700 shadow-sm hover:shadow-md"
               }`}
             >
-              <div className="flex items-center justify-between">
-                <Icon className={`h-4 w-4 ${isActive ? "text-white" : "text-slate-500"}`} />
+              <div className="flex items-center justify-between w-full">
+                <div className={`p-2.5 rounded-2xl ${isActive ? 'bg-white/20' : 'bg-slate-100'}`}>
+                  <Icon className={`h-5 w-5 ${isActive ? "text-white" : "text-slate-500"}`} />
+                </div>
                 <span
-                  className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
+                  className={`text-xs font-black px-3 py-1 rounded-full ${
                     isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
                   }`}
                 >
-                  {count}
+                  {count} Soal
                 </span>
               </div>
-              <span className="text-xs font-bold leading-tight line-clamp-2">
+              <span className="text-sm font-bold leading-snug">
                 {cat.label}
               </span>
             </button>
@@ -172,26 +174,26 @@ export default function AdminKuisView({
         })}
       </div>
 
-      {/* Search Bar */}
-      <div className="flex items-center justify-between gap-4 bg-white p-3 rounded-2xl border border-slate-200/80 shadow-xs">
-        <div className="relative w-full max-w-sm">
-          <input
-            type="text"
-            placeholder="Cari pertanyaan kuis..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-          />
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+      {/* Quiz Questions Data Table Container */}
+      <div className="bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden mt-6">
+        
+        {/* Table Toolbar Header */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-b border-slate-100/80">
+          <div className="relative w-full sm:max-w-xs">
+            <input
+              type="text"
+              placeholder="Cari pertanyaan kuis..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+            />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+          </div>
+          <div className="text-xs font-bold text-slate-400">
+            Total <span className="text-neutral-dark">{totalItems}</span> Soal
+          </div>
         </div>
 
-        <span className="text-xs font-bold text-slate-400 px-2 hidden sm:inline">
-          Menampilkan: <strong className="text-neutral-dark">{totalItems} Soal</strong>
-        </span>
-      </div>
-
-      {/* Quiz Questions Data Table */}
-      <div className="bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
         {quizzes.length === 0 ? (
           <div className="p-10 text-center space-y-2">
             <HelpCircle className="h-8 w-8 text-slate-300 mx-auto" />

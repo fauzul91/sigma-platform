@@ -31,6 +31,11 @@ export default function AdminStatistikView({
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       
+      <div>
+        <h1 className="text-xl font-extrabold text-neutral-dark">Statistik & Pelaporan</h1>
+        <p className="text-xs text-slate-500 font-medium mt-0.5">Tinjauan laporan analitik platform.</p>
+      </div>
+
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/50 pb-4">
         <div className="relative w-full sm:max-w-xs">
           <input

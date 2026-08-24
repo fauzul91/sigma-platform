@@ -1,0 +1,13 @@
+{
+  "name": "meridian",
+  "private": true,
+  "description": "Meridian — Stisla dashboard template (static HTML).",
+  "scripts": {
+    "build:css": "tailwindcss -i assets/css/app.css -o assets/css/style.css --minify"
+  },
+  "devDependencies": {
+    "@stisla/style": "beta",
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0"
+  }
+}
