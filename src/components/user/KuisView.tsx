@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { QuizQuestion } from "@/types";
+import PageHeader from "@/components/shared/PageHeader";
 
 interface LocalQuestion {
   id: string;
@@ -339,7 +340,7 @@ export default function KuisView() {
   }, []);
 
   const [particles, setParticles] = useState<
-    { id: number; left: number; delay: number; color: string }[]
+    { id: number; left: number; delay: number; color: string; }[]
   >([]);
 
   useEffect(() => {
@@ -416,7 +417,7 @@ export default function KuisView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-12 px-6 sm:px-10 lg:px-16 flex flex-col justify-center items-center font-sans">
+    <div className="bg-slate-50 min-h-screen font-sans">
       {/* XP Float Animation */}
       {showXpFloat && (
         <div className="fixed top-1/4 right-1/2 transform translate-x-1/2 z-50 bg-emerald-500 text-white font-black text-xs px-4 py-2 rounded-full shadow-lg animate-bounce flex items-center space-x-1">
@@ -427,21 +428,16 @@ export default function KuisView() {
 
       {/* 1. TOPIC SELECTION SCREEN */}
       {activeScreen === "topic" && (
-        <div className="max-w-4xl w-full space-y-8 animate-in fade-in duration-300">
-          <div className="text-center space-y-3">
-            <span className="inline-block px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-primary text-xs font-black uppercase tracking-wider">
-              Mulai Petualangan Belajar
-            </span>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight">
-              Tantangan Kuis SIGMA
-            </h1>
-            <p className="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
-              Halo Teman SIGMA! Uji pemahamanmu secara menyenangkan. Raih XP dan
-              kumpulkan lencana prestasi belajar di setiap topik.
-            </p>
-          </div>
+        <div className="w-full">
+          <PageHeader
+            title="KUIS KESEHATAN"
+            description="Uji pemahamanmu seputar kesehatan reproduksi, batasan diri, dan hak perlindungan secara seru dan interaktif. Raih XP dan kumpulkan lencana prestasi!"
+            badge="TANTANGAN & PRESTASI"
+            type="kuis"
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+          <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-10 sm:py-14 animate-in fade-in duration-300">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category) => (
               <div
                 key={category.id}
@@ -474,12 +470,16 @@ export default function KuisView() {
                 </div>
               </div>
             ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* 2. CHALLENGE OVERVIEW */}
-      {activeScreen === "overview" && selectedCategory && (
+      {/* Quiz Interaction Screens (Overview, Play, Results) */}
+      {activeScreen !== "topic" && (
+        <div className="min-h-screen py-12 px-6 sm:px-10 lg:px-16 flex flex-col justify-center items-center">
+          {/* 2. CHALLENGE OVERVIEW */}
+          {activeScreen === "overview" && selectedCategory && (
         <div className="max-w-md w-full animate-in zoom-in-95 duration-200 space-y-6">
           <button
             onClick={backToTopics}
@@ -636,17 +636,16 @@ export default function KuisView() {
 
             {isAnswerSubmitted && (
               <div
-                className={`p-5 rounded-2xl border text-xs font-semibold leading-relaxed space-y-2 animate-in slide-in-from-bottom duration-250 ${
-                  selectedOptionIdx ===
-                  selectedCategory.questions[currentQuestionIdx].correctAnswer
+                className={`p-5 rounded-2xl border text-xs font-semibold leading-relaxed space-y-2 animate-in slide-in-from-bottom duration-250 ${selectedOptionIdx ===
+                    selectedCategory.questions[currentQuestionIdx].correctAnswer
                     ? "bg-emerald-50/50 border-emerald-100 text-emerald-950"
                     : "bg-amber-50/50 border-amber-100 text-amber-950"
-                }`}
+                  }`}
               >
                 <div className="flex items-center space-x-1.5 font-black text-[10px] uppercase tracking-wider">
                   {selectedOptionIdx ===
-                  selectedCategory.questions[currentQuestionIdx]
-                    .correctAnswer ? (
+                    selectedCategory.questions[currentQuestionIdx]
+                      .correctAnswer ? (
                     <>
                       <Sparkles className="h-4 w-4 text-emerald-600" />
                       <span className="text-emerald-700">
@@ -850,6 +849,8 @@ export default function KuisView() {
               </button>
             </div>
           </div>
+        </div>
+      )}
         </div>
       )}
     </div>

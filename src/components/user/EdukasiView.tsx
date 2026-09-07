@@ -7,6 +7,7 @@ import { userService } from "@/services/user/userService";
 import { MediaItem } from "@/types";
 import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
 import UserPagination from "@/components/shared/UserPagination";
+import PageHeader from "@/components/shared/PageHeader";
 
 import { getYouTubeThumbnail } from "@/utils/mediaUtils";
 
@@ -94,8 +95,17 @@ export default function EdukasiView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12 font-sans">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+    <div className="bg-slate-50 min-h-screen font-sans">
+      {!selectedPost && (
+        <PageHeader
+          title="ARTIKEL & VIDEO"
+          description="Jelajahi kumpulan artikel kesehatan reproduksi, berita program, serta video edukasi interaktif dari Kader GARUDA."
+          badge="EDUKASI & MEDIA"
+          type="edukasi"
+        />
+      )}
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-8 md:py-12">
         
         {/* VIEW 1: DETAILED POST VIEW */}
         {postSlug && isLoading ? (
@@ -259,15 +269,7 @@ export default function EdukasiView() {
         ) : (
           
           /* VIEW 2: LIST FEED */
-          <div className="space-y-10 animate-in fade-in duration-300">
-            
-            {/* Page Header */}
-            <div className="text-center max-w-3xl mx-auto space-y-3">
-              <h1 className="text-4xl font-extrabold text-neutral-dark tracking-tight">Galeri Edukasi & Media</h1>
-              <p className="text-slate-500 text-sm md:text-base leading-relaxed font-semibold">
-                Temukan video kampanye edukatif dari Kader GARUDA serta artikel kesehatan reproduksi dari pakar medis di bawah ini.
-              </p>
-            </div>
+          <div className="space-y-8 animate-in fade-in duration-300">
 
             {/* Filter and Search Bar */}
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -324,7 +326,9 @@ export default function EdukasiView() {
 
             {/* Media list grid */}
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <CardSkeleton />
+                <CardSkeleton />
                 <CardSkeleton />
                 <CardSkeleton />
                 <CardSkeleton />
@@ -332,78 +336,77 @@ export default function EdukasiView() {
               </div>
             ) : filteredItems.length > 0 ? (
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                   {slicedItems.map((item) => {
                     const videoThumb = item.type === "video" ? getYouTubeThumbnail(item.mediaUrl) : null;
                     return (
                       <div
                         key={item.id}
                         onClick={() => selectPost(item)}
-                        className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row cursor-pointer hover:border-emerald-100 group"
+                        className="group flex flex-col justify-between cursor-pointer transition-all duration-300"
                       >
-                        
-                        {/* Media representation */}
-                        <div className="relative w-full sm:w-48 h-48 shrink-0 bg-slate-100">
-                          {videoThumb ? (
-                            <div className="relative w-full h-full overflow-hidden">
-                              <img
-                                src={videoThumb}
-                                alt={`Thumbnail video: ${item.title}`}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              />
-                              <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-4">
-                                <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <div>
+                          {/* Media representation */}
+                          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-100 shadow-xs mb-4">
+                            {videoThumb ? (
+                              <div className="relative w-full h-full overflow-hidden">
+                                <img
+                                  src={videoThumb}
+                                  alt={`Thumbnail video: ${item.title}`}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
+                                  <div className="h-11 w-11 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                    <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                                  </div>
+                                </div>
+                                <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-bold">
+                                  Video {item.duration || ""}
+                                </div>
+                              </div>
+                            ) : item.type === "video" ? (
+                              <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
+                                <div className="h-11 w-11 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                                   <Play className="h-5 w-5 fill-current text-white pl-0.5" />
                                 </div>
-                                <span className="text-[10px] font-bold text-white/90 mt-2 uppercase tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">
-                                  Video {item.duration || "Edukasi"}
+                                <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">
+                                  Video {item.duration}
                                 </span>
                               </div>
-                            </div>
-                          ) : item.type === "video" ? (
-                            <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
-                              <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                                <Play className="h-5 w-5 fill-current text-white pl-0.5" />
+                            ) : (
+                              <div className="relative w-full h-full overflow-hidden">
+                                <img
+                                  src={item.mediaUrl}
+                                  alt={`Thumbnail artikel: ${item.title}`}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-bold shadow-md">
+                                  sigmaplatform.id
+                                </div>
                               </div>
-                              <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">
-                                Video {item.duration}
-                              </span>
-                            </div>
-                          ) : (
-                            <img
-                              src={item.mediaUrl}
-                              alt={`Thumbnail artikel: ${item.title}`}
-                              className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
-                            />
-                          )}
-                          <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest z-10">
-                            {item.type}
-                          </span>
-                        </div>
+                            )}
+                          </div>
 
-                        {/* Content text */}
-                        <div className="p-5 flex flex-col justify-between flex-grow">
+                          {/* Content text */}
                           <div>
-                            <span className="inline-block px-2.5 py-0.5 rounded bg-emerald-50 text-primary text-[9px] font-extrabold uppercase tracking-wide mb-2">
-                              {item.category}
+                            <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">
+                              {item.category.replace("-", " ")}
                             </span>
-                            <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                            <h3 className="font-extrabold text-neutral-dark text-base sm:text-lg leading-snug line-clamp-2 mt-1.5 group-hover:text-emerald-600 transition-colors">
                               {item.title}
                             </h3>
-                            <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed font-medium">
+                            <p className="text-xs sm:text-sm text-slate-500 mt-2 line-clamp-2 leading-relaxed font-medium">
                               {item.content}
                             </p>
                           </div>
-                          
-                          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
-                            <span className="flex items-center space-x-1">
-                              <User className="h-3 w-3" />
-                              <span>{item.author}</span>
-                            </span>
-                            <span>{item.date}</span>
-                          </div>
                         </div>
 
+                        {/* Footer meta: Author · Date */}
+                        <div className="mt-4 pt-3 flex items-center text-xs text-slate-400 font-medium">
+                          <span>{item.author}</span>
+                          <span className="mx-1.5 font-bold">·</span>
+                          <span>{item.date}</span>
+                        </div>
                       </div>
                     );
                   })}

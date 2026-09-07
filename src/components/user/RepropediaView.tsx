@@ -7,15 +7,17 @@ import { userService } from "@/services/user/userService";
 import { RepropediaItem } from "@/types";
 import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
 import UserPagination from "@/components/shared/UserPagination";
+import PageHeader from "@/components/shared/PageHeader";
 
 export default function RepropediaView() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const moduleSlug = searchParams.get("module");
+  const categoryParam = searchParams.get("category");
 
   const [modules, setModules] = useState<RepropediaItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [activeCategory, setActiveCategory] = useState<string>("semua");
+  const [activeCategory, setActiveCategory] = useState<string>(categoryParam || "semua");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedModule, setSelectedModule] = useState<RepropediaItem | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -24,6 +26,12 @@ export default function RepropediaView() {
   useEffect(() => {
     setCurrentPage(1);
   }, [activeCategory, searchQuery]);
+
+  useEffect(() => {
+    if (categoryParam) {
+      setActiveCategory(categoryParam);
+    }
+  }, [categoryParam]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -75,8 +83,17 @@ export default function RepropediaView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+    <div className="bg-slate-50 min-h-screen font-sans">
+      {!selectedModule && (
+        <PageHeader
+          title="REPROPEDIA"
+          description="Pusat literasi kesehatan reproduksi remaja, materi edukasi terstruktur, dan panduan tumbuh kembang terpercaya."
+          badge="PUSAT LITERASI"
+          type="repropedia"
+        />
+      )}
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-8 md:py-12">
         
         {/* VIEW 1: MODULE DETAIL VIEW */}
         {moduleSlug && isLoading ? (
@@ -198,15 +215,7 @@ export default function RepropediaView() {
         ) : (
           
           /* VIEW 2: MODULE DIRECTORY VIEW */
-          <div className="space-y-10 animate-in fade-in duration-300">
-            
-            {/* Header Title */}
-            <div className="text-center max-w-3xl mx-auto space-y-3">
-              <h1 className="text-4xl font-extrabold text-neutral-dark tracking-tight">Pusat Literasi Repropedia</h1>
-              <p className="text-slate-500 text-sm md:text-base leading-relaxed font-semibold">
-                Materi edukasi reproduksi terpercaya, terstruktur, dan ramah remaja. Pilih kategori bahasan di bawah untuk mulai membaca.
-              </p>
-            </div>
+          <div className="space-y-8 animate-in fade-in duration-300">
 
             {/* Filters and Search */}
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">

@@ -11,6 +11,7 @@ import {
 import { userService } from "@/services/user/userService";
 import { Counselor } from "@/types";
 import { ListSkeleton } from "@/components/shared/Skeletons";
+import PageHeader from "@/components/shared/PageHeader";
 
 interface FlowNode {
   id: string;
@@ -84,19 +85,15 @@ export default function KonselingView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 space-y-12">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <h1 className="text-4xl font-extrabold text-neutral-dark tracking-tight">
-            Rujukan Konseling & Kontak
-          </h1>
-          <p className="text-slate-500 text-sm md:text-base leading-relaxed font-semibold">
-            Jaringan bantuan aman bagi siswa. Hubungi konselor sebaya atau
-            layanan rujukan resmi di bawah ini.
-          </p>
-        </div>
+    <div className="bg-slate-50 min-h-screen font-sans">
+      <PageHeader
+        title="RUJUKAN KONSELING"
+        description="Ruang aman dan pendampingan konseling ramah remaja. Hubungi konselor sebaya terlatih atau akses alur rujukan medis resmi secara rahasia dan aman."
+        badge="RUANG AMAN & RAHASIA"
+        type="konseling"
+      />
 
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-8 md:py-12 space-y-12">
         {/* INTERACTIVE MERMAID-LIKE STEP CHART */}
         <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-8">
           <div className="text-center max-w-md mx-auto">

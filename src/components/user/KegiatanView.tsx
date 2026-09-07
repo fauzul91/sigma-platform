@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { EventItem } from "@/types";
+import PageHeader from "@/components/shared/PageHeader";
 
 export default function KegiatanView() {
   const [eventItems, setEventItems] = useState<EventItem[]>([]);
@@ -59,22 +60,15 @@ export default function KegiatanView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header Section */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center space-x-2 bg-emerald-100/50 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Kader GARUDA SIGMA</span>
-          </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-            Dokumentasi Kegiatan Kader
-          </h1>
-          <p className="text-sm md:text-base text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">
-            Menelusuri jejak kampanye, seminar sosialisasi, dan pelatihan pendampingan sebaya yang dilaksanakan oleh Kader GARUDA secara berkala.
-          </p>
-        </div>
+    <div className="bg-slate-50 min-h-screen font-sans">
+      <PageHeader
+        title="KEGIATAN & EVENT"
+        description="Menelusuri jejak kampanye, seminar sosialisasi, dan pelatihan pendampingan sebaya yang dilaksanakan oleh Kader GARUDA secara berkala."
+        badge="DOKUMENTASI AKSI"
+        type="kegiatan"
+      />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
         {/* Tab/Divider */}
         <div className="flex justify-center border-t mb-6 pt-6">
