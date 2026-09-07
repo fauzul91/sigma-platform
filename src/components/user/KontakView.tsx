@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, CheckCircle, MessageCircle } from "lucide-react";
+import PageHeader from "@/components/shared/PageHeader";
 
 export default function KontakView() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -25,16 +26,15 @@ export default function KontakView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 space-y-12">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <h1 className="text-4xl font-extrabold text-neutral-dark tracking-tight">Hubungi Kami</h1>
-          <p className="text-slate-500 text-sm md:text-base leading-relaxed font-semibold">
-            Kader GARUDA terbuka terhadap saran, undangan sosialisasi sekolah, kolaborasi instansi, atau masukan platform.
-          </p>
-        </div>
+    <div className="bg-slate-50 min-h-screen font-sans">
+      <PageHeader
+        title="HUBUNGI KAMI"
+        description="Kader GARUDA dan pengelola SIGMA terbuka terhadap saran, undangan sosialisasi sekolah, kolaborasi instansi, atau masukan platform."
+        badge="SEKRETARIAT & KONTAK"
+        type="kontak"
+      />
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-8 md:py-12 space-y-12">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           

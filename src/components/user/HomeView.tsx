@@ -16,7 +16,13 @@ import {
   HeartHandshake,
   Activity,
   Paperclip,
-  CheckCircle2
+  CheckCircle2,
+  Scale,
+  ShieldCheck,
+  AlertTriangle,
+  Eye,
+  LifeBuoy,
+  Gamepad2,
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { RepropediaItem, MediaItem } from "@/types";
@@ -44,6 +50,44 @@ const PARTNERS = [
   {
     src: "/assets/logo_blu.png",
     alt: "Badan Layanan Umum",
+  },
+];
+
+const QUIZ_PREVIEWS = [
+  {
+    id: "cat_repro",
+    title: "Kesehatan Reproduksi",
+    description: "Pahami pubertas, perubahan biologis, dan kebersihan diri harian.",
+    duration: "3 Menit",
+    xp: "45 XP",
+  },
+  {
+    id: "cat_marriage",
+    title: "Pencegahan Perkawinan Anak",
+    description: "Ketahui batas usia legal 19 tahun dan risiko medis kehamilan dini.",
+    duration: "3 Menit",
+    xp: "45 XP",
+  },
+  {
+    id: "cat_bullying",
+    title: "Kesehatan Mental",
+    description: "Identifikasi kecemasan berlebih, cyberbullying, dan cara mengelola stress.",
+    duration: "2 Menit",
+    xp: "30 XP",
+  },
+  {
+    id: "cat_violence",
+    title: "Pencegahan Kekerasan Seksual",
+    description: "Kenali batasan tubuh, consent, dan langkah pelaporan darurat.",
+    duration: "2 Menit",
+    xp: "30 XP",
+  },
+  {
+    id: "cat_rights",
+    title: "Hak-Hak Dasar Anak",
+    description: "Ketahui 4 hak dasar anak berdasarkan Konvensi PBB dan hukum Indonesia.",
+    duration: "2 Menit",
+    xp: "30 XP",
   },
 ];
 
@@ -146,6 +190,10 @@ export default function HomeView() {
     {
       question: "Apakah layanan konseling di Program SIGMA rahasia dan berbayar?",
       answer: "Layanan konseling sebaya melalui Kader GARUDA maupun rujukan ke Guru BK dan Puskesmas bersifat 100% gratis dan rahasia. Identitas serta cerita permasalahan Anda tidak akan disebarluaskan ke pihak luar tanpa izin dari Anda."
+    },
+    {
+      question: "Bagaimana alur rujukan dari kader sebaya ke Puskesmas?",
+      answer: "Dimulai dari konseling sebaya dengan Kader GARUDA, jika membutuhkan penanganan lebih lanjut akan didampingi ke Guru BK sekolah, lalu dirujuk secara aman ke fasilitas kesehatan Puskesmas."
     }
   ];
 
@@ -174,7 +222,7 @@ export default function HomeView() {
 
             <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold text-neutral-dark tracking-tight leading-[1.15]">
               Tumbuh Sehat, <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-800 bg-clip-text text-transparent">
+              <span className="text-neutral-dark">
                 Melangkah Bersama SIGMA
               </span>
             </h1>
@@ -186,18 +234,10 @@ export default function HomeView() {
             {/* CTAs */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
               <Link
-                href="/repropedia"
+                href="/konseling"
                 className="w-full sm:w-auto text-center px-8 py-3.5 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
               >
-                <span>Mulai Belajar (Repropedia)</span>
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-
-              <Link
-                href="/konseling"
-                className="w-full sm:w-auto text-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-neutral-dark font-bold hover:bg-slate-50 shadow-sm transition-all duration-200 flex items-center justify-center space-x-2"
-              >
-                <HeartHandshake className="h-5 w-5 text-emerald-600" />
+                <HeartHandshake className="h-5 w-5 text-white" />
                 <span>Butuh Konseling?</span>
               </Link>
             </div>
@@ -211,25 +251,19 @@ export default function HomeView() {
       </section>
 
       {/* Mitra & Partner Kerja Sama Marquee Section - Soft Clean Ribbon */}
-      <section className="relative overflow-hidden border-y border-slate-200/80 bg-white py-7 sm:py-8">
+      <section className="relative overflow-hidden border-y border-slate-200/80 bg-slate-50/40 py-12">
         {/* Section Header */}
-        <div className="relative mx-auto mb-5 flex max-w-7xl flex-col items-center justify-between gap-3 px-6 sm:px-10 lg:flex-row lg:px-16">
-          <div className="text-center lg:text-left">
-            <h3 className="text-base sm:text-lg font-extrabold leading-tight text-neutral-dark">
+        <div className="relative mx-auto mb-8 flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:px-10">
+          <div className="text-center lg:text-center space-y-1">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight text-neutral-dark tracking-tight">
               Mitra & Partner Kerja Sama
             </h3>
-            <p className="mt-0.5 text-xs font-semibold text-slate-500">
+            <p className="text-sm sm:text-base font-medium text-slate-500">
               SIGMA didukung oleh institusi pendidikan dan kesehatan terkemuka.
             </p>
           </div>
-
-          <span className="shrink-0 rounded-full border border-emerald-200/60 bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 shadow-xs">
-            Kolaborasi Terpadu
-          </span>
         </div>
-
-        {/* Marquee */}
-        <div className="relative w-full overflow-hidden py-2">
+        <div className="relative w-full overflow-hidden py-4">
           <div className="animate-marquee flex w-max items-center gap-5 sm:gap-6 md:gap-7">
             {[1, 2, 3].map((group) => (
               <div
@@ -240,12 +274,12 @@ export default function HomeView() {
                 {PARTNERS.map((partner, index) => (
                   <div
                     key={`${group}-${index}`}
-                    className="group flex h-16 sm:h-20 md:h-22 min-w-[120px] sm:min-w-[135px] md:min-w-[155px] shrink-0 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50/80 px-5 sm:px-6 py-2.5 shadow-xs transition-all duration-200 hover:border-emerald-200 hover:bg-white hover:-translate-y-0.5"
+                    className="group flex h-18 sm:h-22 md:h-26 min-w-[120px] sm:min-w-[150px] md:min-w-[180px] shrink-0 items-center justify-center rounded-2xl border border-slate-200/80 bg-white px-6 sm:px-8 py-4 shadow-sm transition-all duration-200 hover:border-emerald-300 hover:shadow-md hover:-translate-y-1"
                   >
                     <img
                       src={partner.src}
                       alt={partner.alt}
-                      className={`h-10 sm:h-12 md:h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105 ${partner.className || ""}`}
+                      className={`h-12 sm:h-14 md:h-16 w-auto max-w-[120px] sm:max-w-[140px] md:max-w-[160px] object-contain transition-transform duration-200 group-hover:scale-105 ${partner.className || ""}`}
                       loading="lazy"
                     />
                   </div>
@@ -257,8 +291,8 @@ export default function HomeView() {
       </section>
 
       {/* 2. DAMPAK & MISI KAMI (EMERALD CANVAS + STAGGERED PAPERCLIPPED CARDS) */}
-      <section className="py-6 md:py-8 lg:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="relative overflow-hidden rounded-3xl md:rounded-[40px] bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-900 p-7 sm:p-10 lg:p-14 shadow-2xl text-white">
+      <section className="py-6 md:py-8 lg:py-10 px-6 sm:px-10 relative lg:px-12 max-w-7xl mx-auto">
+        <div className="relative overflow-hidden rounded-3xl md:rounded-[40px] bg-primary p-7 sm:p-10 lg:p-14 shadow-2xl text-white">
           {/* Subtle Ambient Radial Glows inside Canvas */}
           <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-teal-400/20 blur-3xl" />
@@ -266,15 +300,13 @@ export default function HomeView() {
 
           {/* Section Header Content */}
           <div className="relative z-10 max-w-5xl mx-auto">
-            <div className="flex w-fit mx-auto items-center space-x-2 bg-white/15 backdrop-blur-md border border-white/25 px-4 py-1.5 rounded-full text-white text-xs font-black uppercase tracking-widest shadow-xs mb-5">
-              <span>Dampak & Misi Kami</span>
-            </div>
-
             {/* Tulisan Gede (Main Statement Text) */}
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-extrabold text-white text-center leading-snug tracking-tight">
-              Kami hadir mendampingi remaja memahami kesehatan reproduksi tanpa rasa tabu,{" "}
-              <span className="text-emerald-200 underline decoration-emerald-300/40 underline-offset-4">membangun ruang aman</span>, serta{" "}
-              <span className="text-amber-300 underline decoration-amber-300/40 underline-offset-4">membentuk generasi yang berdaya</span> dan percaya diri.
+              Kami mendampingi remaja memahami kesehatan reproduksi dan{" "}
+              <span className="text-amber-300 underline decoration-amber-300/40 underline-offset-4">
+                mencegah pernikahan dini
+              </span>
+              , agar mereka tumbuh berdaya dan percaya diri.
             </h2>
           </div>
 
@@ -292,31 +324,23 @@ export default function HomeView() {
 
                 <div>
                   <h3 className="text-lg font-extrabold text-neutral-dark">
-                    Literasi Digital
+                    Ruang Literasi Digital
                   </h3>
                   <p className="mt-1.5 text-xs text-slate-500 font-medium leading-relaxed">
-                    Edukasi kesehatan reproduksi yang ilmiah, faktual, dan ramah remaja.
+                    Edukasi kesehatan reproduksi yang ilmiah dan memandu remaja memahami diri.
                   </p>
                 </div>
 
                 {/* 3D Illustration SVG */}
-                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/hero-cards/repropedia.svg"
+                    src="/assets/literasi.svg"
                     alt="Literasi Digital"
                     fill
                     unoptimized
                     sizes="100px"
                     className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
                   />
-                </div>
-
-                {/* Pill Badge with Real Metric */}
-                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-teal-50 text-teal-800 border border-teal-200/60 shadow-xs">
-                    {counts.modules} Modul Belajar
-                  </span>
-                  <BookOpen className="h-4 w-4 text-teal-600" />
                 </div>
               </div>
 
@@ -339,23 +363,15 @@ export default function HomeView() {
                 </div>
 
                 {/* 3D Illustration SVG */}
-                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/hero-cards/edukasi.svg"
+                    src="/assets/konseling.svg"
                     alt="Konseling & Ruang Aman"
                     fill
                     unoptimized
                     sizes="100px"
                     className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
                   />
-                </div>
-
-                {/* Pill Badge */}
-                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200/60 shadow-xs">
-                    100% Bebas Tabu
-                  </span>
-                  <HeartHandshake className="h-4 w-4 text-rose-600" />
                 </div>
               </div>
 
@@ -378,23 +394,15 @@ export default function HomeView() {
                 </div>
 
                 {/* 3D Illustration SVG */}
-                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/hero-cards/garuda.svg"
+                    src="/assets/dutakader.svg"
                     alt="15 Kader Aktif"
                     fill
                     unoptimized
                     sizes="100px"
                     className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
                   />
-                </div>
-
-                {/* Pill Badge with Real Metric */}
-                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
-                    {activeCounselorCount} Kader Terlatih
-                  </span>
-                  <Award className="h-4 w-4 text-emerald-600" />
                 </div>
               </div>
 
@@ -417,9 +425,9 @@ export default function HomeView() {
                 </div>
 
                 {/* 3D Illustration SVG */}
-                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/hero-cards/quiz.svg"
+                    src="/assets/keterlibatan.svg"
                     alt="Keterlibatan Interaktif"
                     fill
                     unoptimized
@@ -427,235 +435,532 @@ export default function HomeView() {
                     className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-
-                {/* Pill Badge */}
-                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/60 shadow-xs">
-                    Kuis & Galeri Karya
-                  </span>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. FEATURED LITERACY (REPROPEDIA) PREVIEW */}
-      <section className="py-16 md:py-20 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 md:mb-12">
-          <div>
-            <h2 className="text-3xl font-extrabold text-neutral-dark">Pusat Literasi Repropedia</h2>
-            <p className="text-slate-500 mt-2 font-medium">Pelajari materi penting kesehatan reproduksi remaja & hak anak.</p>
+      {/* 3. FEATURED LITERACY (REPROPEDIA) PREVIEW - BENTO GRID 6 PILAR UTAMA */}
+      <section className="py-12 md:py-16 max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
+        {/* Section Header (Centered as per wireframe reference) */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
+          <div className="max-w-2xl space-y-3.5">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-dark tracking-tight">
+              Repropedia
+            </h2>
+            <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl leading-relaxed">
+              Pelajari materi penting kesehatan reproduksi remaja & hak anak.
+            </p>
           </div>
-          <Link
-            href="/repropedia"
-            className="mt-4 sm:mt-0 inline-flex items-center space-x-1 text-sm font-bold text-primary hover:text-primary-hover group"
-          >
-            <span>Buka Semua Modul</span>
-            <ChevronRight className="h-4 w-4 transform group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          <div className="shrink-0">
+            <Link
+              href="/repropedia"
+              className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-emerald-700 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all group"
+            >
+              <span>Jelajahi Repropedia</span>
+              <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {isDataLoading ? (
-            <>
-              <CardSkeleton />
-              <CardSkeleton />
-              <CardSkeleton />
-            </>
-          ) : (
-            modulesList.slice(0, 3).map((module) => (
-              <div
-                key={module.id}
-                className="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+        {/* Bento Grid 6 Boxes (Neutral & Primary Green Tones: White, Soft Slate Gray, Light Emerald, and Deep Primary Emerald) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
+
+          {/* ============================================================ */}
+          {/* KLUSTER KIRI (5 KOLOM DI DESKTOP): BOX 1, BOX 2, & BOX 3     */}
+          {/* ============================================================ */}
+          <div className="md:col-span-2 lg:col-span-5 flex flex-col gap-5 lg:gap-6">
+
+            {/* Top Sub-Row: Box 1 (Hak-Hak Anak) + Box 2 (Pencegahan) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6 flex-1">
+
+              {/* BOX 1: Hak-Hak Anak (Putih Bersih) */}
+              <Link
+                href="/repropedia"
+                className="group relative bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <span className="inline-block px-2.5 py-1 rounded-md bg-emerald-50 text-primary text-[10px] font-extrabold uppercase tracking-wider mb-4">
-                    {module.category.replace("-", " ")}
-                  </span>
-                  <h3 className="font-bold text-neutral-dark text-lg leading-snug hover:text-primary transition-colors">
-                    <Link href={`/repropedia?module=${module.slug}`}>
-                      {module.title}
-                    </Link>
+                  <h3 className="text-lg sm:text-xl font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                    Kenali Hak-Hak Anak
                   </h3>
-                  <p className="text-xs text-slate-500 mt-2.5 line-clamp-3 leading-relaxed">
-                    {module.synopsis}
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+                    Pahami hak perlindungan, tumbuh kembang, dan rasa amanmu.
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                  <span>{module.readTime} Baca</span>
-                  <Link
-                    href={`/repropedia?module=${module.slug}`}
-                    className="text-primary hover:underline flex items-center space-x-1"
-                  >
-                    <span>Mulai Baca</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </section>
+              </Link>
 
-      {/* 4. RECENT MEDIA & UPDATES FEED */}
-      <section className="py-12 md:py-16 bg-emerald-500/5 border-t border-slate-200/50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-extrabold text-neutral-dark">Edukasi & Kampanye Terbaru</h2>
-              <p className="text-slate-500 mt-2 font-medium">Artikel kesehatan, berita program, dan konten video kampanye.</p>
+              {/* BOX 2: Pencegahan Kekerasan Seksual (Hijau Muda Lembut) */}
+              <Link
+                href="/repropedia"
+                className="group relative bg-primary rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <h3 className="text-lg sm:text-xl font-extrabold text-white leading-snug">
+                    Pencegahan Kekerasan Seksual
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm text-white/90 font-medium leading-relaxed">
+                    Kenali batasan tubuh (consent), tanda bahaya (red flags), dan cara menjaga diri.
+                  </p>
+                </div>
+              </Link>
+
             </div>
+
+            {/* Bottom Row: Box 3 (Risiko & Dampak Perkawinan Anak - Abu-Abu Lembut) */}
             <Link
-              href="/edukasi"
-              className="mt-4 sm:mt-0 inline-flex items-center space-x-1 text-sm font-bold text-primary hover:text-primary-hover group"
+              href="/repropedia"
+              className="group relative bg-slate-100/80 border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between flex-1"
             >
-              <span>Lihat Semua Media</span>
-              <ChevronRight className="h-4 w-4 transform group-hover:translate-x-0.5 transition-transform" />
+              <div>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold text-slate-900 group-hover:text-emerald-800 transition-colors leading-snug">
+                  Risiko & Dampak Perkawinan Anak
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-lg">
+                  Menilik dampak kesiapan fisik, mental, pendidikan, hingga masa depan remaja.
+                </p>
+              </div>
+
+              {/* Visual Mini Highlight Badge */}
+              <div className="mt-5 pt-3.5 border-t border-slate-200/70 flex items-center">
+                <span className="inline-flex items-center space-x-2 text-[11px] font-bold text-slate-700 bg-white border border-slate-200/80 px-3 py-1 rounded-full shadow-2xs">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span>UU No. 16/2019 • Batas Minimal 19 Tahun</span>
+                </span>
+              </div>
+            </Link>
+
+          </div>
+
+          {/* ============================================================ */}
+          {/* KOLOM TENGAH (4 KOLOM DI DESKTOP): BOX 4 (CARD HERO TERTINGGI)*/}
+          {/* ============================================================ */}
+          <div className="md:col-span-1 lg:col-span-4 flex flex-col">
+            <Link
+              href="/repropedia"
+              className="group relative bg-emerald-800 text-white rounded-3xl p-7 sm:p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full overflow-hidden"
+            >
+              {/* Header Card Hero */}
+              <div>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-tight">
+                  Kesehatan Reproduksi
+                </h3>
+                <p className="mt-3 text-xs sm:text-sm text-white/90 font-medium leading-relaxed">
+                  Panduan menyeluruh mengenal perubahan tubuh masa pubertas, sistem biologis, dan kebersihan diri tanpa rasa malu.
+                </p>
+              </div>
+
+              {/* 3D Illustration SVG Highlight */}
+              <div className="relative w-48 sm:w-56 h-48 sm:h-56 mx-auto my-6 flex items-center justify-center">
+                <Image
+                  src="/assets/health.svg"
+                  alt="Kesehatan Reproduksi"
+                  fill
+                  unoptimized
+                  sizes="(max-width: 768px) 200px, 240px"
+                  className="object-contain filter drop-shadow-[0_16px_32px_rgba(0,0,0,0.3)] group-hover:scale-105 group-hover:-rotate-1 transition-all duration-300"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-white/15 flex items-center justify-between text-xs text-emerald-100/90 font-bold">
+                <span>Edukasi Ilmiah & Komprehensif</span>
+                <span className="group-hover:translate-x-1 transition-transform">SIGMA Platform →</span>
+              </div>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* ============================================================ */}
+          {/* KLUSTER KANAN (3 KOLOM DI DESKTOP): BOX 5 & BOX 6            */}
+          {/* ============================================================ */}
+          <div className="md:col-span-1 lg:col-span-3 flex flex-col gap-5 lg:gap-6">
+
+            {/* BOX 5: Bentuk-Bentuk Kekerasan Seksual (Putih Bersih) */}
+            <Link
+              href="/repropedia"
+              className="group relative bg-slate-100/80 border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between flex-1"
+            >
+              <div>
+                <h3 className="text-lg sm:text-xl font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Bentuk Kekerasan Seksual
+                </h3>
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+                  Pahami jenis verbal, fisik, hingga kekerasan di ranah digital (KBGO).
+                </p>
+              </div>
+            </Link>
+
+            {/* BOX 6: Langkah Tanggap Kekerasan (Hijau Muda Lembut) */}
+            <Link
+              href="/repropedia"
+              className="group relative bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between flex-1"
+            >
+              <div>
+                <h3 className="text-lg sm:text-xl font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Mengalami Kekerasan Seksual?
+                </h3>
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+                  Panduan aman mencari bantuan, kontak darurat, dan alur rujukan konseling.
+                </p>
+              </div>
+            </Link>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 4. MEDICAL QUIZ SECTION (INTERACTIVE GAMIFIED CHALLENGE - FULL WIDTH STRETCH) */}
+      <section className="w-full bg-primary py-16 md:py-20 text-white relative overflow-hidden">
+        {/* Subtle Ambient Radial Glows & Texture spanning full width */}
+        <div className="pointer-events-none absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-emerald-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -right-32 h-[500px] w-[500px] rounded-full bg-teal-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.06),transparent)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+            {/* Left Column: Title, Subtitle, CTA Button, and 3D Voxel Mascot */}
+            <div className="lg:col-span-5 flex flex-col justify-between h-full">
+              <div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+                  Saatnya Uji Pemahamanmu Lewat Kuis Seru!
+                </h2>
+
+                <p className="mt-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-medium">
+                  Cari tahu seberapa paham kamu soal kesehatan reproduksi dan batas diri. Bukan ujian sekolah, kok! Cuma kuis santai buat mastiin kamu paham cara menjaga diri dan mengenali hak-hakmu sebagai remaja. Cepat, seru, dan pastinya nambah ilmu.
+                </p>
+
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/kuis"
+                    className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm shadow-lg hover:shadow-amber-400/30 active:scale-98 transition-all"
+                  >
+                    <span>Mulai Kuis Sekarang</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* 3D Voxel Graphic Mascot */}
+              <div className="mt-8 relative w-44 sm:w-52 h-44 sm:h-52">
+                <Image
+                  src="/assets/hero-cards/quiz.svg"
+                  alt="Medical Quiz SIGMA"
+                  fill
+                  unoptimized
+                  className="object-contain filter drop-shadow-[0_16px_32px_rgba(0,0,0,0.35)] hover:scale-105 hover:rotate-1 transition-all duration-500"
+                />
+              </div>
+            </div>
+
+            {/* Right Column: 2x2 Grid of Quiz Categories from Quiz Page */}
+            <div className="lg:col-span-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                {QUIZ_PREVIEWS.map((quiz) => (
+                  <Link
+                    key={quiz.id}
+                    href="/kuis"
+                    className="group relative bg-white rounded-3xl p-5 shadow-lg border border-white/80 hover:shadow-2xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Title */}
+                      <h4 className="text-base font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                        {quiz.title}
+                      </h4>
+
+                      {/* Description */}
+                      <p className="mt-1.5 text-xs text-slate-500 font-medium leading-relaxed line-clamp-2">
+                        {quiz.description}
+                      </p>
+                    </div>
+
+                    {/* Card Footer with Button */}
+                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-400">
+                        {quiz.duration} • {quiz.xp}
+                      </span>
+                      <span className="inline-flex items-center space-x-1 px-3.5 py-1.5 rounded-xl bg-amber-400 group-hover:bg-amber-500 text-slate-950 font-extrabold text-xs shadow-xs transition-colors">
+                        <span>Mulai</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 5. RECENT ARTIKEL & EDUKASI FEED */}
+      <section className="py-16 md:py-20 bg-slate-50/60 border-b border-slate-200/50">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
+            <div className="max-w-2xl space-y-3.5">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-dark tracking-tight">
+                Artikel & Edukasi
+              </h2>
+              <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl leading-relaxed">
+                Jelajahi Artikel kesehatan, berita, dan konten video kesehatan
+              </p>
+            </div>
+            <div className="shrink-0">
+              <Link
+                href="/edukasi"
+                className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-emerald-700 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all group"
+              >
+                <span>Jelajahi Artikel Edukasi</span>
+                <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {isDataLoading ? (
               <>
                 <CardSkeleton />
                 <CardSkeleton />
+                <CardSkeleton />
               </>
             ) : (
-              mediaList.slice(0, 2).map((item) => (
-                <div
-                  key={item.id}
-                  className="overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row"
-                >
-                  {/* Media Image/Thumbnail */}
-                  <div className="relative w-full md:w-44 h-44 shrink-0 bg-slate-100">
-                    {(() => {
-                      const ytThumb = item.type === "video" ? getYouTubeThumbnail(item.mediaUrl) : null;
-                      if (ytThumb) {
-                        return (
+              mediaList.slice(0, 3).map((item) => {
+                const ytThumb = item.type === "video" ? getYouTubeThumbnail(item.mediaUrl) : null;
+                return (
+                  <Link
+                    key={item.id}
+                    href={`/edukasi?post=${item.slug}`}
+                    className="group flex flex-col justify-between transition-all duration-300"
+                  >
+                    <div>
+                      {/* Media Image / Thumbnail Container */}
+                      <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-100 shadow-xs mb-4">
+                        {ytThumb ? (
                           <div className="relative w-full h-full overflow-hidden">
-                            <img src={ytThumb} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-4">
-                              <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <img
+                              src={ytThumb}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
+                              <div className="h-11 w-11 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                                 <Play className="h-5 w-5 fill-current text-white pl-0.5" />
                               </div>
-                              <span className="text-[10px] font-bold text-white/90 mt-2 uppercase tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">
-                                Video {item.duration || "Edukasi"}
-                              </span>
+                            </div>
+                            <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-bold">
+                              Video {item.duration || ""}
                             </div>
                           </div>
-                        );
-                      }
-                      if (item.type === "video") {
-                        return (
+                        ) : item.type === "video" ? (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4">
-                            <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                            <div className="h-11 w-11 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                               <Play className="h-5 w-5 fill-current text-white pl-0.5" />
                             </div>
-                            <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">Video {item.duration}</span>
+                            <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">
+                              Video {item.duration}
+                            </span>
                           </div>
-                        );
-                      }
-                      return (
-                        <img
-                          src={item.mediaUrl}
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                        />
-                      );
-                    })()}
-                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-neutral-dark/80 text-white text-[9px] font-extrabold uppercase tracking-widest z-10">
-                      {item.type}
-                    </span>
-                  </div>
+                        ) : (
+                          <div className="relative w-full h-full overflow-hidden">
+                            <img
+                              src={item.mediaUrl}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-bold shadow-md">
+                              sigmaplatform.id
+                            </div>
+                          </div>
+                        )}
+                      </div>
 
-                  {/* Content */}
-                  <div className="p-5 flex flex-col justify-between flex-grow">
-                    <div>
-                      <h3 className="font-bold text-neutral-dark text-base leading-snug line-clamp-2 hover:text-primary transition-colors">
-                        <Link href={`/edukasi?post=${item.slug}`}>
+                      {/* Content Details */}
+                      <div>
+                        <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">
+                          {item.category.replace("-", " ")}
+                        </span>
+                        <h3 className="font-extrabold text-neutral-dark text-base sm:text-lg leading-snug line-clamp-2 mt-1.5 group-hover:text-emerald-600 transition-colors">
                           {item.title}
-                        </Link>
-                      </h3>
-                      <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                        {item.content}
-                      </p>
+                        </h3>
+                        <p className="text-xs sm:text-sm text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+                          {item.content}
+                        </p>
+                      </div>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+
+                    {/* Meta Footer: Author · Date */}
+                    <div className="mt-4 pt-3 flex items-center text-xs text-slate-400 font-medium">
                       <span>{item.author}</span>
+                      <span className="mx-1.5 font-bold">·</span>
                       <span>{item.date}</span>
                     </div>
-                  </div>
-                </div>
-              ))
+                  </Link>
+                );
+              })
             )}
           </div>
         </div>
       </section>
 
-      {/* 5. INTERACTIVE FAQ SECTION */}
-      <section id="faq" className="py-16 bg-white border-t border-slate-200/50">
-        <div className="max-w-4xl mx-auto px-6 sm:px-10 lg:px-16">
-          <div className="text-center max-w-xl mx-auto mb-10">
-            <h2 className="text-3xl font-extrabold text-neutral-dark">FAQ Seputar Kesehatan & Pernikahan Anak</h2>
-            <p className="text-sm text-slate-500 mt-2 font-medium">Temukan jawaban atas pertanyaan umum seputar kesehatan reproduksi remaja.</p>
-          </div>
+      {/* 5. INTERACTIVE FAQ & CONTACT SECTION (MATCHING REFERENCE WITH 3D MASCOTS) */}
+      <section id="faq" className="py-16 relative overflow-hidden">
+        {/* Subtle Ambient Background Glows */}
+        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-100/30 rounded-full blur-3xl -z-10" />
 
-          <div className="space-y-4">
-            {faqData.map((faq, index) => {
-              const isOpen = openFaqIndex === index;
-              return (
-                <div
-                  key={index}
-                  className="border border-slate-100 rounded-2xl bg-slate-50/50 overflow-hidden transition-all duration-200 hover:border-emerald-100"
-                >
-                  <button
-                    onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                    className="w-full px-6 py-4 text-left flex justify-between items-center gap-4 text-sm font-bold text-neutral-dark hover:bg-slate-50 transition-colors"
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Top Stylized Badge: "Tanya Jawab & Kontak" */}
+          <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12 space-y-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-dark tracking-tight">
+              Pertanyaan yang Sering Ditanyakan
+            </h2>
+            <p className="text-slate-600 font-medium text-sm sm:text-base leading-relaxed">
+              Temukan jawaban atas pertanyaan seputar kesehatan reproduksi, hak anak, dan pencegahan pernikahan dini.
+            </p>
+          </div>
+          {/* Interactive Layout: Left Questions | Center 3D Mascots | Right Questions */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-5 sm:gap-6 relative z-10">
+            {/* Kolom Kiri: 3 Gelembung Pertanyaan */}
+            <div className="lg:col-span-4 flex flex-col gap-4 sm:gap-5 order-2 lg:order-1">
+              {faqData.slice(0, 3).map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className={`relative p-4 sm:p-4.5 rounded-2xl bg-white/95 backdrop-blur-xs border transition-all duration-300 cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5 group ${isOpen
+                      ? "border-emerald-500 ring-2 ring-emerald-500/20 shadow-emerald-500/10"
+                      : "border-emerald-100/80 hover:border-emerald-300"
+                      }`}
                   >
-                    <span>{faq.question}</span>
-                    <span className={`text-slate-400 transform transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180 text-primary' : ''}`}>
-                      <ChevronRight className="h-4 w-4" />
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="px-6 pb-4 pt-1 text-xs text-slate-600 leading-relaxed font-medium bg-white animate-in fade-in duration-200">
-                      {faq.answer}
+                    {/* Speech bubble pointer towards center mascot on desktop */}
+                    <div
+                      className={`hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-6 border-t-transparent border-b-6 border-b-transparent border-l-8 transition-colors ${isOpen ? "border-l-emerald-500" : "border-l-emerald-200/80 group-hover:border-l-emerald-300"
+                        }`}
+                    />
+
+                    <div className="flex items-center justify-between gap-2.5">
+                      <span className="text-xs sm:text-sm font-extrabold text-slate-800 group-hover:text-emerald-700 transition-colors leading-snug">
+                        {faq.question}
+                      </span>
+                      <span
+                        className={`h-6 w-6 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${isOpen
+                          ? "bg-emerald-600 text-white rotate-90"
+                          : "bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 group-hover:text-emerald-700"
+                          }`}
+                      >
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </span>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* 6. GAMIFICATION / QUIZ INTERACTIVE CARD */}
-      <section className="py-16 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="p-8 md:p-12 rounded-3xl bg-neutral-dark text-white relative overflow-hidden shadow-2xl">
-          {/* Decorative accents */}
-          <div className="absolute -bottom-10 -left-10 bg-primary/20 h-44 w-44 rounded-full blur-2xl" />
-          <div className="absolute -top-10 -right-10 bg-amber-500/10 h-44 w-44 rounded-full blur-2xl" />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-            <div className="lg:col-span-8 space-y-4 text-center lg:text-left">
-              <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-primary text-xs font-bold uppercase tracking-wider">
-                Mini Gamifikasi
-              </span>
-              <h2 className="text-2xl md:text-3xl font-extrabold">Uji Pengetahuan Kesehatan Reproduksimu!</h2>
-              <p className="text-slate-400 text-sm md:text-base max-w-xl leading-relaxed">
-                Ikuti kuis interaktif berhadiah badge virtual. Pahami pubertas, kenali batasan tubuh, dan ketahui hak-hak perlindungan anak dengan cara seru.
-              </p>
+                    {isOpen && (
+                      <div className="mt-3 pt-2.5 border-t border-slate-100 text-xs text-slate-600 font-medium leading-relaxed animate-in fade-in duration-200">
+                        <p>{faq.answer}</p>
+                        <Link
+                          href="/faq"
+                          className="inline-flex items-center gap-1 mt-2 text-[11px] font-bold text-emerald-600 hover:text-emerald-700"
+                        >
+                          <span>Buka di FAQ Lengkap</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            <div className="lg:col-span-4 flex justify-center lg:justify-end">
-              <Link
-                href="/kuis"
-                className="px-8 py-4 rounded-xl bg-accent text-neutral-dark font-extrabold text-sm hover:bg-accent-hover transform hover:-translate-y-0.5 transition-all shadow-lg shadow-amber-500/10 whitespace-nowrap"
-              >
-                Mulai Kuis Sekarang
-              </Link>
+
+            {/* Kolom Tengah: Dua Maskot 3D Voxel */}
+            <div className="lg:col-span-4 flex flex-col items-center justify-center relative order-1 lg:order-2 my-2 lg:my-0">
+              <div className="relative w-64 sm:w-72 md:w-80 aspect-square">
+                <Image
+                  src="/assets/faq_mascots.svg"
+                  alt="Maskot Kader GARUDA SIGMA"
+                  fill
+                  className="object-contain filter drop-shadow-2xl rounded-3xl hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+            <div className="lg:col-span-4 flex flex-col gap-4 sm:gap-5 order-3">
+              {faqData.slice(3, 6).map((faq, idx) => {
+                const actualIndex = idx + 3;
+                const isOpen = openFaqIndex === actualIndex;
+                return (
+                  <div
+                    key={actualIndex}
+                    onClick={() => setOpenFaqIndex(isOpen ? null : actualIndex)}
+                    className={`relative p-4 sm:p-4.5 rounded-2xl bg-white/95 backdrop-blur-xs border transition-all duration-300 cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5 group ${isOpen
+                      ? "border-emerald-500 ring-2 ring-emerald-500/20 shadow-emerald-500/10"
+                      : "border-emerald-100/80 hover:border-emerald-300"
+                      }`}
+                  >
+                    {/* Speech bubble pointer towards center mascot on desktop */}
+                    <div
+                      className={`hidden lg:block absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-6 border-t-transparent border-b-6 border-b-transparent border-r-8 transition-colors ${isOpen ? "border-r-emerald-500" : "border-r-emerald-200/80 group-hover:border-r-emerald-300"
+                        }`}
+                    />
+
+                    <div className="flex items-center justify-between gap-2.5">
+                      <span className="text-xs sm:text-sm font-extrabold text-slate-800 group-hover:text-emerald-700 transition-colors leading-snug">
+                        {faq.question}
+                      </span>
+                      <span
+                        className={`h-6 w-6 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${isOpen
+                          ? "bg-emerald-600 text-white rotate-90"
+                          : "bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 group-hover:text-emerald-700"
+                          }`}
+                      >
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+
+                    {isOpen && (
+                      <div className="mt-3 pt-2.5 border-t border-slate-100 text-xs text-slate-600 font-medium leading-relaxed animate-in fade-in duration-200">
+                        <p>{faq.answer}</p>
+                        <Link
+                          href="/faq"
+                          className="inline-flex items-center gap-1 mt-2 text-[11px] font-bold text-emerald-600 hover:text-emerald-700"
+                        >
+                          <span>Buka di FAQ Lengkap</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
+
+          {/* Bottom Callout Card (Floating Peach/Amber Box matching reference) */}
+          <div className="mt-8 sm:mt-12 max-w-xl mx-auto relative z-20">
+            <div className="relative rounded-3xl bg-gradient-to-r from-amber-200 via-orange-200 to-amber-200 border-2 border-orange-300/90 p-6 sm:p-7 text-center shadow-xl">
+              {/* Corner decorative ribbons */}
+              <div className="absolute -top-1.5 -left-1.5 w-5 h-5 border-t-4 border-l-4 border-orange-500 rounded-tl-lg pointer-events-none" />
+              <div className="absolute -bottom-1.5 -left-1.5 w-5 h-5 border-b-4 border-l-4 border-orange-500 rounded-bl-lg pointer-events-none" />
+              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 border-t-4 border-r-4 border-orange-500 rounded-tr-lg pointer-events-none" />
+              <div className="absolute -bottom-1.5 -right-1.5 w-5 h-5 border-b-4 border-r-4 border-orange-500 rounded-br-lg pointer-events-none" />
+
+              <h3 className="text-sm sm:text-base md:text-lg font-black text-slate-900 leading-snug">
+                Cari Tahu Semua Pertanyaanmu atau Hubungi Kami Langsung!
+              </h3>
+
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/faq"
+                  className="px-6 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm shadow-md hover:shadow-amber-400/30 transition-all active:scale-95"
+                >
+                  Lihat Semua FAQ
+                </Link>
+                <Link
+                  href="/kontak"
+                  className="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-xs sm:text-sm shadow-md hover:shadow-orange-500/30 transition-all active:scale-95"
+                >
+                  Hubungi Kami
+                </Link>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

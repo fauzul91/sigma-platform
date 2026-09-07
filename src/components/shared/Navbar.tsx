@@ -60,7 +60,7 @@ export default function Navbar() {
       label: "Bantuan",
       items: [
         { label: "Konseling & Rujukan", href: "/konseling", desc: "Peer counseling & WhatsApp" },
-        { label: "FAQ Umum", href: "/beranda#faq", desc: "Tanya jawab reproduksi" },
+        { label: "FAQ Umum", href: "/faq", desc: "Tanya jawab reproduksi" },
         { label: "Hubungi Kami", href: "/kontak", desc: "Alamat dan form kontak" },
       ],
     },
@@ -102,17 +102,12 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed left-0 right-0 z-40 transition-all duration-300 ${isScrolled
-        ? "top-0 md:top-4 py-3 md:py-0"
-        : "top-0 py-4 md:py-5"
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-200 ${isScrolled
+        ? "bg-white shadow-sm border-b border-slate-100 py-3 md:py-3.5"
+        : "bg-white/95 md:bg-transparent py-4 md:py-5"
         }`}
     >
-      <div
-        className={`mx-auto transition-all duration-300 border ${isScrolled
-          ? "max-w-7xl px-6 sm:px-10 md:max-w-6xl md:px-8 md:py-2.5 md:rounded-2xl md:bg-white md:shadow-xl md:border-slate-100 border-transparent bg-white shadow-md"
-          : "max-w-7xl px-6 sm:px-10 lg:px-16 border-transparent bg-white/95 md:bg-transparent"
-          }`}
-      >
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/beranda" className="flex items-center space-x-2.5 shrink-0 group">

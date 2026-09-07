@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { OrgMember } from "@/types";
+import PageHeader from "@/components/shared/PageHeader";
 
 export default function TentangView() {
   const [selectedRole, setSelectedRole] = useState<OrgMember | null>({
@@ -118,22 +119,15 @@ export default function TentangView() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-10 md:py-16 font-sans">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 space-y-16">
-        
-        {/* Header Overview */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="inline-block px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-wider">
-            Profil & Visi Misi SIGMA
-          </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight">
-            Pemberdayaan Digital & Edukasi Kesehatan Reproduksi
-          </h1>
-          <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">
-            Gerakan kolaboratif berbasis komunitas sekolah untuk mendampingi remaja tumbuh sehat, berwawasan, dan terlindungi dari risiko pernikahan usia anak.
-          </p>
-        </div>
+    <div className="bg-slate-50 min-h-screen font-sans">
+      <PageHeader
+        title="TENTANG KAMI"
+        description="Mengenal visi, misi, struktur organisasi Kader GARUDA, dan komitmen SIGMA dalam mendampingi remaja serta mencegah pernikahan usia anak."
+        badge="PROFIL PROGRAM"
+        type="tentang"
+      />
 
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-10 md:py-16 space-y-16">
         {/* Vision & Mission Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-4">

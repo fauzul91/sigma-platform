@@ -6,6 +6,7 @@ import { userService } from "@/services/user/userService";
 import { UgcItem } from "@/types";
 import { CardSkeleton } from "@/components/shared/Skeletons";
 import UserPagination from "@/components/shared/UserPagination";
+import PageHeader from "@/components/shared/PageHeader";
 
 export default function KaryaKaderView() {
   const [ugcList, setUgcList] = useState<UgcItem[]>([]);
@@ -116,21 +117,15 @@ export default function KaryaKaderView() {
   );
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 md:py-12 font-sans">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border-b border-slate-200/40 pb-6">
-          <div className="text-center md:text-left space-y-2">
-            <h1 className="text-4xl font-extrabold text-neutral-dark tracking-tight">
-              Karya Kreatif Kader & Siswa
-            </h1>
-            <p className="text-slate-500 text-sm md:text-base max-w-2xl font-semibold">
-              Galeri apresiasi poster digital, infografis menarik, dan video
-              edukasi orisinal buatan teman-teman siswa sekolah menengah.
-            </p>
-          </div>
-        </div>
+    <div className="bg-slate-50 min-h-screen font-sans">
+      <PageHeader
+        title="KARYA SISWA"
+        description="Galeri apresiasi poster digital, infografis menarik, dan video edukasi orisinal buatan teman-teman siswa sekolah dan Kader GARUDA."
+        badge="GALERI KREATIF"
+        type="karya-kader"
+      />
 
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-8 md:py-12">
         {/* Filters */}
         <div className="flex items-center space-x-2 border-b border-slate-200 pb-4 mb-8 overflow-x-auto scrollbar-none">
           <Filter className="h-4 w-4 text-slate-400 shrink-0 hidden sm:inline" />
