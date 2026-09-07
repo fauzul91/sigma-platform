@@ -19,6 +19,7 @@ import {
 import { userService } from "@/services/user/userService";
 import { RepropediaItem, MediaItem } from "@/types";
 import { CardSkeleton } from "@/components/shared/Skeletons";
+import HeroCardsDeck from "@/components/user/HeroCardsDeck";
 
 const PARTNERS = [
   {
@@ -161,32 +162,30 @@ export default function HomeView() {
       <div className="absolute top-1/3 right-10 -z-10 h-[300px] w-[300px] rounded-full bg-amber-100/30 blur-3xl" />
 
       {/* 1. HERO SECTION */}
-      <section className="relative py-16 md:py-24 lg:py-28 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-
+      <section className="relative pt-12 md:pt-16 lg:pt-20 pb-0 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Hero text content */}
-          <div className="lg:col-span-7 space-y-6 md:space-y-8 text-center lg:text-left">
-
-            <div className="inline-flex items-center space-x-2 bg-emerald-50 border border-emerald-200/50 px-3.5 py-1.5 rounded-full text-primary text-xs font-bold uppercase tracking-wider shadow-sm animate-pulse">
-              <Sparkles className="h-3.5 w-3.5" />
+          <div className="lg:col-span-12 flex flex-col items-center text-center space-y-4 md:space-y-4 max-w-4xl mx-auto">
+            <div className="inline-flex items-center space-x-2 bg-emerald-50 border border-emerald-200/50 px-3.5 py-1.5 rounded-full text-primary text-xs font-bold uppercase tracking-wider shadow-sm">
               <span>Bersama Kader GARUDA Indonesia</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-neutral-dark leading-tight tracking-tight">
-              Tumbuh Sehat, <br />
-              <span className="text-primary bg-clip-text">Melangkah Aman</span> <br className="hidden sm:inline" />
-              Bersama SIGMA
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold text-neutral-dark tracking-tight leading-[1.15]">
+              Tumbuh Sehat, <br className="hidden sm:inline" />
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-800 bg-clip-text text-transparent">
+                Melangkah Bersama SIGMA
+              </span>
             </h1>
 
-            <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
-              Platform interaktif edukasi kesehatan reproduksi remaja, pencegahan perkawinan anak, dan rujukan konseling aman, rahasia, serta ramah bagi generasi muda.
+            <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-normal font-medium">
+              Platform interaktif dan ruang konseling aman bagi remaja untuk pahami diri serta lindungi masa depan.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
               <Link
                 href="/repropedia"
-                className="w-full sm:w-auto text-center px-8 py-4 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
+                className="w-full sm:w-auto text-center px-8 py-3.5 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
               >
                 <span>Mulai Belajar (Repropedia)</span>
                 <ArrowRight className="h-5 w-5" />
@@ -194,64 +193,18 @@ export default function HomeView() {
 
               <Link
                 href="/konseling"
-                className="w-full sm:w-auto text-center px-8 py-4 rounded-xl bg-white border border-slate-200 text-neutral-dark font-bold hover:bg-slate-50 shadow-sm transition-all duration-200 flex items-center justify-center space-x-2"
+                className="w-full sm:w-auto text-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-neutral-dark font-bold hover:bg-slate-50 shadow-sm transition-all duration-200 flex items-center justify-center space-x-2"
               >
                 <HeartHandshake className="h-5 w-5 text-emerald-600" />
                 <span>Butuh Konseling?</span>
               </Link>
             </div>
           </div>
+        </div>
 
-          {/* Hero Illustration / Graphical Box */}
-          <div className="lg:col-span-5 relative flex justify-center w-full">
-            <div className="relative w-full max-w-md h-auto min-h-[380px] md:min-h-[400px] rounded-3xl shadow-2xl glass-card border border-white p-6 flex flex-col justify-between gap-6">
-
-              {/* Decorative design within the card */}
-              <div className="absolute top-0 right-0 bg-primary/10 h-32 w-32 rounded-bl-full -z-10" />
-
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="h-3 w-3 rounded-full bg-red-500" />
-                  <div className="h-3 w-3 rounded-full bg-yellow-500" />
-                  <div className="h-3 w-3 rounded-full bg-green-500" />
-                </div>
-
-                <div className="p-4 rounded-2xl bg-white/80 border border-slate-100 shadow-sm">
-                  <h3 className="text-sm font-bold text-neutral-dark flex items-center space-x-2">
-                    <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
-                    <span>Layanan Pengaduan Aktif</span>
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-normal">
-                    Jika kamu menemui kasus pemaksaan pernikahan usia anak atau butuh bantuan darurat kekerasan seksual, klik tombol merah SOS di pojok kanan bawah.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-white/80 border border-slate-100 shadow-sm">
-                  <h3 className="text-sm font-bold text-neutral-dark flex items-center space-x-2">
-                    <span>💡 Tips Sehat Hari Ini</span>
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-normal">
-                    Penting menjaga kebersihan organ reproduksi selama masa pubertas untuk mencegah infeksi dan menjaga rasa percaya diri.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between p-3.5 bg-emerald-600 rounded-2xl text-white">
-                <div className="flex items-center space-x-2.5">
-                  <Users className="h-5 w-5 shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-emerald-100 uppercase tracking-wider font-bold">Kader Aktif</p>
-                    <p className="text-xs font-bold">12 Teman Sebaya Siap Dengar</p>
-                  </div>
-                </div>
-                <Link href="/konseling" className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-white">
-                  <ChevronRight className="h-4 w-4" />
-                </Link>
-              </div>
-
-            </div>
-          </div>
-
+        {/* 5 Interactive Hero Cards Deck (Rising from below hero) */}
+        <div className="mt-8 md:mt-12 -mb-8 sm:-mb-10 md:-mb-14">
+          <HeroCardsDeck />
         </div>
       </section>
 
