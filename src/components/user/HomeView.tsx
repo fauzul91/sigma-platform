@@ -4,6 +4,7 @@ import { getYouTubeThumbnail } from "@/utils/mediaUtils";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   BookOpen,
   MessageCircle,
@@ -12,9 +13,10 @@ import {
   Users,
   ChevronRight,
   Play,
-  Sparkles,
   HeartHandshake,
-  Activity
+  Activity,
+  Paperclip,
+  CheckCircle2
 } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { RepropediaItem, MediaItem } from "@/types";
@@ -208,30 +210,26 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* Mitra & Partner Kerja Sama Marquee Section */}
-      <section className="relative overflow-hidden border-y border-emerald-700/30 bg-emerald-600 py-8 sm:py-10">
-        {/* Decorative background */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent)]" />
-
+      {/* Mitra & Partner Kerja Sama Marquee Section - Soft Clean Ribbon */}
+      <section className="relative overflow-hidden border-y border-slate-200/80 bg-white py-7 sm:py-8">
         {/* Section Header */}
-        <div className="relative mx-auto mb-6 sm:mb-7 flex max-w-7xl flex-col items-center justify-between gap-3 sm:gap-4 px-6 sm:px-10 lg:flex-row lg:px-16">
+        <div className="relative mx-auto mb-5 flex max-w-7xl flex-col items-center justify-between gap-3 px-6 sm:px-10 lg:flex-row lg:px-16">
           <div className="text-center lg:text-left">
-            <h3 className="text-lg sm:text-xl font-extrabold leading-tight text-white">
+            <h3 className="text-base sm:text-lg font-extrabold leading-tight text-neutral-dark">
               Mitra & Partner Kerja Sama
             </h3>
-
-            <p className="mt-1 text-xs font-semibold text-emerald-100/80">
+            <p className="mt-0.5 text-xs font-semibold text-slate-500">
               SIGMA didukung oleh institusi pendidikan dan kesehatan terkemuka.
             </p>
           </div>
 
-          <span className="shrink-0 rounded-full border border-emerald-100 bg-white/95 px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-emerald-800 shadow-sm">
+          <span className="shrink-0 rounded-full border border-emerald-200/60 bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 shadow-xs">
             Kolaborasi Terpadu
           </span>
         </div>
 
         {/* Marquee */}
-        <div className="relative w-full overflow-hidden py-3 sm:py-4">
+        <div className="relative w-full overflow-hidden py-2">
           <div className="animate-marquee flex w-max items-center gap-5 sm:gap-6 md:gap-7">
             {[1, 2, 3].map((group) => (
               <div
@@ -242,12 +240,12 @@ export default function HomeView() {
                 {PARTNERS.map((partner, index) => (
                   <div
                     key={`${group}-${index}`}
-                    className="group flex h-20 sm:h-24 md:h-28 min-w-[125px] sm:min-w-[145px] md:min-w-[165px] shrink-0 items-center justify-center rounded-2xl sm:rounded-3xl border border-emerald-500/10 bg-white px-5 sm:px-7 md:px-8 py-3 sm:py-4 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+                    className="group flex h-16 sm:h-20 md:h-22 min-w-[120px] sm:min-w-[135px] md:min-w-[155px] shrink-0 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50/80 px-5 sm:px-6 py-2.5 shadow-xs transition-all duration-200 hover:border-emerald-200 hover:bg-white hover:-translate-y-0.5"
                   >
                     <img
                       src={partner.src}
                       alt={partner.alt}
-                      className={`h-12 sm:h-14 md:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105 ${partner.className || ""}`}
+                      className={`h-10 sm:h-12 md:h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105 ${partner.className || ""}`}
                       loading="lazy"
                     />
                   </div>
@@ -258,49 +256,185 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* 2. DYNAMIC STATISTICS DASHBOARD */}
-      <section className="bg-white border-y border-slate-100 py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-          <div className="text-center max-w-xl mx-auto mb-10 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-dark">Dampak Kontribusi Program SIGMA</h2>
-            <p className="text-sm text-slate-500 mt-2 font-medium">Data riil edukasi dan pendampingan psikososial remaja secara berkala.</p>
+      {/* 2. DAMPAK & MISI KAMI (EMERALD CANVAS + STAGGERED PAPERCLIPPED CARDS) */}
+      <section className="py-6 md:py-8 lg:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="relative overflow-hidden rounded-3xl md:rounded-[40px] bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-900 p-7 sm:p-10 lg:p-14 shadow-2xl text-white">
+          {/* Subtle Ambient Radial Glows inside Canvas */}
+          <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-teal-400/20 blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent)]" />
+
+          {/* Section Header Content */}
+          <div className="relative z-10 max-w-5xl mx-auto">
+            <div className="flex w-fit mx-auto items-center space-x-2 bg-white/15 backdrop-blur-md border border-white/25 px-4 py-1.5 rounded-full text-white text-xs font-black uppercase tracking-widest shadow-xs mb-5">
+              <span>Dampak & Misi Kami</span>
+            </div>
+
+            {/* Tulisan Gede (Main Statement Text) */}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-extrabold text-white text-center leading-snug tracking-tight">
+              Kami hadir mendampingi remaja memahami kesehatan reproduksi tanpa rasa tabu,{" "}
+              <span className="text-emerald-200 underline decoration-emerald-300/40 underline-offset-4">membangun ruang aman</span>, serta{" "}
+              <span className="text-amber-300 underline decoration-amber-300/40 underline-offset-4">membentuk generasi yang berdaya</span> dan percaya diri.
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {/* Stat Item 1 */}
-            <div className="p-6 rounded-2xl border border-slate-100 bg-slate-50/50 text-center hover:shadow-md transition-all duration-200">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-primary">
-                <BookOpen className="h-6 w-6" />
-              </div>
-              <p className="mt-4 text-3xl font-extrabold text-neutral-dark">{counts.modules}</p>
-              <p className="text-sm text-slate-500 font-semibold mt-1">Modul Repropedia</p>
-            </div>
+          {/* Staggered Floating Cards (Persis Layout Referensi Gambar) */}
+          <div className="relative z-10 mt-12 sm:mt-16 pb-2 lg:pb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7 items-start">
+              {/* Card 1: Literasi Digital (Normal Level) */}
+              <div className="relative bg-white text-neutral-dark rounded-3xl p-6 shadow-xl border border-white/80 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between min-h-[280px] lg:min-h-[315px] group lg:translate-y-0">
+                {/* Metallic Paperclip on top-right */}
+                <div className="absolute -top-3.5 right-6 z-20 pointer-events-none transform -rotate-12">
+                  <div className="bg-slate-100/95 border border-slate-300/90 rounded-full p-1 shadow-md">
+                    <Paperclip className="h-5 w-5 text-slate-600" />
+                  </div>
+                </div>
 
-            {/* Stat Item 2 */}
-            <div className="p-6 rounded-2xl border border-slate-100 bg-slate-50/50 text-center hover:shadow-md transition-all duration-200">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-primary">
-                <Users className="h-6 w-6" />
-              </div>
-              <p className="mt-4 text-3xl font-extrabold text-neutral-dark">{counts.users}+</p>
-              <p className="text-sm text-slate-500 font-semibold mt-1">Siswa Terbantu</p>
-            </div>
+                <div>
+                  <h3 className="text-lg font-extrabold text-neutral-dark">
+                    Literasi Digital
+                  </h3>
+                  <p className="mt-1.5 text-xs text-slate-500 font-medium leading-relaxed">
+                    Edukasi kesehatan reproduksi yang ilmiah, faktual, dan ramah remaja.
+                  </p>
+                </div>
 
-            {/* Stat Item 3 */}
-            <div className="p-6 rounded-2xl border border-slate-100 bg-slate-50/50 text-center hover:shadow-md transition-all duration-200">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-                <MessageCircle className="h-6 w-6" />
-              </div>
-              <p className="mt-4 text-3xl font-extrabold text-neutral-dark">{counts.articles}</p>
-              <p className="text-sm text-slate-500 font-semibold mt-1">Artikel Edukatif</p>
-            </div>
+                {/* 3D Illustration SVG */}
+                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                  <Image
+                    src="/assets/hero-cards/repropedia.svg"
+                    alt="Literasi Digital"
+                    fill
+                    unoptimized
+                    sizes="100px"
+                    className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
 
-            {/* Stat Item 4 */}
-            <div className="p-6 rounded-2xl border border-slate-100 bg-slate-50/50 text-center hover:shadow-md transition-all duration-200">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-red-600">
-                <Award className="h-6 w-6" />
+                {/* Pill Badge with Real Metric */}
+                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-teal-50 text-teal-800 border border-teal-200/60 shadow-xs">
+                    {counts.modules} Modul Belajar
+                  </span>
+                  <BookOpen className="h-4 w-4 text-teal-600" />
+                </div>
               </div>
-              <p className="mt-4 text-3xl font-extrabold text-neutral-dark">{activeCounselorCount}</p>
-              <p className="text-sm text-slate-500 font-semibold mt-1">Kader Terlatih</p>
+
+              {/* Card 2: Konseling & Ruang Aman (Staggered Down) */}
+              <div className="relative bg-white text-neutral-dark rounded-3xl p-6 shadow-xl border border-white/80 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between min-h-[280px] lg:min-h-[315px] group lg:translate-y-8">
+                {/* Metallic Paperclip on top-right */}
+                <div className="absolute -top-3.5 right-6 z-20 pointer-events-none transform -rotate-12">
+                  <div className="bg-slate-100/95 border border-slate-300/90 rounded-full p-1 shadow-md">
+                    <Paperclip className="h-5 w-5 text-slate-600" />
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-extrabold text-neutral-dark">
+                    Konseling & Ruang Aman
+                  </h3>
+                  <p className="mt-1.5 text-xs text-slate-500 font-medium leading-relaxed">
+                    Ruang bercerita privat tanpa stigma dengan konselor sebaya & tenaga ahli.
+                  </p>
+                </div>
+
+                {/* 3D Illustration SVG */}
+                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                  <Image
+                    src="/assets/hero-cards/edukasi.svg"
+                    alt="Konseling & Ruang Aman"
+                    fill
+                    unoptimized
+                    sizes="100px"
+                    className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Pill Badge */}
+                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200/60 shadow-xs">
+                    100% Bebas Tabu
+                  </span>
+                  <HeartHandshake className="h-4 w-4 text-rose-600" />
+                </div>
+              </div>
+
+              {/* Card 3: 15 Kader Aktif (Staggered Slight) */}
+              <div className="relative bg-white text-neutral-dark rounded-3xl p-6 shadow-xl border border-white/80 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between min-h-[280px] lg:min-h-[315px] group lg:translate-y-2">
+                {/* Metallic Paperclip on top-right */}
+                <div className="absolute -top-3.5 right-6 z-20 pointer-events-none transform -rotate-12">
+                  <div className="bg-slate-100/95 border border-slate-300/90 rounded-full p-1 shadow-md">
+                    <Paperclip className="h-5 w-5 text-slate-600" />
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-extrabold text-neutral-dark">
+                    15 Kader Aktif
+                  </h3>
+                  <p className="mt-1.5 text-xs text-slate-500 font-medium leading-relaxed">
+                    Duta sebaya terpilih di sekolah yang siap mendampingi teman sebayanya.
+                  </p>
+                </div>
+
+                {/* 3D Illustration SVG */}
+                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                  <Image
+                    src="/assets/hero-cards/garuda.svg"
+                    alt="15 Kader Aktif"
+                    fill
+                    unoptimized
+                    sizes="100px"
+                    className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Pill Badge with Real Metric */}
+                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
+                    {activeCounselorCount} Kader Terlatih
+                  </span>
+                  <Award className="h-4 w-4 text-emerald-600" />
+                </div>
+              </div>
+
+              {/* Card 4: Keterlibatan Interaktif (Staggered Down) */}
+              <div className="relative bg-white text-neutral-dark rounded-3xl p-6 shadow-xl border border-white/80 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between min-h-[280px] lg:min-h-[315px] group lg:translate-y-10">
+                {/* Metallic Paperclip on top-right */}
+                <div className="absolute -top-3.5 right-6 z-20 pointer-events-none transform -rotate-12">
+                  <div className="bg-slate-100/95 border border-slate-300/90 rounded-full p-1 shadow-md">
+                    <Paperclip className="h-5 w-5 text-slate-600" />
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-extrabold text-neutral-dark">
+                    Keterlibatan Interaktif
+                  </h3>
+                  <p className="mt-1.5 text-xs text-slate-500 font-medium leading-relaxed">
+                    Asah pemahaman lewat Quiz kesehatan dan ruang berekspresi karya remaja.
+                  </p>
+                </div>
+
+                {/* 3D Illustration SVG */}
+                <div className="relative w-24 h-24 mx-auto my-3 flex items-center justify-center">
+                  <Image
+                    src="/assets/hero-cards/quiz.svg"
+                    alt="Keterlibatan Interaktif"
+                    fill
+                    unoptimized
+                    sizes="100px"
+                    className="object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Pill Badge */}
+                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/60 shadow-xs">
+                    Kuis & Galeri Karya
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

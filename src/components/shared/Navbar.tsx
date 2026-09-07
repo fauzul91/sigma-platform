@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Activity, ChevronDown, Sparkles } from "lucide-react";
+import { Menu, X, Activity, ChevronDown } from "lucide-react";
 
 interface SubmenuItem {
   label: string;
@@ -109,8 +109,8 @@ export default function Navbar() {
     >
       <div
         className={`mx-auto transition-all duration-300 border ${isScrolled
-            ? "max-w-7xl px-6 sm:px-10 md:max-w-6xl md:px-8 md:py-2.5 md:rounded-2xl md:bg-white md:shadow-xl md:border-slate-100 border-transparent bg-white shadow-md"
-            : "max-w-7xl px-6 sm:px-10 lg:px-16 border-transparent bg-white/95 md:bg-transparent"
+          ? "max-w-7xl px-6 sm:px-10 md:max-w-6xl md:px-8 md:py-2.5 md:rounded-2xl md:bg-white md:shadow-xl md:border-slate-100 border-transparent bg-white shadow-md"
+          : "max-w-7xl px-6 sm:px-10 lg:px-16 border-transparent bg-white/95 md:bg-transparent"
           }`}
       >
         <div className="flex items-center justify-between gap-4">
@@ -188,7 +188,6 @@ export default function Navbar() {
               href="/kuis"
               className="hidden sm:flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-orange-500 text-white text-xs font-bold hover:bg-orange-600 transition-colors shadow-sm"
             >
-              <Sparkles className="w-4 h-4" />
               <span>Medical Quiz</span>
             </Link>
 
@@ -274,7 +273,6 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-orange-500 text-white text-base font-bold transition-all shadow-sm"
                 >
-                  <Sparkles className="w-4 h-4" />
                   <span>Medical Quiz</span>
                 </Link>
 
