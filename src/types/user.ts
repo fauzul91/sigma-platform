@@ -45,6 +45,7 @@ export interface EventItem {
   location: string;
   images: string[];
   attendees: number;
+  week?: number;
 }
 
 export interface QuizQuestion {

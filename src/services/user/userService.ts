@@ -125,7 +125,7 @@ export const userService = {
     try {
       const { data, error } = await supabase
         .from("events")
-        .select("id, title, description, date, location, images, attendees")
+        .select("id, title, description, date, location, images, attendees, week")
         .order("created_at", { ascending: false });
 
       if (error || !data || data.length === 0) return mockEvents;
@@ -138,6 +138,7 @@ export const userService = {
         location: item.location,
         images: item.images || [],
         attendees: item.attendees || 0,
+        week: item.week ?? 1,
       }));
     } catch {
       return mockEvents;

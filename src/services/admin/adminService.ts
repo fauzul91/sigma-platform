@@ -559,7 +559,7 @@ export async function fetchEvents(page?: number, limit?: number): Promise<EventI
   try {
     let query = supabase
       .from("events")
-      .select("id, title, description, date, location, images, attendees");
+      .select("id, title, description, date, location, images, attendees, week");
 
     if (page !== undefined && limit !== undefined) {
       const from = (page - 1) * limit;
@@ -577,6 +577,7 @@ export async function fetchEvents(page?: number, limit?: number): Promise<EventI
       location: item.location,
       images: item.images || [],
       attendees: item.attendees || 0,
+      week: item.week ?? 1,
     }));
   } catch {
     return initialEvents;
@@ -599,6 +600,7 @@ export async function saveEvent(eventData: Partial<EventItem>): Promise<EventIte
     location: eventData.location || "Lokasi Umum",
     images: formattedImages,
     attendees: eventData.attendees || 0,
+    week: Number(eventData.week) || 1,
   };
 
   if (eventData.id && !eventData.id.startsWith("e-gen-")) {
@@ -614,7 +616,7 @@ export async function saveEvent(eventData: Partial<EventItem>): Promise<EventIte
     const { data, error } = await supabase
       .from("events")
       .insert([payload])
-      .select("id, title, description, date, location, images, attendees")
+      .select("id, title, description, date, location, images, attendees, week")
       .single();
     if (error || !data) return null;
     return {
@@ -625,6 +627,7 @@ export async function saveEvent(eventData: Partial<EventItem>): Promise<EventIte
       location: data.location,
       images: data.images,
       attendees: data.attendees,
+      week: data.week ?? payload.week,
     };
   }
 }
