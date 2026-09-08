@@ -572,7 +572,7 @@ export default function PageHeader({
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-teal-300/20 blur-3xl" />
 
       {/* 2. Content Container */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
         {/* Left Column: Badge, Big Bold Title, Description */}
         <div className="max-w-2xl space-y-2.5 text-left">
           {badge && (
@@ -592,7 +592,7 @@ export default function PageHeader({
         </div>
 
         {/* Right Column: Minimalist Tailored Cards Illustration */}
-        <div className="shrink-0 flex items-center justify-center md:justify-end">
+        <div className="hidden md:flex shrink-0 items-center justify-end">
           {renderIllustration()}
         </div>
       </div>

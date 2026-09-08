@@ -56,38 +56,48 @@ const PARTNERS = [
 const QUIZ_PREVIEWS = [
   {
     id: "cat_repro",
+    slug: "pubertas",
     title: "Kesehatan Reproduksi",
     description: "Pahami pubertas, perubahan biologis, dan kebersihan diri harian.",
     duration: "3 Menit",
     xp: "45 XP",
+    image: "/assets/quiz/reproduksi_pubertas.svg",
   },
   {
     id: "cat_marriage",
+    slug: "pernikahan-anak",
     title: "Pencegahan Perkawinan Anak",
     description: "Ketahui batas usia legal 19 tahun dan risiko medis kehamilan dini.",
     duration: "3 Menit",
     xp: "45 XP",
+    image: "/assets/quiz/perkawinan_anak.svg",
   },
   {
     id: "cat_bullying",
+    slug: "kesehatan-mental",
     title: "Kesehatan Mental",
     description: "Identifikasi kecemasan berlebih, cyberbullying, dan cara mengelola stress.",
     duration: "2 Menit",
     xp: "30 XP",
+    image: "/assets/quiz/kesehatan_mental.svg",
   },
   {
     id: "cat_violence",
+    slug: "kekerasan-seksual",
     title: "Pencegahan Kekerasan Seksual",
     description: "Kenali batasan tubuh, consent, dan langkah pelaporan darurat.",
     duration: "2 Menit",
     xp: "30 XP",
+    image: "/assets/quiz/batasan_diri.svg",
   },
   {
     id: "cat_rights",
+    slug: "hak-anak",
     title: "Hak-Hak Dasar Anak",
     description: "Ketahui 4 hak dasar anak berdasarkan Konvensi PBB dan hukum Indonesia.",
     duration: "2 Menit",
     xp: "30 XP",
+    image: "/assets/quiz/hak_anak.svg",
   },
 ];
 
@@ -443,17 +453,17 @@ export default function HomeView() {
 
       {/* 3. FEATURED LITERACY (REPROPEDIA) PREVIEW - BENTO GRID 6 PILAR UTAMA */}
       <section className="py-12 md:py-16 max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
-        {/* Section Header (Centered as per wireframe reference) */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
-          <div className="max-w-2xl space-y-3.5">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-dark tracking-tight">
+        {/* Section Header (Centered on mobile, split on desktop) */}
+        <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12 md:mb-16 text-center md:text-left">
+          <div className="max-w-2xl space-y-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight">
               Repropedia
             </h2>
-            <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl leading-relaxed">
+            <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl mx-auto md:mx-0 leading-relaxed">
               Pelajari materi penting kesehatan reproduksi remaja & hak anak.
             </p>
           </div>
-          <div className="shrink-0">
+          <div className="shrink-0 flex justify-center md:block">
             <Link
               href="/repropedia"
               className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-emerald-700 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all group"
@@ -475,9 +485,9 @@ export default function HomeView() {
             {/* Top Sub-Row: Box 1 (Hak-Hak Anak) + Box 2 (Pencegahan) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6 flex-1">
 
-              {/* BOX 1: Hak-Hak Anak (Putih Bersih) */}
+              {/* BOX 1: Hak-Hak Anak (Putih Bersih) -> Bab 2 (Hal 6) */}
               <Link
-                href="/repropedia"
+                href="/repropedia?bab=2"
                 className="group relative bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
@@ -490,9 +500,9 @@ export default function HomeView() {
                 </div>
               </Link>
 
-              {/* BOX 2: Pencegahan Kekerasan Seksual (Hijau Muda Lembut) */}
+              {/* BOX 2: Pencegahan Kekerasan Seksual (Hijau Muda Lembut) -> Bab 5 (Hal 14) */}
               <Link
-                href="/repropedia"
+                href="/repropedia?bab=5"
                 className="group relative bg-primary rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
@@ -507,9 +517,9 @@ export default function HomeView() {
 
             </div>
 
-            {/* Bottom Row: Box 3 (Risiko & Dampak Perkawinan Anak - Abu-Abu Lembut) */}
+            {/* Bottom Row: Box 3 (Risiko & Dampak Perkawinan Anak - Abu-Abu Lembut) -> Bab 3 (Hal 7) */}
             <Link
-              href="/repropedia"
+              href="/repropedia?bab=3"
               className="group relative bg-slate-100/80 border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between flex-1"
             >
               <div>
@@ -537,7 +547,7 @@ export default function HomeView() {
           {/* ============================================================ */}
           <div className="md:col-span-1 lg:col-span-4 flex flex-col">
             <Link
-              href="/repropedia"
+              href="/repropedia?bab=1"
               className="group relative bg-emerald-800 text-white rounded-3xl p-7 sm:p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full overflow-hidden"
             >
               {/* Header Card Hero */}
@@ -574,9 +584,9 @@ export default function HomeView() {
           {/* ============================================================ */}
           <div className="md:col-span-1 lg:col-span-3 flex flex-col gap-5 lg:gap-6">
 
-            {/* BOX 5: Bentuk-Bentuk Kekerasan Seksual (Putih Bersih) */}
+            {/* BOX 5: Bentuk-Bentuk Kekerasan Seksual (Putih Bersih) -> Bab 4 (Hal 10) */}
             <Link
-              href="/repropedia"
+              href="/repropedia?bab=4"
               className="group relative bg-slate-100/80 border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between flex-1"
             >
               <div>
@@ -589,9 +599,9 @@ export default function HomeView() {
               </div>
             </Link>
 
-            {/* BOX 6: Langkah Tanggap Kekerasan (Hijau Muda Lembut) */}
+            {/* BOX 6: Langkah Tanggap Kekerasan (Hijau Muda Lembut) -> Bab 6 (Hal 18) */}
             <Link
-              href="/repropedia"
+              href="/repropedia?bab=6"
               className="group relative bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between flex-1"
             >
               <div>
@@ -621,17 +631,17 @@ export default function HomeView() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
             {/* Left Column: Title, Subtitle, CTA Button, and 3D Voxel Mascot */}
-            <div className="lg:col-span-5 flex flex-col justify-between h-full">
+            <div className="lg:col-span-5 flex flex-col justify-between h-full text-center md:text-left items-center md:items-start">
               <div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
                   Saatnya Uji Pemahamanmu Lewat Kuis Seru!
                 </h2>
 
-                <p className="mt-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-medium">
+                <p className="mt-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-medium max-w-xl mx-auto md:mx-0">
                   Cari tahu seberapa paham kamu soal kesehatan reproduksi dan batas diri. Bukan ujian sekolah, kok! Cuma kuis santai buat mastiin kamu paham cara menjaga diri dan mengenali hak-hakmu sebagai remaja. Cepat, seru, dan pastinya nambah ilmu.
                 </p>
 
-                <div className="mt-6 flex flex-wrap items-center gap-3">
+                <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-3">
                   <Link
                     href="/kuis"
                     className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm shadow-lg hover:shadow-amber-400/30 active:scale-98 transition-all"
@@ -643,7 +653,7 @@ export default function HomeView() {
               </div>
 
               {/* 3D Voxel Graphic Mascot */}
-              <div className="mt-8 relative w-44 sm:w-52 h-44 sm:h-52">
+              <div className="mt-8 relative w-44 sm:w-52 h-44 sm:h-52 mx-auto md:mx-0">
                 <Image
                   src="/assets/hero-cards/quiz.svg"
                   alt="Medical Quiz SIGMA"
@@ -660,14 +670,27 @@ export default function HomeView() {
                 {QUIZ_PREVIEWS.map((quiz) => (
                   <Link
                     key={quiz.id}
-                    href="/kuis"
+                    href={`/kuis/${quiz.slug}`}
                     className="group relative bg-white rounded-3xl p-5 shadow-lg border border-white/80 hover:shadow-2xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                   >
                     <div>
-                      {/* Title */}
-                      <h4 className="text-base font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
-                        {quiz.title}
-                      </h4>
+                      <div className="flex items-start gap-3.5 mb-2">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-50/80 border border-emerald-100 p-1 shrink-0 relative overflow-hidden group-hover:scale-105 transition-transform">
+                          <Image
+                            src={quiz.image}
+                            alt={quiz.title}
+                            fill
+                            unoptimized
+                            className="object-contain p-1"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          {/* Title */}
+                          <h4 className="text-base font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                            {quiz.title}
+                          </h4>
+                        </div>
+                      </div>
 
                       {/* Description */}
                       <p className="mt-1.5 text-xs text-slate-500 font-medium leading-relaxed line-clamp-2">
@@ -697,16 +720,16 @@ export default function HomeView() {
       {/* 5. RECENT ARTIKEL & EDUKASI FEED */}
       <section className="py-16 md:py-20 bg-slate-50/60 border-b border-slate-200/50">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
-            <div className="max-w-2xl space-y-3.5">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-dark tracking-tight">
+          <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12 md:mb-16 text-center md:text-left">
+            <div className="max-w-2xl space-y-2">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight">
                 Artikel & Edukasi
               </h2>
-              <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl leading-relaxed">
+              <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl mx-auto md:mx-0 leading-relaxed">
                 Jelajahi Artikel kesehatan, berita, dan konten video kesehatan
               </p>
             </div>
-            <div className="shrink-0">
+            <div className="shrink-0 flex justify-center md:block">
               <Link
                 href="/edukasi"
                 className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-emerald-700 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all group"
@@ -802,7 +825,7 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* 5. INTERACTIVE FAQ & CONTACT SECTION (MATCHING REFERENCE WITH 3D MASCOTS) */}
+      {/* 6. INTERACTIVE FAQ & CONTACT SECTION (MATCHING REFERENCE WITH 3D MASCOTS) */}
       <section id="faq" className="py-16 relative overflow-hidden">
         {/* Subtle Ambient Background Glows */}
         <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-100/30 rounded-full blur-3xl -z-10" />

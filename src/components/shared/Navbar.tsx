@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Activity, ChevronDown } from "lucide-react";
+import { LogIn } from "lucide-react";
 
 interface SubmenuItem {
   label: string;
@@ -102,26 +103,18 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-200 ${isScrolled
-        ? "bg-white shadow-sm border-b border-slate-100 py-3 md:py-3.5"
-        : "bg-white/95 md:bg-transparent py-4 md:py-5"
+      className={`fixed top-0 left-0 right-0 z-100 py-3 md:py-3.5 ${isScrolled
+        ? "bg-white shadow-sm border-b border-slate-100"
+        : "bg-white md:bg-transparent"
         }`}
     >
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/beranda" className="flex items-center space-x-2.5 shrink-0 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-              <Activity className="h-5 w-5" />
-            </div>
-            <div>
-              <span className="font-extrabold text-neutral-dark text-lg leading-none tracking-tight block">
-                SIGMA
-              </span>
-              <span className="text-[10px] text-primary font-bold tracking-wider uppercase block">
-                Reproductive Health
-              </span>
-            </div>
+            <span className="text-4xl sm:text-5xl font-black tracking-tighter text-primary select-none lowercase drop-shadow-md group-hover:drop-shadow-lg transition-all duration-300">
+              sigma
+            </span>
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -178,20 +171,20 @@ export default function Navbar() {
 
           {/* Action CTAs & Mobile Toggle */}
           <div className="flex items-center space-x-2.5 shrink-0">
-            {/* Button Medical Quiz (Solid Orange) */}
-            <Link
-              href="/kuis"
-              className="hidden sm:flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-orange-500 text-white text-xs font-bold hover:bg-orange-600 transition-colors shadow-sm"
-            >
-              <span>Medical Quiz</span>
-            </Link>
-
-            {/* Button Masuk */}
+            {/* Masuk: Tombol Sekunder (Ghost/Text Only) */}
             <Link
               href="/admin/login"
-              className="hidden sm:flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-hover transition-colors shadow-sm"
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-600 hover:text-primary hover:border-emerald-300 text-xs sm:text-sm font-semibold transition-all group"
             >
               <span>Masuk</span>
+            </Link>
+
+            {/* Jelajahi Repropedia: Tombol Utama (Primary Green) */}
+            <Link
+              href="/repropedia"
+              className="hidden sm:flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary-hover transition-all shadow-sm shadow-emerald-600/15"
+            >
+              <span>Jelajahi Repropedia</span>
             </Link>
 
             {/* Mobile Menu Button */}
@@ -264,19 +257,18 @@ export default function Navbar() {
               {/* Mobile CTA Buttons */}
               <div className="pt-3 space-y-2">
                 <Link
-                  href="/kuis"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-orange-500 text-white text-base font-bold transition-all shadow-sm"
-                >
-                  <span>Medical Quiz</span>
-                </Link>
-
-                <Link
                   href="/admin/login"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl border border-slate-200 text-slate-600 hover:text-primary hover:border-emerald-300 text-base font-bold transition-all shadow-sm"
+                >
+                  <span>Masuk</span>
+                </Link>
+                <Link
+                  href="/repropedia"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white text-base font-bold transition-all shadow-sm"
                 >
-                  <span>Masuk</span>
+                  <span>Jelajahi Repropedia</span>
                 </Link>
               </div>
             </nav>

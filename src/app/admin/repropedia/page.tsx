@@ -1,9 +1,5 @@
-import { requireAdminSession } from "@/lib/requireAdminSession";
-import { fetchModules } from "@/services/admin/adminService";
-import AdminRepropediaClient from "@/components/admin/repropedia/AdminRepropediaClient";
+import { redirect } from "next/navigation";
 
-export default async function AdminRepropediaPage() {
-  await requireAdminSession();
-  const modules = await fetchModules();
-  return <AdminRepropediaClient initialModules={modules} />;
+export default function AdminRepropediaPage() {
+  redirect("/admin/dashboard");
 }
