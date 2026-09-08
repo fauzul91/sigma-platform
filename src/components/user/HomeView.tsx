@@ -61,7 +61,7 @@ const QUIZ_PREVIEWS = [
     description: "Pahami pubertas, perubahan biologis, dan kebersihan diri harian.",
     duration: "3 Menit",
     xp: "45 XP",
-    image: "/assets/quiz/reproduksi_pubertas.svg",
+    image: "/assets/quiz/reproduksi_pubertas.webp",
   },
   {
     id: "cat_marriage",
@@ -70,7 +70,7 @@ const QUIZ_PREVIEWS = [
     description: "Ketahui batas usia legal 19 tahun dan risiko medis kehamilan dini.",
     duration: "3 Menit",
     xp: "45 XP",
-    image: "/assets/quiz/perkawinan_anak.svg",
+    image: "/assets/quiz/perkawinan_anak.webp",
   },
   {
     id: "cat_bullying",
@@ -79,7 +79,7 @@ const QUIZ_PREVIEWS = [
     description: "Identifikasi kecemasan berlebih, cyberbullying, dan cara mengelola stress.",
     duration: "2 Menit",
     xp: "30 XP",
-    image: "/assets/quiz/kesehatan_mental.svg",
+    image: "/assets/quiz/kesehatan_mental.webp",
   },
   {
     id: "cat_violence",
@@ -88,7 +88,7 @@ const QUIZ_PREVIEWS = [
     description: "Kenali batasan tubuh, consent, dan langkah pelaporan darurat.",
     duration: "2 Menit",
     xp: "30 XP",
-    image: "/assets/quiz/batasan_diri.svg",
+    image: "/assets/quiz/batasan_diri.webp",
   },
   {
     id: "cat_rights",
@@ -97,7 +97,7 @@ const QUIZ_PREVIEWS = [
     description: "Ketahui 4 hak dasar anak berdasarkan Konvensi PBB dan hukum Indonesia.",
     duration: "2 Menit",
     xp: "30 XP",
-    image: "/assets/quiz/hak_anak.svg",
+    image: "/assets/quiz/hak_anak.webp",
   },
 ];
 
@@ -344,7 +344,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/literasi.svg"
+                    src="/assets/literasi.webp"
                     alt="Literasi Digital"
                     fill
                     unoptimized
@@ -375,7 +375,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/konseling.svg"
+                    src="/assets/konseling.webp"
                     alt="Konseling & Ruang Aman"
                     fill
                     unoptimized
@@ -406,7 +406,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/dutakader.svg"
+                    src="/assets/dutakader.webp"
                     alt="15 Kader Aktif"
                     fill
                     unoptimized
@@ -437,7 +437,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/keterlibatan.svg"
+                    src="/assets/keterlibatan.webp"
                     alt="Keterlibatan Interaktif"
                     fill
                     unoptimized
@@ -563,7 +563,7 @@ export default function HomeView() {
               {/* 3D Illustration SVG Highlight */}
               <div className="relative w-48 sm:w-56 h-48 sm:h-56 mx-auto my-6 flex items-center justify-center">
                 <Image
-                  src="/assets/health.svg"
+                  src="/assets/health.webp"
                   alt="Kesehatan Reproduksi"
                   fill
                   unoptimized
@@ -655,7 +655,7 @@ export default function HomeView() {
               {/* 3D Voxel Graphic Mascot */}
               <div className="mt-8 relative w-44 sm:w-52 h-44 sm:h-52 mx-auto md:mx-0">
                 <Image
-                  src="/assets/hero-cards/quiz.svg"
+                  src="/assets/hero-cards/quiz.webp"
                   alt="Medical Quiz SIGMA"
                   fill
                   unoptimized
@@ -896,10 +896,10 @@ export default function HomeView() {
             <div className="lg:col-span-4 flex flex-col items-center justify-center relative order-1 lg:order-2 my-2 lg:my-0">
               <div className="relative w-64 sm:w-72 md:w-80 aspect-square">
                 <Image
-                  src="/assets/faq_mascots.svg"
+                  src="/assets/maskot_faq.webp"
                   alt="Maskot Kader GARUDA SIGMA"
                   fill
-                  className="object-contain filter drop-shadow-2xl rounded-3xl hover:scale-105 transition-transform duration-500"
+                  className="object-contain filter rounded-3xl hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </div>

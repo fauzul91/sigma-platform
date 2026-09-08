@@ -1,19 +1,23 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   BookOpen,
-  FileText,
   Download,
   ExternalLink,
   CheckCircle2,
   ChevronRight,
-  Sparkles,
+  ChevronLeft,
   Layers,
   ArrowUpRight,
-  Info,
-  Maximize2
+  Maximize2,
+  Minimize2,
+  ZoomIn,
+  ZoomOut,
+  LayoutGrid,
+  Zap,
+  FileText
 } from "lucide-react";
 import PageHeader from "@/components/shared/PageHeader";
 
@@ -95,52 +99,177 @@ export const REPROPEDIA_SUB_BABS: RepropediaSubBab[] = [
 const PDF_FILE_PATH = "/assets/buku_repropedia.pdf";
 const TOTAL_PAGES = 24;
 
+// Helper to resolve which Bab a page belongs to
+export function getBabForPage(page: number): RepropediaSubBab {
+  if (page <= 5) return REPROPEDIA_SUB_BABS[0];
+  if (page === 6) return REPROPEDIA_SUB_BABS[1];
+  if (page <= 9) return REPROPEDIA_SUB_BABS[2];
+  if (page <= 13) return REPROPEDIA_SUB_BABS[3];
+  if (page <= 17) return REPROPEDIA_SUB_BABS[4];
+  if (page <= 20) return REPROPEDIA_SUB_BABS[5];
+  return REPROPEDIA_SUB_BABS[6];
+}
+
+export function getPageSectionTitle(page: number): string {
+  if (page === 1) return "Cover Depan";
+  if (page === 2) return "Kata Pengantar";
+  if (page === 3) return "Daftar Isi Modul";
+  const bab = getBabForPage(page);
+  return `${bab.babNumber}: ${bab.title}`;
+}
+
 export default function RepropediaView() {
   const searchParams = useSearchParams();
   const viewerRef = useRef<HTMLDivElement>(null);
+  const readerStageRef = useRef<HTMLDivElement>(null);
 
-  // Initialize active bab based on URL query param or fallback to Bab 1
-  const [activeBabId, setActiveBabId] = useState<number>(() => {
+  // View Mode: "interactive" (Fast WebP pages) or "pdf" (native iframe)
+  const [viewMode, setViewMode] = useState<"interactive" | "pdf">("interactive");
+
+  // Current page state (1 to 24, default page 4 = Bab 1)
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    const pageParam = searchParams.get("page");
+    if (pageParam) {
+      const p = parseInt(pageParam, 10);
+      if (p >= 1 && p <= TOTAL_PAGES) return p;
+    }
     const babParam = searchParams.get("bab");
     if (babParam) {
-      const parsed = parseInt(babParam, 10);
-      if (parsed >= 1 && parsed <= REPROPEDIA_SUB_BABS.length) {
-        return parsed;
-      }
+      const b = parseInt(babParam, 10);
+      const found = REPROPEDIA_SUB_BABS.find((item) => item.id === b);
+      if (found) return found.page;
     }
-    return 1;
+    return 4; // Start at Bab 1
   });
 
-  const activeBab =
-    REPROPEDIA_SUB_BABS.find((item) => item.id === activeBabId) ||
-    REPROPEDIA_SUB_BABS[0];
+  const [zoom, setZoom] = useState<number>(1);
+  const [showThumbnails, setShowThumbnails] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
 
-  // Sync if URL query param changes externally
-  useEffect(() => {
-    const babParam = searchParams.get("bab");
-    if (babParam) {
-      const parsed = parseInt(babParam, 10);
-      if (parsed >= 1 && parsed <= REPROPEDIA_SUB_BABS.length) {
-        setActiveBabId(parsed);
-      }
-    }
-  }, [searchParams]);
+  // Active bab resolved dynamically from current page
+  const activeBab = getBabForPage(currentPage);
 
-  const handleSelectBab = (bab: RepropediaSubBab) => {
-    setActiveBabId(bab.id);
-
-    // Update query string smoothly without full page refresh
+  // Sync URL params without page reload
+  const syncUrl = useCallback((page: number) => {
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
+      url.searchParams.set("page", page.toString());
+      const bab = getBabForPage(page);
       url.searchParams.set("bab", bab.id.toString());
       window.history.replaceState({}, "", url.toString());
+    }
+  }, []);
 
-      // On mobile / tablet screens, scroll down to the PDF viewer container
-      if (window.innerWidth < 1024 && viewerRef.current) {
-        viewerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  const goToPage = useCallback(
+    (page: number) => {
+      const target = Math.max(1, Math.min(TOTAL_PAGES, page));
+      if (target !== currentPage) {
+        setIsImageLoading(true);
+        setCurrentPage(target);
+        syncUrl(target);
       }
+    },
+    [currentPage, syncUrl]
+  );
+
+  const goToNextPage = useCallback(() => {
+    if (currentPage < TOTAL_PAGES) {
+      goToPage(currentPage + 1);
+    }
+  }, [currentPage, goToPage]);
+
+  const goToPrevPage = useCallback(() => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
+  }, [currentPage, goToPage]);
+
+  // Pre-load adjacent pages for instantaneous 0ms page turns
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const preload = (p: number) => {
+      if (p >= 1 && p <= TOTAL_PAGES) {
+        const img = new window.Image();
+        img.src = `/assets/repropedia/pages/page_${p}.webp`;
+      }
+    };
+    preload(currentPage - 1);
+    preload(currentPage + 1);
+    preload(currentPage + 2);
+  }, [currentPage]);
+
+  // Keyboard navigation (ArrowLeft, ArrowRight)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (viewMode !== "interactive") return;
+      if (e.key === "ArrowRight" || e.key === "PageDown") {
+        e.preventDefault();
+        goToNextPage();
+      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        e.preventDefault();
+        goToPrevPage();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [goToNextPage, goToPrevPage, viewMode]);
+
+  // Touch swipe support for mobile ergonomics
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+    if (distance > minSwipeDistance) {
+      goToNextPage();
+    } else if (distance < -minSwipeDistance) {
+      goToPrevPage();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  const handleSelectBab = (bab: RepropediaSubBab) => {
+    goToPage(bab.page);
+    // Smooth scroll to reader on mobile
+    if (typeof window !== "undefined" && window.innerWidth < 1024 && viewerRef.current) {
+      viewerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
+
+  const toggleFullscreen = () => {
+    if (!viewerRef.current) return;
+    if (!document.fullscreenElement) {
+      viewerRef.current.requestFullscreen?.().catch(() => { });
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen?.().catch(() => { });
+      setIsFullscreen(false);
+    }
+  };
+
+  useEffect(() => {
+    const onFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
+  const handleZoomIn = () => setZoom((z) => Math.min(2, Math.round((z + 0.25) * 100) / 100));
+  const handleZoomOut = () => setZoom((z) => Math.max(0.75, Math.round((z - 0.25) * 100) / 100));
+  const handleZoomReset = () => setZoom(1);
 
   return (
     <div className="bg-slate-50 min-h-screen font-sans">
@@ -152,9 +281,9 @@ export default function RepropediaView() {
         type="repropedia"
       />
 
-      {/* 2. Document Summary Banner Bar (Matches Wireframe Reference) */}
+      {/* 2. Document Summary Banner Bar */}
       <div className="border-b border-slate-200/80 bg-white sticky top-0 z-20 shadow-2xs backdrop-blur-md bg-white/95">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-4 sm:py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-3.5 sm:py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
             <div className="flex items-center space-x-2 text-[11px] font-extrabold text-emerald-700 uppercase tracking-wider mb-0.5">
               <span>E-Book Resmi SIGMA Platform</span>
@@ -163,25 +292,52 @@ export default function RepropediaView() {
               Repropedia: Modul Kesehatan Reproduksi Remaja
             </h2>
             <p className="text-xs text-slate-500 font-medium mt-0.5">
-              Format: Dokumen PDF • 7 Sub-Bab Utama • {TOTAL_PAGES} Halaman • 3.7 MB
+              7 Sub-Bab Utama • {TOTAL_PAGES} Halaman • Resolusi Tinggi WebP • PDF Lengkap 3.8 MB
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            {/* Mode Switcher Pills */}
+            <div className="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200/80">
+              <button
+                onClick={() => setViewMode("interactive")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${viewMode === "interactive"
+                    ? "bg-white text-emerald-800 shadow-xs border border-slate-200"
+                    : "text-slate-600 hover:text-slate-900"
+                  }`}
+                title="Mode E-Book Cepat (WebP)"
+              >
+                <Zap className="h-3.5 w-3.5 text-emerald-600" />
+                <span>E-Book Cepat</span>
+              </button>
+              <button
+                onClick={() => setViewMode("pdf")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${viewMode === "pdf"
+                    ? "bg-white text-emerald-800 shadow-xs border border-slate-200"
+                    : "text-slate-600 hover:text-slate-900"
+                  }`}
+                title="Mode PDF Asli"
+              >
+                <FileText className="h-3.5 w-3.5 text-slate-500" />
+                <span>Dokumen PDF</span>
+              </button>
+            </div>
+
             <a
               href={PDF_FILE_PATH}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-200"
+              className="hidden md:inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-200"
               title="Buka PDF di Tab Baru"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               <span>Buka Tab Baru</span>
             </a>
+
             <a
               href={PDF_FILE_PATH}
               download="Buku_Repropedia_SIGMA.pdf"
-              className="inline-flex items-center space-x-2 px-4 sm:px-5 py-2 rounded-xl bg-primary hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs hover:shadow-sm active:scale-98 transition-all"
+              className="inline-flex items-center space-x-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-primary hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs hover:shadow-sm active:scale-98 transition-all"
               title="Unduh file PDF"
             >
               <Download className="h-3.5 w-3.5" />
@@ -193,7 +349,7 @@ export default function RepropediaView() {
 
       {/* 3. Main Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10">
-        {/* Mobile Quick Selector (Horizontal Scrollable Tabs for Mobile UX) */}
+        {/* Mobile Quick Selector */}
         <div className="lg:hidden mb-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
@@ -201,36 +357,35 @@ export default function RepropediaView() {
               Pilih Sub-Bab Materi:
             </span>
             <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-              {activeBab.babNumber} • {activeBab.pageRange}
+              Hal. {currentPage} / {TOTAL_PAGES}
             </span>
           </div>
 
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200">
             {REPROPEDIA_SUB_BABS.map((bab) => {
-              const isActive = bab.id === activeBabId;
+              const isActive = bab.id === activeBab.id;
               return (
                 <button
                   key={bab.id}
                   onClick={() => handleSelectBab(bab)}
-                  className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 border ${isActive
-                    ? "bg-primary text-white border-primary shadow-sm"
-                    : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                  className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 border cursor-pointer ${isActive
+                      ? "bg-primary text-white border-primary shadow-sm"
+                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                     }`}
                 >
                   <span>{bab.babNumber}</span>
                   <span className="opacity-60">•</span>
-                  <span className="max-w-[120px] truncate">{bab.title}</span>
+                  <span className="max-w-[130px] truncate">{bab.title}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* 2-Column Split Layout: Left Panel (Daftar Isi 35%) & Right Panel (PDF Viewer 65%) */}
+        {/* 2-Column Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-
           {/* ============================================================ */}
-          {/* PANEL KIRI: DAFTAR ISI (35% DI DESKTOP / lg:col-span-5)      */}
+          {/* PANEL KIRI: DAFTAR ISI (lg:col-span-5)                       */}
           {/* ============================================================ */}
           <div className="lg:col-span-5 space-y-4">
             <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs">
@@ -244,7 +399,7 @@ export default function RepropediaView() {
                       Daftar Isi &amp; Sub-Bab
                     </h3>
                     <p className="text-[11px] text-slate-400 font-semibold">
-                      Klik sub-bab untuk membuka halaman di PDF
+                      Klik sub-bab untuk membuka langsung
                     </p>
                   </div>
                 </div>
@@ -256,14 +411,14 @@ export default function RepropediaView() {
               {/* Sub-Bab Cards List */}
               <div className="mt-4 space-y-3">
                 {REPROPEDIA_SUB_BABS.map((bab) => {
-                  const isActive = bab.id === activeBabId;
+                  const isActive = bab.id === activeBab.id;
                   return (
                     <div
                       key={bab.id}
                       onClick={() => handleSelectBab(bab)}
                       className={`group relative p-4 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between ${isActive
-                        ? "bg-emerald-50/50 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20"
-                        : "bg-white border-slate-200 hover:border-emerald-300 hover:bg-slate-50/80 hover:shadow-2xs"
+                          ? "bg-emerald-50/50 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20"
+                          : "bg-white border-slate-200 hover:border-emerald-300 hover:bg-slate-50/80 hover:shadow-2xs"
                         }`}
                     >
                       {/* Card Header: Bab Number & Page Range */}
@@ -271,8 +426,8 @@ export default function RepropediaView() {
                         <div className="flex items-center space-x-2">
                           <span
                             className={`px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider uppercase ${isActive
-                              ? "bg-emerald-600 text-white"
-                              : "bg-slate-100 text-slate-600 group-hover:bg-emerald-100 group-hover:text-emerald-700"
+                                ? "bg-emerald-600 text-white"
+                                : "bg-slate-100 text-slate-600 group-hover:bg-emerald-100 group-hover:text-emerald-700"
                               }`}
                           >
                             {bab.babNumber}
@@ -297,8 +452,8 @@ export default function RepropediaView() {
                       {/* Title */}
                       <h4
                         className={`text-sm font-extrabold leading-snug transition-colors ${isActive
-                          ? "text-emerald-900 font-black"
-                          : "text-slate-800 group-hover:text-emerald-700"
+                            ? "text-emerald-900 font-black"
+                            : "text-slate-800 group-hover:text-emerald-700"
                           }`}
                       >
                         {bab.title}
@@ -312,13 +467,15 @@ export default function RepropediaView() {
                       {/* Bottom action cue */}
                       <div className="mt-3 pt-2.5 border-t border-slate-100/80 flex items-center justify-between text-[11px] font-bold">
                         <span
-                          className={`${isActive ? "text-emerald-700 font-extrabold" : "text-slate-400 group-hover:text-emerald-600"
+                          className={`${isActive
+                              ? "text-emerald-700 font-extrabold"
+                              : "text-slate-400 group-hover:text-emerald-600"
                             }`}
                         >
                           Menuju Halaman {bab.page}
                         </span>
                         <span className="text-[10px] text-slate-400 font-semibold group-hover:underline flex items-center">
-                          Lihat Modul <ArrowUpRight className="h-3 w-3 ml-0.5" />
+                          Buka Halaman <ArrowUpRight className="h-3 w-3 ml-0.5" />
                         </span>
                       </div>
                     </div>
@@ -329,73 +486,241 @@ export default function RepropediaView() {
           </div>
 
           {/* ============================================================ */}
-          {/* PANEL KANAN: PDF VIEWER (65% DI DESKTOP / lg:col-span-7)     */}
+          {/* PANEL KANAN: OPTIMIZED READER (lg:col-span-7)               */}
           {/* ============================================================ */}
           <div ref={viewerRef} className="lg:col-span-7 lg:sticky lg:top-20 space-y-3">
             <div className="bg-white rounded-3xl border border-slate-200/80 shadow-md overflow-hidden flex flex-col">
-
-              {/* PDF Viewer Header Toolbar */}
+              {/* Reader Header Toolbar */}
               <div className="px-4 sm:px-6 py-3 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-2 border-b border-slate-800">
-                <div className="flex items-center space-x-2.5">
-                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs font-black tracking-wide uppercase text-emerald-300">
-                    {activeBab.babNumber}
+                <div className="flex items-center space-x-2.5 min-w-0">
+                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <span className="text-xs font-black tracking-wide uppercase text-emerald-300 shrink-0">
+                    {currentPage >= 4 ? activeBab.babNumber : "Pengantar"}
                   </span>
                   <span className="text-slate-400 text-xs">•</span>
-                  <span className="text-xs font-bold text-slate-200 truncate max-w-[180px] sm:max-w-xs">
-                    {activeBab.title}
+                  <span className="text-xs font-bold text-slate-200 truncate max-w-[140px] sm:max-w-xs">
+                    {getPageSectionTitle(currentPage)}
                   </span>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <span className="text-[11px] font-bold text-slate-300 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
-                    Hal {activeBab.page} / {TOTAL_PAGES}
+                <div className="flex items-center space-x-2 shrink-0">
+                  {/* Page Indicator */}
+                  <span className="text-[11px] font-extrabold text-slate-200 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                    Hal. {currentPage} / {TOTAL_PAGES}
                   </span>
-                  <a
-                    href={`${PDF_FILE_PATH}#page=${activeBab.page}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-                    title="Buka Layar Penuh"
+
+                  {/* Zoom Controls (Interactive Mode only) */}
+                  {viewMode === "interactive" && (
+                    <div className="hidden sm:flex items-center space-x-1 bg-slate-800 px-1 py-0.5 rounded-lg border border-slate-700">
+                      <button
+                        onClick={handleZoomOut}
+                        disabled={zoom <= 0.75}
+                        className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-30 transition-colors cursor-pointer"
+                        title="Perkecil (-)"
+                      >
+                        <ZoomOut className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={handleZoomReset}
+                        className="px-1.5 py-0.5 text-[10px] font-bold text-slate-300 hover:text-white cursor-pointer"
+                        title="Reset Ukuran"
+                      >
+                        {Math.round(zoom * 100)}%
+                      </button>
+                      <button
+                        onClick={handleZoomIn}
+                        disabled={zoom >= 2}
+                        className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-30 transition-colors cursor-pointer"
+                        title="Perbesar (+)"
+                      >
+                        <ZoomIn className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Filmstrip / Thumbnail Toggle */}
+                  {viewMode === "interactive" && (
+                    <button
+                      onClick={() => setShowThumbnails((prev) => !prev)}
+                      className={`p-1.5 rounded-lg transition-colors border cursor-pointer ${showThumbnails
+                          ? "bg-emerald-600 border-emerald-500 text-white"
+                          : "bg-slate-800 border-slate-700 text-slate-300 hover:text-white"
+                        }`}
+                      title="Tampilkan Galeri Halaman"
+                    >
+                      <LayoutGrid className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+
+                  {/* Fullscreen Button */}
+                  <button
+                    onClick={toggleFullscreen}
+                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 cursor-pointer"
+                    title={isFullscreen ? "Keluar Layar Penuh" : "Layar Penuh"}
                   >
-                    <Maximize2 className="h-3.5 w-3.5" />
-                  </a>
-                  <a
-                    href={PDF_FILE_PATH}
-                    download="Buku_Repropedia_SIGMA.pdf"
-                    className="p-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-colors"
-                    title="Unduh PDF"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                  </a>
+                    {isFullscreen ? (
+                      <Minimize2 className="h-3.5 w-3.5" />
+                    ) : (
+                      <Maximize2 className="h-3.5 w-3.5" />
+                    )}
+                  </button>
                 </div>
               </div>
 
-              {/* Inline PDF Viewer Frame (Tinggi sticky ~80vh) */}
-              <div className="relative w-full h-[540px] sm:h-[640px] lg:h-[78vh] bg-slate-100 flex flex-col justify-between">
-                <iframe
-                  key={activeBab.page}
-                  src={`${PDF_FILE_PATH}#page=${activeBab.page}&toolbar=1&navpanes=0`}
-                  title={`Buku Repropedia - ${activeBab.title}`}
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                />
+              {/* Reader Main Stage */}
+              <div
+                ref={readerStageRef}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                className="relative w-full h-[540px] sm:h-[640px] lg:h-[75vh] bg-slate-800/95 overflow-auto flex items-center justify-center p-2 sm:p-4 select-none"
+              >
+                {viewMode === "interactive" ? (
+                  <>
+                    {/* Floating Navigation Chevron - Left */}
+                    <button
+                      onClick={goToPrevPage}
+                      disabled={currentPage <= 1}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg backdrop-blur-xs border border-white/10 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-95 cursor-pointer"
+                      title="Halaman Sebelumnya (Panah Kiri)"
+                    >
+                      <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
 
-                {/* Mobile Browser Fallback Overlay Hint */}
-                <div className="sm:hidden bg-slate-900/90 text-white p-2.5 text-[11px] flex items-center justify-between">
-                  <span className="text-slate-300">Kurang nyaman di layar kecil?</span>
-                  <a
-                    href={`${PDF_FILE_PATH}#page=${activeBab.page}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold text-emerald-400 underline flex items-center gap-1"
-                  >
-                    Buka PDF Langsung →
-                  </a>
-                </div>
+                    {/* Page Image Container with Zoom Transform */}
+                    <div
+                      className="transition-transform duration-200 ease-out flex items-center justify-center"
+                      style={{
+                        transform: `scale(${zoom})`,
+                        transformOrigin: "center center",
+                      }}
+                    >
+                      <div className="relative shadow-2xl rounded-lg overflow-hidden bg-white max-w-full max-h-[500px] sm:max-h-[600px] lg:max-h-[70vh] aspect-[1191/1685]">
+                        <img
+                          src={`/assets/repropedia/pages/page_${currentPage}.webp`}
+                          alt={`Halaman ${currentPage} - ${getPageSectionTitle(currentPage)}`}
+                          className="w-full h-full object-contain block"
+                          onLoad={() => setIsImageLoading(false)}
+                          loading="eager"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Floating Navigation Chevron - Right */}
+                    <button
+                      onClick={goToNextPage}
+                      disabled={currentPage >= TOTAL_PAGES}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg backdrop-blur-xs border border-white/10 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-95 cursor-pointer"
+                      title="Halaman Selanjutnya (Panah Kanan)"
+                    >
+                      <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+
+                    {/* Mobile Swipe Hint */}
+                    <div className="sm:hidden absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-950/70 text-slate-300 px-3 py-1 rounded-full text-[10px] font-medium backdrop-blur-xs pointer-events-none">
+                      Usap layar untuk ganti halaman ↔
+                    </div>
+                  </>
+                ) : (
+                  /* Mode PDF Asli (Iframe) */
+                  <iframe
+                    src={`${PDF_FILE_PATH}#page=${currentPage}&toolbar=1&navpanes=0`}
+                    title={`Buku Repropedia - ${activeBab.title}`}
+                    className="w-full h-full border-0 bg-white"
+                  />
+                )}
               </div>
 
-              {/* PDF Viewer Footer Bar */}
+              {/* Interactive Mode Bottom Controls & Page Slider */}
+              {viewMode === "interactive" && (
+                <div className="px-4 py-3 bg-white border-t border-slate-100 flex flex-col gap-2">
+                  <div className="flex items-center justify-between gap-3">
+                    {/* Previous Button */}
+                    <button
+                      onClick={goToPrevPage}
+                      disabled={currentPage <= 1}
+                      className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 disabled:opacity-30 disabled:pointer-events-none text-xs font-bold flex items-center space-x-1 transition-all cursor-pointer"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      <span className="hidden sm:inline">Sebelumnya</span>
+                    </button>
+
+                    {/* Interactive Page Slider */}
+                    <div className="flex-1 flex items-center space-x-3 max-w-md mx-auto">
+                      <span className="text-[11px] font-bold text-slate-400">1</span>
+                      <input
+                        type="range"
+                        min="1"
+                        max={TOTAL_PAGES}
+                        value={currentPage}
+                        onChange={(e) => goToPage(parseInt(e.target.value, 10))}
+                        className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                        title={`Geser Halaman (Saat ini: ${currentPage})`}
+                      />
+                      <span className="text-[11px] font-bold text-slate-400">{TOTAL_PAGES}</span>
+                    </div>
+
+                    {/* Next Button */}
+                    <button
+                      onClick={goToNextPage}
+                      disabled={currentPage >= TOTAL_PAGES}
+                      className="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-emerald-700 text-white disabled:opacity-30 disabled:pointer-events-none text-xs font-bold flex items-center space-x-1 transition-all shadow-xs cursor-pointer"
+                    >
+                      <span className="hidden sm:inline">Selanjutnya</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Collapsible Filmstrip / Thumbnail Grid */}
+                  {showThumbnails && (
+                    <div className="pt-3 mt-1 border-t border-slate-100">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-extrabold text-slate-700">
+                          Pilih Halaman ({TOTAL_PAGES} Halaman):
+                        </span>
+                        <span className="text-[11px] font-semibold text-emerald-700">
+                          Sedang di Halaman {currentPage}
+                        </span>
+                      </div>
+                      <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200">
+                        {Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1).map((pageNum) => {
+                          const isSelected = pageNum === currentPage;
+                          return (
+                            <button
+                              key={pageNum}
+                              onClick={() => goToPage(pageNum)}
+                              className={`shrink-0 flex flex-col items-center gap-1 group cursor-pointer transition-all ${isSelected ? "scale-105" : "opacity-75 hover:opacity-100"
+                                }`}
+                            >
+                              <div
+                                className={`w-14 h-20 rounded-md border-2 overflow-hidden bg-slate-100 relative shadow-xs ${isSelected
+                                    ? "border-emerald-600 ring-2 ring-emerald-500/30"
+                                    : "border-slate-200 group-hover:border-slate-300"
+                                  }`}
+                              >
+                                <img
+                                  src={`/assets/repropedia/pages/page_${pageNum}.webp`}
+                                  alt={`Thumbnail Hal ${pageNum}`}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                />
+                              </div>
+                              <span
+                                className={`text-[10px] font-bold ${isSelected ? "text-emerald-700 font-extrabold" : "text-slate-500"
+                                  }`}
+                              >
+                                Hal {pageNum}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Reader Footer Info Bar */}
               <div className="px-4 py-3 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-2">
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
@@ -404,15 +729,16 @@ export default function RepropediaView() {
                   </span>
                 </div>
                 <div className="flex items-center space-x-3 text-[11px] font-bold text-slate-500">
-                  <span>Ukuran: ~3.7 MB</span>
+                  <span className="flex items-center space-x-1 text-emerald-700">
+                    <Zap className="h-3 w-3 text-emerald-600" />
+                    <span>Mode WebP Cepat (Hemat Kuota)</span>
+                  </span>
                   <span>•</span>
                   <span>Bahasa: Indonesia</span>
                 </div>
               </div>
-
             </div>
           </div>
-
         </div>
       </div>
     </div>

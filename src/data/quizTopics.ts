@@ -31,7 +31,7 @@ export const QUIZ_TOPICS: QuizTopic[] = [
     description:
       "Pahami masa pubertas, perubahan hormon fisik tubuh, serta panduan praktis merawat kebersihan organ reproduksi harian tanpa rasa canggung.",
     duration: "3 Menit",
-    image: "/assets/quiz/reproduksi_pubertas.svg",
+    image: "/assets/quiz/reproduksi_pubertas.webp",
     accentColor: "emerald",
     fallbackQuestions: [
       {
@@ -83,7 +83,7 @@ export const QUIZ_TOPICS: QuizTopic[] = [
     description:
       "Ketahui batasan usia legal perkawinan 19 tahun sesuai UU No. 16/2019, risiko medis kehamilan terlalu muda, dan dampak sosial ekonomi.",
     duration: "3 Menit",
-    image: "/assets/quiz/perkawinan_anak.svg",
+    image: "/assets/quiz/perkawinan_anak.webp",
     accentColor: "emerald",
     fallbackQuestions: [
       {
@@ -135,7 +135,7 @@ export const QUIZ_TOPICS: QuizTopic[] = [
     description:
       "Pahami empat pilar hak fundamental anak berdasarkan Konvensi Hak Anak PBB untuk melindungi diri sendiri dan membela sesama rekan sebaya.",
     duration: "2 Menit",
-    image: "/assets/quiz/hak_anak.svg",
+    image: "/assets/quiz/hak_anak.webp",
     accentColor: "emerald",
     fallbackQuestions: [
       {
@@ -178,7 +178,7 @@ export const QUIZ_TOPICS: QuizTopic[] = [
     description:
       "Kenali aturan sentuhan aman (safe touch), konsep persetujuan (consent), keberanian berkata tidak, dan alur rujukan bantuan yang aman.",
     duration: "2 Menit",
-    image: "/assets/quiz/batasan_diri.svg",
+    image: "/assets/quiz/batasan_diri.webp",
     accentColor: "emerald",
     fallbackQuestions: [
       {
@@ -221,7 +221,7 @@ export const QUIZ_TOPICS: QuizTopic[] = [
     description:
       "Identifikasi tanda kecemasan berlebih, cara merespons cyberbullying, pentingnya digital detox, serta cara membangun persahabatan yang saling mendukung.",
     duration: "2 Menit",
-    image: "/assets/quiz/kesehatan_mental.svg",
+    image: "/assets/quiz/kesehatan_mental.webp",
     accentColor: "emerald",
     fallbackQuestions: [
       {

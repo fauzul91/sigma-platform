@@ -36,7 +36,7 @@ export default function KuisView() {
           <div className="hidden md:flex items-center space-x-3 shrink-0">
             <div className="relative w-20 h-20">
               <Image
-                src="/assets/hero-cards/quiz.svg"
+                src="/assets/hero-cards/quiz.webp"
                 alt="Maskot Kuis SIGMA"
                 fill
                 unoptimized
