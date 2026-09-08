@@ -224,19 +224,112 @@ export const eventItems: EventItem[] = [
       "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800",
     ],
     attendees: 120,
+    week: 1,
   },
   {
     id: "e2",
-    title: "Training of Trainer (ToT) Kader Sebaya GARUDA",
+    title: "Orientasi Kader Sebaya & Pemetaan Masalah Remaja",
     description:
-      "Pelatihan intensif 3 hari untuk mencetak konselor sebaya baru yang mampu mendeteksi dini kekerasan seksual dan merujuk teman sebaya ke guru BK.",
-    date: "10 Juni 2026",
+      "Sesi pengenalan peran konselor sebaya GARUDA, pemetaan risiko perkawinan usia anak, dan membangun komitmen bersama para siswa.",
+    date: "18 Mei 2026",
+    location: "SMPN 4 Sumberjambe",
+    images: [
+      "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800",
+    ],
+    attendees: 45,
+    week: 1,
+  },
+  {
+    id: "e3",
+    title: "Training of Trainer (ToT) Konseling Ramah Remaja",
+    description:
+      "Pelatihan intensif untuk mencetak konselor sebaya baru yang mampu mendeteksi dini kekerasan seksual dan merujuk teman sebaya ke guru BK.",
+    date: "25 Mei 2026",
     location: "Pusat Diklat Kencana",
     images: [
       "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
     ],
     attendees: 30,
+    week: 2,
+  },
+  {
+    id: "e4",
+    title: "Focus Group Discussion (FGD) Hak-Hak Dasar Anak",
+    description:
+      "Diskusi terarah bersama perwakilan guru BK dan orang tua murid mengenai hak perlindungan anak dan bahaya dispensasi kawin dini.",
+    date: "02 Juni 2026",
+    location: "Balai Desa Sukamaju",
+    images: [
+      "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800",
+    ],
+    attendees: 60,
+    week: 2,
+  },
+  {
+    id: "e5",
+    title: "Sosialisasi Modul Repropedia & Batasan Diri Remaja",
+    description:
+      "Pengenalan buku pedoman Repropedia kepada seluruh siswa kelas 7 & 8, panduan higienitas reproduksi, dan pemahaman consent.",
+    date: "09 Juni 2026",
+    location: "Lapangan Serbaguna SMPN 1",
+    images: [
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800",
+    ],
+    attendees: 150,
+    week: 3,
+  },
+  {
+    id: "e6",
+    title: "Simulasi Roleplay Pendampingan Konseling Sebaya",
+    description:
+      "Praktik langsung kader dalam mendengarkan aktif curhat teman sebaya tanpa menghakimi dan simulasi rujukan darurat ke puskesmas.",
+    date: "16 Juni 2026",
+    location: "Ruang Kolaborasi Remaja",
+    images: [
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800",
+    ],
+    attendees: 25,
+    week: 3,
+  },
+  {
+    id: "e7",
+    title: "Kampanye Kreatif: Lomba Poster & Video Pencegahan Kekerasan",
+    description:
+      "Pameran karya seni poster dan pemutaran video edukasi karya siswa untuk menyuarakan stop perkawinan anak dan anti cyberbullying.",
+    date: "23 Juni 2026",
+    location: "Gedung Kesenian Daerah",
+    images: [
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
+    ],
+    attendees: 200,
+    week: 4,
+  },
+  {
+    id: "e8",
+    title: "Audiensi Advokasi Perlindungan Anak dengan Pemangku Adat",
+    description:
+      "Dialog terbuka bersama tokoh adat dan aparat desa untuk memperkuat kesepakatan penolakan dispensasi perkawinan anak di desa binaan.",
+    date: "01 Juli 2026",
+    location: "Kantor Kecamatan Sumberjambe",
+    images: [
+      "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800",
+    ],
+    attendees: 40,
+    week: 5,
+  },
+  {
+    id: "e9",
+    title: "Festival SIGMA & Penobatan Duta Konselor Garuda 2026",
+    description:
+      "Puncak rangkaian program SIGMA, penyerahan apresiasi kepada 15 kader konselor berprestasi, dan deklarasi komitmen sekolah bebas kekerasan.",
+    date: "10 Juli 2026",
+    location: "Auditorium Utama Universitas",
+    images: [
+      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800",
+    ],
+    attendees: 350,
+    week: 6,
   },
 ];
 
