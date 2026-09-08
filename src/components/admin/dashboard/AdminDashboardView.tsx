@@ -63,11 +63,11 @@ export default function AdminDashboardView({
 
         <div className="flex items-center shrink-0">
           <Link
-            href="/admin/repropedia"
+            href="/admin/edukasi"
             className="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md shadow-emerald-500/20 transition-all flex items-center space-x-2"
           >
             <Plus className="h-4 w-4" />
-            <span>Buat Modul</span>
+            <span>Buat Edukasi</span>
           </Link>
         </div>
       </div>
@@ -75,27 +75,27 @@ export default function AdminDashboardView({
       {/* 2. Stat Cards (Meridian Style) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
         
-        {/* Card 1: Distribusi Status Modul */}
+        {/* Card 1: Distribusi Status Media & Edukasi */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
           <div className="flex items-start justify-between mb-4">
             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl">
-              <BookOpen className="h-6 w-6" />
+              <FileText className="h-6 w-6" />
             </div>
             <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-bold uppercase tracking-wide rounded-lg border border-emerald-100">
-              Konten Modul
+              Edukasi & Media
             </span>
           </div>
           <div>
             <h3 className="text-3xl font-black text-slate-800">
-              {isLoading ? "..." : stats.totalModules}
+              {isLoading ? "..." : stats.totalMedia}
             </h3>
-            <p className="text-sm text-slate-500 font-medium mt-1">Total Modul Tersedia</p>
+            <p className="text-sm text-slate-500 font-medium mt-1">Total Artikel & Video</p>
           </div>
           
           <div className="mt-5 pt-5 border-t border-slate-100 space-y-3">
             <div className="flex justify-between text-xs font-bold">
               <span className="text-slate-600">Terbit</span>
-              <span className="text-emerald-600">85%</span>
+              <span className="text-emerald-600">Aktif</span>
             </div>
             <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden flex">
               <div className="bg-emerald-500 h-2 rounded-l-full" style={{ width: '85%' }}></div>
@@ -172,28 +172,28 @@ export default function AdminDashboardView({
       {/* 3. Main Grid Area */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         
-        {/* Left Col (2/3): Katalog Konten Repropedia */}
+        {/* Left Col (2/3): Katalog Konten Edukasi */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
               <FileText className="h-5 w-5 text-emerald-500" />
-              Modul Repropedia Terbaru
+              Konten Edukasi & Media Terbaru
             </h2>
-            <Link href="/admin/repropedia" className="text-sm font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 group">
+            <Link href="/admin/edukasi" className="text-sm font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 group">
               Lihat Semua <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {isLoading ? (
-              <div className="text-sm text-slate-400">Memuat modul...</div>
+              <div className="text-sm text-slate-400">Memuat konten...</div>
             ) : (
               stats.recentItems.slice(0, 3).map((item, idx) => (
                 <div key={idx} className="bg-white rounded-3xl p-5 border border-slate-200/60 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all group flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-start mb-4">
                       <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 group-hover:scale-110 transition-transform">
-                        <BookOpen className="h-6 w-6" />
+                        <FileText className="h-6 w-6" />
                       </div>
                       <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-extrabold uppercase border border-emerald-100">
                         {item.label}
@@ -203,8 +203,8 @@ export default function AdminDashboardView({
                   </div>
                   <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
                     <span className="text-[11px] font-bold text-slate-400">{item.createdAt}</span>
-                    <Link href="/admin/repropedia" className="px-3 py-1.5 rounded-xl bg-slate-50 text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 text-xs font-bold transition-colors">
-                      Kelola Modul
+                    <Link href="/admin/edukasi" className="px-3 py-1.5 rounded-xl bg-slate-50 text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 text-xs font-bold transition-colors">
+                      Kelola Konten
                     </Link>
                   </div>
                 </div>
@@ -212,12 +212,12 @@ export default function AdminDashboardView({
             )}
 
             {/* Create New Item */}
-            <Link href="/admin/repropedia" className="bg-slate-50/50 border-2 border-dashed border-slate-200 rounded-3xl p-5 flex flex-col items-center justify-center text-center hover:bg-slate-50 hover:border-emerald-300 transition-colors cursor-pointer min-h-[180px]">
+            <Link href="/admin/edukasi" className="bg-slate-50/50 border-2 border-dashed border-slate-200 rounded-3xl p-5 flex flex-col items-center justify-center text-center hover:bg-slate-50 hover:border-emerald-300 transition-colors cursor-pointer min-h-[180px]">
               <div className="w-12 h-12 rounded-full bg-white text-emerald-500 shadow-sm flex items-center justify-center mb-3">
                 <Plus className="h-6 w-6" />
               </div>
-              <h3 className="text-sm font-bold text-slate-700">Buat Modul Baru</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[200px]">Mulai draft materi edukasi untuk kader dan siswa</p>
+              <h3 className="text-sm font-bold text-slate-700">Buat Edukasi Baru</h3>
+              <p className="text-xs text-slate-400 mt-1 max-w-[200px]">Mulai draft artikel atau materi edukasi video untuk remaja</p>
             </Link>
           </div>
         </div>

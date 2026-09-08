@@ -28,20 +28,10 @@ export default function Footer() {
 
             {/* Kolom 1: SIGMA & Deskripsi Program */}
             <div className="lg:col-span-4 space-y-4">
-              <Link href="/beranda" className="flex items-center space-x-2.5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-xs">
-                  <Activity className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="font-extrabold text-neutral-dark text-xl leading-none tracking-tight block">
-                    SIGMA
-                  </span>
-                  <span className="text-[10px] text-primary font-bold tracking-wider uppercase block mt-0.5">
-                    Platform Kesehatan Reproduksi
-                  </span>
-                </div>
-              </Link>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
+                PROGRAM SIGMA
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
                 Program SIGMA (Sinergi Edukasi dan Pencegahan Perkawinan Anak) adalah platform digital edukasi kesehatan reproduksi remaja, pencegahan perkawinan anak, dan akses cepat layanan rujukan konseling sebaya &amp; medis. Dikelola bersama kader muda di Desa Gunungmalang.
               </p>
             </div>
