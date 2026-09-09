@@ -65,7 +65,7 @@ export default function AdminKegiatanView({
       </div>
 
       {/* Events Data Table Container */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xs overflow-hidden">
+      <div className="w-full max-w-full min-w-0 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xs overflow-hidden">
         {/* Table Toolbar Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800">
           <div className="relative w-full sm:max-w-xs">
@@ -83,7 +83,7 @@ export default function AdminKegiatanView({
           </span>
         </div>
 
-        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
+        <div className="w-full max-w-full min-w-0 overflow-x-auto pb-1.5 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
           <table className="w-full text-left text-xs font-semibold text-slate-500 dark:text-slate-400 min-w-[780px]">
             <thead className="bg-slate-50/80 dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 font-extrabold uppercase tracking-wider text-[10px] border-b border-slate-200/70 dark:border-slate-800">
               <tr>
