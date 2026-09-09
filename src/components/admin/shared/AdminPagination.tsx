@@ -19,17 +19,17 @@ export default function AdminPagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 mt-4 text-[11px] md:text-xs text-slate-500 font-semibold select-none">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 text-[11px] md:text-xs text-slate-500 dark:text-slate-400 font-semibold select-none">
       <div className="text-center sm:text-left">
         Menampilkan{" "}
-        <span className="text-neutral-dark font-extrabold">
+        <span className="text-neutral-dark dark:text-slate-200 font-extrabold">
           {Math.min((currentPage - 1) * pageSize + 1, totalItems)}
         </span>{" "}
         sampai{" "}
-        <span className="text-neutral-dark font-extrabold">
+        <span className="text-neutral-dark dark:text-slate-200 font-extrabold">
           {Math.min(currentPage * pageSize, totalItems)}
         </span>{" "}
-        dari <span className="text-neutral-dark font-extrabold">{totalItems}</span> data
+        dari <span className="text-neutral-dark dark:text-slate-200 font-extrabold">{totalItems}</span> data
       </div>
 
       <div className="flex items-center space-x-1">
@@ -37,7 +37,7 @@ export default function AdminPagination({
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white text-slate-600 transition-colors cursor-pointer"
+          className="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
           aria-label="Halaman Sebelumnya"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -54,7 +54,7 @@ export default function AdminPagination({
               className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer ${
                 isActive
                   ? "bg-primary border-primary text-white font-extrabold shadow-sm"
-                  : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                  : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
               {pageNum}
@@ -66,7 +66,7 @@ export default function AdminPagination({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white text-slate-600 transition-colors cursor-pointer"
+          className="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
           aria-label="Halaman Selanjutnya"
         >
           <ChevronRight className="h-4 w-4" />

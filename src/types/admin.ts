@@ -34,9 +34,11 @@ export interface AdminGeneralSettings {
 }
 
 export interface AdminRecentItem {
+  id?: string;
   label: string;
   title: string;
   createdAt: string;
+  href?: string;
 }
 
 export interface AdminDashboardStats {

@@ -45,43 +45,53 @@ export default function AdminOrganisasiView({
   const sorted = [...members].sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
-      
-      <div className="flex flex-col gap-2 pb-4 border-b border-slate-200/50">
+    <div className="space-y-6 animate-in fade-in duration-300 pb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/60 dark:border-slate-800">
         <div>
-          <h1 className="text-xl font-extrabold text-neutral-dark">Badan Organisasi</h1>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">Struktur kepengurusan platform SIGMA. Klik ikon edit untuk memperbarui nama pemegang jabatan. Struktur jabatan bersifat tetap.</p>
+          <div className="flex items-center space-x-2">
+            <h1 className="text-xl sm:text-2xl font-black text-neutral-dark dark:text-slate-100 tracking-tight">
+              Badan Organisasi
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border dark:border-emerald-800/60 text-[11px] font-black">
+              {sorted.length} Jabatan
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
+            Struktur kepengurusan resmi kader platform SIGMA. Klik ikon pensil untuk memperbarui nama pemegang jabatan.
+          </p>
         </div>
       </div>
 
       {/* Org Members Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {sorted.map((m) => {
           const config = ROLE_CONFIG[m.key];
-          const Icon = config?.Icon;
+          const Icon = config ? config.Icon : Shield;
+          const label = config ? config.label : m.role;
+
           return (
             <div
-              key={m.id}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-center justify-between gap-4"
+              key={m.key}
+              className="bg-white dark:bg-slate-900 p-5 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center justify-between hover:border-primary/40 dark:hover:border-primary/40 hover:shadow-xs transition-all duration-200"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                {Icon && (
-                  <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-primary">
-                    <Icon className="h-4.5 w-4.5" />
-                  </div>
-                )}
+              <div className="flex items-center space-x-3.5 min-w-0">
+                <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 text-primary dark:text-emerald-400 border border-emerald-100/80 dark:border-emerald-900/60 rounded-2xl shrink-0">
+                  <Icon className="h-5 w-5" />
+                </div>
                 <div className="min-w-0">
-                  <span className="block text-[10px] font-black text-primary uppercase tracking-wider">
-                    {config?.label ?? m.role}
+                  <span className="text-[10px] font-extrabold uppercase text-slate-400 dark:text-slate-500 tracking-wider block truncate">
+                    {label}
                   </span>
-                  <p className="text-sm font-extrabold text-neutral-dark truncate">
-                    {m.name}
-                  </p>
+                  <span className="text-xs sm:text-sm font-bold text-neutral-dark dark:text-slate-100 block truncate mt-0.5">
+                    {m.name || (
+                      <span className="text-slate-300 dark:text-slate-600 italic font-normal">Belum diisi</span>
+                    )}
+                  </span>
                 </div>
               </div>
               <button
                 onClick={() => setEditingMember(m)}
-                className="shrink-0 p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-emerald-50 hover:text-primary transition-colors cursor-pointer border border-slate-100"
+                className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-slate-700 hover:text-primary dark:hover:text-primary transition-colors cursor-pointer border border-slate-200/60 dark:border-slate-700 shrink-0 ml-2"
                 title="Edit nama"
               >
                 <Edit2 className="h-4 w-4" />
@@ -93,27 +103,35 @@ export default function AdminOrganisasiView({
 
       {/* Edit Modal — hanya nama yang bisa diubah */}
       {editingMember && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-5">
-              <h3 className="font-extrabold text-neutral-dark text-base">
-                Edit Nama Pemegang Jabatan
-              </h3>
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="w-full max-w-sm max-h-[92vh] bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200 my-auto">
+            {/* Modal Header */}
+            <div className="px-5 sm:px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0 bg-white dark:bg-slate-900">
+              <div>
+                <h3 className="font-extrabold text-neutral-dark dark:text-slate-100 text-base">
+                  Edit Pemegang Jabatan
+                </h3>
+                <p className="text-[11px] text-slate-400 dark:text-slate-400 font-medium">
+                  Perbarui nama pemegang posisi organisasi.
+                </p>
+              </div>
               <button
                 onClick={() => setEditingMember(null)}
-                className="text-slate-400 hover:text-slate-600 font-bold p-1 rounded-full hover:bg-slate-50 cursor-pointer"
+                className="text-slate-400 hover:text-neutral-dark dark:hover:text-white font-bold p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Tutup Modal"
               >
                 ✕
               </button>
             </div>
 
-            <div className="space-y-4">
+            {/* Modal Body */}
+            <div className="p-5 sm:p-6 overflow-y-auto space-y-4 grow touch-pan-y">
               {/* Jabatan — read-only display */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
-                  Jabatan
+                <label className="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                  Jabatan Organisasi
                 </label>
-                <div className="w-full px-3.5 py-2.5 rounded-xl border border-slate-100 bg-slate-50 text-xs font-bold text-slate-500 flex items-center gap-2">
+                <div className="w-full px-3.5 py-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center gap-2">
                   {(() => {
                     const cfg = ROLE_CONFIG[editingMember.key ?? ""];
                     if (!cfg) return editingMember.role ?? "-";
@@ -130,8 +148,8 @@ export default function AdminOrganisasiView({
 
               {/* Nama — satu-satunya field yang bisa diedit */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
-                  Nama Pemegang Jabatan
+                <label className="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                  Nama Lengkap Pemegang Jabatan <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -142,22 +160,23 @@ export default function AdminOrganisasiView({
                   onChange={(e) =>
                     setEditingMember({ ...editingMember, name: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-semibold"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs focus:outline-none focus:border-primary dark:focus:border-primary transition-all font-semibold"
                 />
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end space-x-3">
+            {/* Modal Footer */}
+            <div className="px-5 sm:px-6 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 flex items-center justify-end space-x-3 shrink-0">
               <button
                 onClick={() => setEditingMember(null)}
-                className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 cursor-pointer"
+                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-all"
               >
                 Batal
               </button>
               <button
                 onClick={onSave}
                 disabled={!editingMember.name?.trim()}
-                className="px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover shadow-md cursor-pointer disabled:opacity-50"
+                className="px-5 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover shadow-xs active:scale-98 cursor-pointer disabled:opacity-50 transition-all"
               >
                 Simpan Nama
               </button>

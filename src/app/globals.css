@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
@@ -16,8 +18,32 @@
   --color-sos-hover: #be123c;
   --color-neutral-dark: #1e293b;
   --color-neutral-light: #f1f5f9;
+  --color-slate-850: #181c27;
+  --color-slate-750: #242938;
   --font-heading: var(--font-heading), ui-sans-serif, system-ui;
   --font-sans: var(--font-body), ui-sans-serif, system-ui;
+}
+
+/* Reference UI: Obsidian / Matte Graphite Dark Theme Palette */
+.dark {
+  --background: #0b0d13;
+  --foreground: #f8fafc;
+  --color-neutral-dark: #f8fafc;
+  --color-neutral-light: #13161f;
+
+  /* Custom dark mode tones replacing bluish slate with sleek carbon/graphite */
+  --color-slate-950: #0b0d13;
+  --color-slate-900: #13161f;
+  --color-slate-850: #181c27;
+  --color-slate-800: #1e2230;
+  --color-slate-750: #242938;
+  --color-slate-700: #2b3144;
+  --color-slate-600: #414a63;
+  --color-slate-500: #626c85;
+  --color-slate-400: #8e98ac;
+  --color-slate-300: #c8cfde;
+  --color-slate-200: #e2e6f0;
+  --color-slate-100: #f8fafc;
 }
 
 body {
@@ -97,6 +123,17 @@ nav a,
   background: #94a3b8;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background: #0b0d13;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e2230;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2b3144;
+}
+
 @keyframes drawOutline {
   0% {
     stroke-dasharray: 1200;
@@ -128,10 +165,27 @@ select {
     border-color 150ms ease;
 }
 
+.dark input[type="text"],
+.dark input[type="number"],
+.dark input[type="email"],
+.dark input[type="url"],
+.dark input[type="tel"],
+.dark textarea,
+.dark select {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
 input:focus,
 textarea:focus,
 select:focus {
   box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
+  outline: none;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  box-shadow: 0 0 0 1px #059669, 0 4px 16px rgba(0, 0, 0, 0.4);
   outline: none;
 }
 

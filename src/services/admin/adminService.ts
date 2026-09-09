@@ -254,6 +254,38 @@ export async function deleteMedia(id: string): Promise<boolean> {
   return !error;
 }
 
+export async function fetchMediaById(id: string): Promise<MediaItem | null> {
+  try {
+    const { data, error } = await supabase
+      .from("media")
+      .select("id, title, slug, type, category, tags, content, media_url, read_time, duration, author, date")
+      .eq("id", id)
+      .single();
+
+    if (error || !data) {
+      const foundMock = initialMedia.find((m) => m.id === id);
+      return foundMock || null;
+    }
+
+    return {
+      id: data.id,
+      title: data.title,
+      slug: data.slug,
+      type: data.type,
+      category: data.category,
+      tags: data.tags || [],
+      content: data.content,
+      mediaUrl: data.media_url,
+      readTime: data.read_time,
+      duration: data.duration,
+      author: data.author,
+      date: data.date,
+    };
+  } catch {
+    return initialMedia.find((m) => m.id === id) || null;
+  }
+}
+
 // --- UGC CRUD ---
 export async function fetchUgc(page?: number, limit?: number): Promise<UgcItem[]> {
   try {
@@ -654,6 +686,34 @@ export async function deleteEvent(id: string): Promise<boolean> {
   return !error;
 }
 
+export async function fetchEventById(id: string): Promise<EventItem | null> {
+  try {
+    const { data, error } = await supabase
+      .from("events")
+      .select("id, title, description, date, location, images, attendees, week")
+      .eq("id", id)
+      .single();
+
+    if (error || !data) {
+      const foundMock = initialEvents.find((e) => e.id === id);
+      return foundMock || null;
+    }
+
+    return {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      date: data.date,
+      location: data.location,
+      images: data.images || [],
+      attendees: data.attendees || 0,
+      week: data.week ?? 1,
+    };
+  } catch {
+    return initialEvents.find((e) => e.id === id) || null;
+  }
+}
+
 // --- ORG MEMBERS CRUD ---
 export async function fetchOrgMembers(page?: number, limit?: number): Promise<OrgMember[]> {
   try {
@@ -839,41 +899,59 @@ export async function fetchDashboardStats(): Promise<AdminDashboardStats> {
       supabase.from("quizzes").select("id", { count: "exact", head: true }),
     ]);
 
-    // Fetch the 3 newest items from core tables for recent activity logs
-    const [recentMods, recentMedia, recentUgc] = await Promise.all([
+    // Fetch newest items from core tables for recent activity logs
+    const [recentMedia, recentEvents, recentUgc, recentMods] = await Promise.all([
       supabase
-        .from("repropedia")
-        .select("title, created_at")
+        .from("media")
+        .select("id, title, created_at")
         .order("created_at", { ascending: false })
         .limit(3),
       supabase
-        .from("media")
-        .select("title, created_at")
+        .from("events")
+        .select("id, title, created_at")
         .order("created_at", { ascending: false })
         .limit(3),
       supabase
         .from("ugc_submissions")
-        .select("title, created_at")
+        .select("id, title, created_at")
+        .order("created_at", { ascending: false })
+        .limit(3),
+      supabase
+        .from("repropedia")
+        .select("id, title, created_at")
         .order("created_at", { ascending: false })
         .limit(3),
     ]);
 
     // Merge recent activity list and sort chronologically
     const recentItems = [
-      ...(recentMods.data || []).map((i) => ({
-        label: "Repropedia",
-        title: i.title as string,
-        createdAt: i.created_at as string,
-      })),
-      ...(recentMedia.data || []).map((i) => ({
+      ...(recentMedia.data || []).map((i: any) => ({
+        id: i.id,
         label: "Edukasi",
         title: i.title as string,
         createdAt: i.created_at as string,
+        href: `/admin/edukasi/edit/${i.id}`,
       })),
-      ...(recentUgc.data || []).map((i) => ({
+      ...(recentEvents.data || []).map((i: any) => ({
+        id: i.id,
+        label: "Kegiatan",
+        title: i.title as string,
+        createdAt: i.created_at as string,
+        href: `/admin/kegiatan/edit/${i.id}`,
+      })),
+      ...(recentUgc.data || []).map((i: any) => ({
+        id: i.id,
         label: "Karya Kader",
         title: i.title as string,
         createdAt: i.created_at as string,
+        href: `/admin/karya-kader`,
+      })),
+      ...(recentMods.data || []).map((i: any) => ({
+        id: i.id,
+        label: "Repropedia",
+        title: i.title as string,
+        createdAt: i.created_at as string,
+        href: `/admin/repropedia`,
       })),
     ]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())

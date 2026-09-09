@@ -91,7 +91,7 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
   };
 
   return (
-    <div className="bg-slate-50/95 border-b border-slate-200/90 px-3 py-2 rounded-t-2xl flex flex-wrap items-center gap-1 sticky top-0 z-10 backdrop-blur-xs">
+    <div className="bg-slate-50/95 dark:bg-slate-850/95 border-b border-slate-200/90 dark:border-slate-800 px-3 py-2 rounded-t-2xl flex flex-wrap items-center gap-1 sticky top-0 z-10 backdrop-blur-xs">
       {/* Hidden File Input for Image Upload */}
       <input
         ref={fileInputRef}
@@ -108,8 +108,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         disabled={!editor.can().chain().focus().toggleBold().run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("bold")
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Tebal (Bold: Ctrl+B)"
       >
@@ -122,8 +122,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("italic")
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Miring (Italic: Ctrl+I)"
       >
@@ -136,8 +136,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         disabled={!editor.can().chain().focus().toggleStrike().run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("strike")
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Coret (Strikethrough)"
       >
@@ -145,7 +145,7 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
       </button>
 
       {/* Separator */}
-      <div className="h-5 w-[1px] bg-slate-300 mx-1" />
+      <div className="h-5 w-[1px] bg-slate-300 dark:bg-slate-700 mx-1" />
 
       {/* 2. Headings (Level 2 & Level 3 - No H1) */}
       <button
@@ -153,8 +153,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("heading", { level: 2 })
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Judul Bab (Heading 2)"
       >
@@ -166,8 +166,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("heading", { level: 3 })
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Sub-Judul (Heading 3)"
       >
@@ -175,7 +175,7 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
       </button>
 
       {/* Separator */}
-      <div className="h-5 w-[1px] bg-slate-300 mx-1" />
+      <div className="h-5 w-[1px] bg-slate-300 dark:bg-slate-700 mx-1" />
 
       {/* 3. Lists (Bullet & Ordered) */}
       <button
@@ -183,8 +183,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("bulletList")
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Daftar Poin (Bullet List)"
       >
@@ -196,8 +196,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("orderedList")
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Daftar Bernomor (Numbered List)"
       >
@@ -205,7 +205,7 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
       </button>
 
       {/* Separator */}
-      <div className="h-5 w-[1px] bg-slate-300 mx-1" />
+      <div className="h-5 w-[1px] bg-slate-300 dark:bg-slate-700 mx-1" />
 
       {/* 4. Blockquote & Horizontal Rule */}
       <button
@@ -213,8 +213,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("blockquote")
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Kutipan (Blockquote)"
       >
@@ -224,14 +224,14 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
       <button
         type="button"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        className="p-1.5 rounded-lg text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800 transition-colors cursor-pointer"
         title="Garis Pemisah (Divider)"
       >
         <Minus className="h-4 w-4" />
       </button>
 
       {/* Separator */}
-      <div className="h-5 w-[1px] bg-slate-300 mx-1" />
+      <div className="h-5 w-[1px] bg-slate-300 dark:bg-slate-700 mx-1" />
 
       {/* 5. Link & Unlink */}
       <button
@@ -239,8 +239,8 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         onClick={openLinkModal}
         className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
           editor.isActive("link")
-            ? "bg-emerald-100 text-emerald-800 font-bold shadow-2xs"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/70"
+            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shadow-2xs"
+            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800"
         }`}
         title="Sisipkan Tautan (Link)"
       >
@@ -251,7 +251,7 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         <button
           type="button"
           onClick={handleUnlink}
-          className="p-1.5 rounded-lg text-xs text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+          className="p-1.5 rounded-lg text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
           title="Hapus Tautan"
         >
           <Unlink className="h-4 w-4" />
@@ -263,28 +263,28 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         type="button"
         onClick={handleImageButtonClick}
         disabled={isUploadingImage}
-        className="p-1.5 rounded-lg text-xs text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-colors flex items-center space-x-1 cursor-pointer disabled:opacity-50"
+        className="p-1.5 rounded-lg text-xs text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors flex items-center space-x-1 cursor-pointer disabled:opacity-50"
         title="Unggah & Sisipkan Gambar (Cloudinary)"
       >
         {isUploadingImage ? (
-          <Loader2 className="h-4 w-4 animate-spin text-emerald-600" />
+          <Loader2 className="h-4 w-4 animate-spin text-emerald-600 dark:text-emerald-400" />
         ) : (
-          <ImageIcon className="h-4 w-4 text-emerald-600" />
+          <ImageIcon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
         )}
-        <span className="text-[11px] font-bold text-emerald-700 hidden sm:inline">
+        <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 hidden sm:inline">
           {isUploadingImage ? "Mengunggah..." : "Gambar"}
         </span>
       </button>
 
       {/* Separator */}
-      <div className="h-5 w-[1px] bg-slate-300 mx-1" />
+      <div className="h-5 w-[1px] bg-slate-300 dark:bg-slate-700 mx-1" />
 
       {/* 7. Undo & Redo */}
       <button
         type="button"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().chain().focus().undo().run()}
-        className="p-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-900 hover:bg-slate-200/70 disabled:opacity-30 transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800 disabled:opacity-30 transition-colors cursor-pointer"
         title="Urungkan (Undo: Ctrl+Z)"
       >
         <Undo className="h-4 w-4" />
@@ -294,7 +294,7 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         type="button"
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().chain().focus().redo().run()}
-        className="p-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-900 hover:bg-slate-200/70 disabled:opacity-30 transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-800 disabled:opacity-30 transition-colors cursor-pointer"
         title="Ulangi (Redo: Ctrl+Y)"
       >
         <Redo className="h-4 w-4" />
@@ -302,10 +302,10 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
 
       {/* Simple Link Modal Popover */}
       {showLinkModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-5 w-full max-w-sm shadow-xl border border-slate-200 animate-in zoom-in-95 duration-150">
-            <h4 className="text-sm font-black text-slate-900 mb-1">Sisipkan Tautan</h4>
-            <p className="text-xs text-slate-500 mb-3 font-medium">
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 w-full max-w-sm shadow-xl border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-150">
+            <h4 className="text-sm font-black text-slate-900 dark:text-slate-100 mb-1">Sisipkan Tautan</h4>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 font-medium">
               Masukkan alamat URL web tujuan (contoh: https://...)
             </p>
             <form onSubmit={handleApplyLink} className="space-y-3">
@@ -316,13 +316,13 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 placeholder="https://example.com"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-mono"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-mono"
               />
               <div className="flex justify-end gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setShowLinkModal(false)}
-                  className="px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold cursor-pointer"
                 >
                   Batal
                 </button>

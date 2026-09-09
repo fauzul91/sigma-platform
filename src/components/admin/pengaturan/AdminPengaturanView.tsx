@@ -26,45 +26,45 @@ export default function AdminPengaturanView({
       
 
 
-      <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/60 shadow-sm space-y-6">
+      <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-6">
         <div>
-          <h2 className="text-lg font-bold text-neutral-dark">Pengaturan Konten Umum</h2>
-          <p className="text-xs text-slate-400 mt-1 font-semibold">Ubah parameter teks statis situs utama dalam sekali klik.</p>
+          <h2 className="text-lg font-bold text-neutral-dark dark:text-slate-100">Pengaturan Konten Umum</h2>
+          <p className="text-xs text-slate-400 dark:text-slate-400 mt-1 font-semibold">Ubah parameter teks statis situs utama dalam sekali klik.</p>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Visi Organisasi</label>
+            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">Visi Organisasi</label>
             <textarea
               rows={2}
               value={vision}
               onChange={(e) => setVision(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs focus:outline-none focus:border-primary dark:focus:border-primary"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Misi Organisasi</label>
+            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">Misi Organisasi</label>
             <textarea
               rows={3}
               value={mission}
               onChange={(e) => setMission(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs focus:outline-none focus:border-primary dark:focus:border-primary"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Nama Ketua Kader GARUDA</label>
+            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">Nama Ketua Kader GARUDA</label>
             <input
               type="text"
               value={ketuaName}
               onChange={(e) => setKetuaName(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs focus:outline-none focus:border-primary dark:focus:border-primary"
             />
           </div>
         </div>
 
-        <div className="pt-4 border-t border-slate-100">
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
           <button
             onClick={onSave}
             className="w-full py-3 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover shadow-md shadow-emerald-600/10 transition-all active:scale-98 cursor-pointer"
