@@ -98,7 +98,7 @@ export default function AdminLayout({
 
   return (
     <div
-      className={`min-h-screen flex flex-col lg:flex-row font-sans transition-colors duration-300 ${
+      className={`min-h-screen flex flex-col lg:flex-row font-sans transition-colors duration-300 overflow-x-hidden max-w-full ${
         isDarkMode ? "dark bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
       }`}
     >
@@ -110,7 +110,7 @@ export default function AdminLayout({
         onToggleCollapse={toggleSidebarCollapse}
       />
       <div
-        className={`grow min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
+        className={`grow min-w-0 max-w-full min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? "lg:pl-20" : "lg:pl-64"
         }`}
       >
@@ -121,7 +121,7 @@ export default function AdminLayout({
           isDarkMode={isDarkMode}
           onToggleTheme={toggleTheme}
         />
-        <main className="grow p-4 sm:p-6 lg:p-8 space-y-6">{children}</main>
+        <main className="grow min-w-0 max-w-full p-4 sm:p-6 lg:p-8 space-y-6">{children}</main>
       </div>
     </div>
   );

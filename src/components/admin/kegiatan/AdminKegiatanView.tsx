@@ -10,6 +10,7 @@ import {
   Trash2,
   MapPin,
   Users,
+  Camera,
 } from "lucide-react";
 import { EventItem } from "@/types";
 import AdminPagination from "@/components/admin/shared/AdminPagination";
@@ -64,7 +65,7 @@ export default function AdminKegiatanView({
       </div>
 
       {/* Events Data Table Container */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xs overflow-hidden">
+      <div className="w-full max-w-full min-w-0 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xs overflow-hidden">
         {/* Table Toolbar Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800">
           <div className="relative w-full sm:max-w-xs">
@@ -82,16 +83,16 @@ export default function AdminKegiatanView({
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-semibold text-slate-500 dark:text-slate-400">
-            <thead className="bg-slate-50/80 dark:bg-slate-800/60 text-neutral-dark dark:text-slate-200 font-extrabold uppercase tracking-wider text-[10px] border-b border-slate-200/70 dark:border-slate-800">
+        <div className="w-full max-w-full min-w-0 overflow-x-auto pb-1.5 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
+          <table className="w-full text-left text-xs font-semibold text-slate-500 dark:text-slate-400 min-w-[780px]">
+            <thead className="bg-slate-50/80 dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 font-extrabold uppercase tracking-wider text-[10px] border-b border-slate-200/70 dark:border-slate-800">
               <tr>
-                <th className="py-3.5 px-4 sm:px-6">Nama Kegiatan</th>
-                <th className="py-3.5 px-4">Minggu</th>
-                <th className="py-3.5 px-4">Tanggal</th>
-                <th className="py-3.5 px-4">Lokasi</th>
-                <th className="py-3.5 px-4">Peserta &amp; Foto</th>
-                <th className="py-3.5 px-4 sm:px-6 text-right">Aksi</th>
+                <th className="py-3 px-4 sm:px-6">Nama Kegiatan</th>
+                <th className="py-3 px-3 whitespace-nowrap">Minggu</th>
+                <th className="py-3 px-3 whitespace-nowrap">Tanggal</th>
+                <th className="py-3 px-3">Lokasi</th>
+                <th className="py-3 px-3 whitespace-nowrap">Peserta &amp; Foto</th>
+                <th className="py-3 px-4 sm:px-6 text-right whitespace-nowrap">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
@@ -107,42 +108,44 @@ export default function AdminKegiatanView({
               ) : (
                 events.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3.5 px-4 sm:px-6 font-bold text-neutral-dark dark:text-slate-100">
-                      <div className="flex items-center space-x-3">
+                    <td className="py-3 px-4 sm:px-6 font-bold text-slate-900 dark:text-slate-100">
+                      <div className="flex items-center space-x-2.5 min-w-0">
                         <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-primary dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/50 shrink-0">
-                          <Calendar className="h-4 w-4" />
+                          <Calendar className="h-3.5 w-3.5" />
                         </div>
-                        <span className="truncate max-w-xs">{item.title}</span>
+                        <span className="truncate max-w-[200px] lg:max-w-xs block font-bold text-slate-900 dark:text-slate-100">{item.title}</span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <span className="px-2.5 py-1 rounded-full bg-emerald-100/80 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border dark:border-emerald-800/50 font-black text-[10px]">
-                        {item.week === 99 ? "Penutupan" : `Minggu ${item.week || 1}`}
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 font-black text-[11px] whitespace-nowrap shadow-2xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span>{item.week === 99 ? "Penutupan" : `Minggu ke-${item.week || 1}`}</span>
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 font-medium text-slate-700 dark:text-slate-300">{item.date}</td>
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">
-                      <div className="flex items-center gap-1.5">
+                    <td className="py-3 px-3 font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">{item.date}</td>
+                    <td className="py-3 px-3 text-slate-600 dark:text-slate-300">
+                      <div className="flex items-center gap-1.5 min-w-0">
                         <MapPin className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
-                        <span className="truncate max-w-[180px]">{item.location}</span>
+                        <span className="truncate max-w-[170px] font-medium">{item.location}</span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-1 text-slate-700 dark:text-slate-200 font-bold">
-                          <Users className="h-3 w-3 text-slate-400 dark:text-slate-500" />
-                          <span>{item.attendees} Orang</span>
-                        </div>
-                        <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold block">
-                          {(item.images || []).length} Foto Dokumentasi
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      <div className="inline-flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-200 bg-slate-100/90 dark:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-200/70 dark:border-slate-700/80">
+                          <Users className="h-3 w-3 text-slate-400 dark:text-slate-400 shrink-0" />
+                          <span>{item.attendees || 0} Orang</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60">
+                          <Camera className="h-3 w-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <span>{(item.images || []).length} Foto</span>
                         </span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 sm:px-6 text-right">
+                    <td className="py-3 px-4 sm:px-6 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end space-x-1.5">
                         <Link
                           href={`/admin/kegiatan/edit/${item.id}`}
-                          className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors cursor-pointer"
                           title="Edit Kegiatan & Foto"
                         >
                           <Edit2 className="h-4 w-4" />

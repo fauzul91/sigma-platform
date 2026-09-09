@@ -150,8 +150,8 @@ export default function AdminEdukasiView({
         </div>
 
         {/* Data Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-600 dark:text-slate-300">
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
+          <table className="w-full text-left text-xs text-slate-600 dark:text-slate-300 min-w-[760px]">
             <thead className="bg-slate-50/80 dark:bg-slate-800/60 text-neutral-dark dark:text-slate-200 font-extrabold uppercase tracking-wider text-[10px] border-b border-slate-200/70 dark:border-slate-800">
               <tr>
                 <th className="py-3.5 px-4 sm:px-6">Materi &amp; Info</th>
