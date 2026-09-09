@@ -95,20 +95,20 @@ export default function DragDropUpload({
 
       {currentUrl ? (
         /* Image Preview Box */
-        <div className="relative group rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 p-2 flex items-center justify-between gap-3">
+        <div className="relative group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 p-2 flex items-center justify-between gap-3">
           <div className="flex items-center space-x-3 min-w-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={currentUrl}
               alt="Preview"
-              className="w-16 h-12 object-cover rounded-xl border border-slate-200 shadow-xs shrink-0"
+              className="w-16 h-12 object-cover rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs shrink-0"
             />
             <div className="min-w-0">
-              <span className="text-xs font-bold text-neutral-dark flex items-center gap-1">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+              <span className="text-xs font-bold text-neutral-dark dark:text-slate-100 flex items-center gap-1">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span>Gambar Tersimpan</span>
               </span>
-              <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5 max-w-[200px] sm:max-w-xs">
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate mt-0.5 max-w-[200px] sm:max-w-xs">
                 {currentUrl}
               </p>
             </div>
@@ -118,7 +118,7 @@ export default function DragDropUpload({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-600 bg-white hover:bg-slate-100 text-xs font-bold transition-all cursor-pointer shadow-xs"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-bold transition-all cursor-pointer shadow-xs"
             >
               Ganti File
             </button>
@@ -126,7 +126,7 @@ export default function DragDropUpload({
               <button
                 type="button"
                 onClick={onRemove}
-                className="p-1.5 rounded-xl text-rose-600 bg-rose-50 hover:bg-rose-100 transition-all cursor-pointer"
+                className="p-1.5 rounded-xl text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition-all cursor-pointer"
                 title="Hapus gambar"
               >
                 <X className="h-4 w-4" />
@@ -143,29 +143,29 @@ export default function DragDropUpload({
           onClick={() => fileInputRef.current?.click()}
           className={`relative rounded-2xl border-2 border-dashed p-6 text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-2 ${
             isDragging
-              ? "border-primary bg-emerald-50/60 scale-[1.01]"
-              : "border-slate-300/80 bg-slate-50/50 hover:bg-slate-100/60 hover:border-slate-400"
+              ? "border-primary bg-emerald-50/60 dark:bg-emerald-950/30 scale-[1.01]"
+              : "border-slate-300/80 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-100/60 dark:hover:bg-slate-800/60 hover:border-slate-400 dark:hover:border-slate-600"
           }`}
         >
           {isUploading ? (
             <div className="flex flex-col items-center space-y-2 py-2">
               <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-              <p className="text-xs font-bold text-slate-600">Mengunggah gambar ke server...</p>
+              <p className="text-xs font-bold text-slate-600 dark:text-slate-300">Mengunggah gambar ke server...</p>
             </div>
           ) : (
             <>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-xs border border-slate-200 text-primary">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-xs border border-slate-200 dark:border-slate-700 text-primary dark:text-emerald-400">
                 <UploadCloud className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs font-extrabold text-neutral-dark">
+                <p className="text-xs font-extrabold text-neutral-dark dark:text-slate-100">
                   Tarik & Lepas Gambar di Sini
                 </p>
-                <p className="text-[11px] text-slate-500 font-medium mt-0.5">
-                  atau <span className="text-primary font-bold underline">pilih file</span> dari komputer Anda
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                  atau <span className="text-primary dark:text-emerald-400 font-bold underline">pilih file</span> dari komputer Anda
                 </p>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium">{note}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">{note}</p>
             </>
           )}
         </div>

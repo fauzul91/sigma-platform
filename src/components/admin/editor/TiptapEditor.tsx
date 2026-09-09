@@ -61,7 +61,7 @@ export default function TiptapEditor({
     editorProps: {
       attributes: {
         class:
-          "prose prose-slate max-w-none focus:outline-none min-h-[380px] p-5 sm:p-8 bg-white rounded-b-2xl font-sans text-slate-850 leading-relaxed text-sm sm:text-base selection:bg-emerald-100 selection:text-emerald-900 prose-p:text-justify text-justify",
+          "prose prose-slate dark:prose-invert max-w-none focus:outline-none min-h-[380px] p-5 sm:p-8 bg-white dark:bg-slate-900 rounded-b-2xl font-sans text-slate-850 dark:text-slate-200 leading-relaxed text-sm sm:text-base selection:bg-emerald-100 dark:selection:bg-emerald-900/60 selection:text-emerald-900 dark:selection:text-emerald-100 prose-p:text-justify text-justify",
       },
     },
     onUpdate: ({ editor }) => {
@@ -81,7 +81,7 @@ export default function TiptapEditor({
   }, [initialContent, editor]);
 
   return (
-    <div className="border border-slate-200/90 rounded-2xl bg-white shadow-xs focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-500 transition-all overflow-hidden flex flex-col">
+    <div className="border border-slate-200/90 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-xs focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-500 transition-all overflow-hidden flex flex-col">
       <TiptapToolbar editor={editor} />
       <div className="flex-1 overflow-y-auto max-h-[75vh]">
         <EditorContent editor={editor} />

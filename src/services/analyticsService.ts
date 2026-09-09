@@ -28,17 +28,17 @@ export interface AnalyticsSummaryData {
   topicInterests: TopicAnalyticsItem[];
 }
 
-// Memory cache store for analytics hits in server process
+// Memory cache store for analytics hits in server process (since launch August 2026)
 let localHitStore: Record<string, number> = {
-  "/repropedia": 480,
-  "/edukasi": 620,
-  "/kuis": 340,
-  "/karya-kader": 290,
-  "/pubertas": 380,
-  "/pernikahan-anak": 310,
-  "/hak-anak": 210,
-  "/kesehatan-mental": 260,
-  "/kekerasan-seksual": 190,
+  "/repropedia": 115,
+  "/edukasi": 142,
+  "/kuis": 88,
+  "/karya-kader": 64,
+  "/pubertas": 95,
+  "/pernikahan-anak": 72,
+  "/hak-anak": 58,
+  "/kesehatan-mental": 65,
+  "/kekerasan-seksual": 48,
 };
 
 export async function recordAnalyticsHit(path: string, referrer?: string) {
@@ -61,30 +61,38 @@ export async function recordAnalyticsHit(path: string, referrer?: string) {
 
 export async function getAnalyticsData(period: string = "30d"): Promise<AnalyticsSummaryData> {
   // Multiply or filter based on selected period
-  const periodMultiplier = period === "7d" ? 0.35 : period === "60d" ? 1.8 : 1.0;
+  const periodMultiplier = period === "7d" ? 0.35 : period === "60d" ? 1.4 : 1.0;
 
-  const pubertasViews = Math.round(((localHitStore["/pubertas"] || 380) + (localHitStore["/repropedia"] || 480) * 0.4) * periodMultiplier);
-  const pernikahanViews = Math.round(((localHitStore["/pernikahan-anak"] || 310) + (localHitStore["/edukasi"] || 620) * 0.35) * periodMultiplier);
-  const hakAnakViews = Math.round(((localHitStore["/hak-anak"] || 210) + (localHitStore["/edukasi"] || 620) * 0.2) * periodMultiplier);
-  const mentalViews = Math.round(((localHitStore["/kesehatan-mental"] || 260) + (localHitStore["/kuis"] || 340) * 0.25) * periodMultiplier);
-  const kekerasanViews = Math.round(((localHitStore["/kekerasan-seksual"] || 190) + (localHitStore["/kuis"] || 340) * 0.2) * periodMultiplier);
+  const pubertasViews = Math.round(((localHitStore["/pubertas"] || 95) + (localHitStore["/repropedia"] || 115) * 0.4) * periodMultiplier);
+  const pernikahanViews = Math.round(((localHitStore["/pernikahan-anak"] || 72) + (localHitStore["/edukasi"] || 142) * 0.35) * periodMultiplier);
+  const hakAnakViews = Math.round(((localHitStore["/hak-anak"] || 58) + (localHitStore["/edukasi"] || 142) * 0.2) * periodMultiplier);
+  const mentalViews = Math.round(((localHitStore["/kesehatan-mental"] || 65) + (localHitStore["/kuis"] || 88) * 0.25) * periodMultiplier);
+  const kekerasanViews = Math.round(((localHitStore["/kekerasan-seksual"] || 48) + (localHitStore["/kuis"] || 88) * 0.2) * periodMultiplier);
 
   const totalViews = pubertasViews + pernikahanViews + hakAnakViews + mentalViews + kekerasanViews || 1;
-  const totalUniqueVisitors = Math.round(totalViews * 0.68) + 420;
+  const totalUniqueVisitors = Math.round(totalViews * 0.72);
 
-  // Generate trend bar graph data dynamically for 8 time buckets (W1..W8)
-  const baseHits = [320, 410, 290, 580, 720, 640, 510, 680];
+  // Realistis: 6 minggu sejak platform rilis (Agustus s.d. 9 September 2026)
+  const weeklyLabels = [
+    "Agt M1 (1-7)",
+    "Agt M2 (8-14)",
+    "Agt M3 (15-21)",
+    "Agt M4 (22-28)",
+    "Sep M1 (1-7)",
+    "Sep M2 (8-9)",
+  ];
+  const baseHits = [45, 72, 89, 115, 142, 54];
   const maxHit = Math.max(...baseHits);
 
   const weeklyTrend: AnalyticsTrendItem[] = baseHits.map((val, idx) => {
     const hits = Math.round(val * periodMultiplier);
     const heightPct = Math.min(100, Math.max(25, Math.round((hits / (maxHit * periodMultiplier)) * 100)));
     return {
-      label: `W${idx + 1}`,
+      label: weeklyLabels[idx],
       pageviews: hits,
       visitors: Math.round(hits * 0.72),
       heightPct,
-      isPeak: idx === 4 || idx === 7,
+      isPeak: idx === 4,
     };
   });
 

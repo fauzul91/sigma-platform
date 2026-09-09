@@ -14,7 +14,7 @@ export default function AdminDefaultLoading() {
       </div>
 
       {/* Search control */}
-      <div className="flex items-center space-x-3 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="flex items-center space-x-3 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <SkeletonBlock className="h-9 w-64 rounded-xl" />
       </div>
 
