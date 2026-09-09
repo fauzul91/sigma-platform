@@ -29,7 +29,8 @@ export default function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -72,6 +73,23 @@ export default function Navbar() {
     },
   ];
 
+  // Auto close mobile menu on page navigation
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll when mobile menu is open to prevent page background scrolling
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) {
       setOpenMobileDropdown(null);
@@ -102,13 +120,14 @@ export default function Navbar() {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-100 py-3 md:py-3.5 transition-all duration-200 ${
-        isScrolled
-          ? "bg-primary/95 backdrop-blur-md shadow-md shadow-emerald-950/15 border-b border-emerald-500/30"
-          : "bg-primary border-b border-transparent"
-      }`}
-    >
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-[60] py-3 md:py-3.5 transition-all duration-200 ${
+          isScrolled
+            ? "bg-primary/95 backdrop-blur-md shadow-md shadow-emerald-950/15 border-b border-emerald-500/30"
+            : "bg-primary border-b border-transparent"
+        }`}
+      >
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
@@ -204,85 +223,89 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+    </header>
 
-      {/* Mobile Drawer Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 top-[60px] md:top-[68px] z-30 bg-primary border-t border-emerald-500/30 lg:hidden overflow-y-auto animate-in slide-in-from-top duration-200">
-          <div className="p-4 space-y-4">
-            <nav className="flex flex-col space-y-1">
-              {menuStructure.map((menu) => (
-                <div key={menu.label} className="border-b border-emerald-600/40 pb-1">
-                  {menu.type === "link" && menu.href ? (
-                    <Link
-                      href={menu.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`px-4 py-3 rounded-xl text-base font-semibold transition-all block ${
+    {/* Mobile Drawer Overlay - Rendered as a sibling to avoid containing-block clipping from header backdrop-filter */}
+    {isOpen && (
+      <div
+        id="mobile-nav-drawer"
+        className="fixed inset-x-0 bottom-0 top-[58px] md:top-[66px] z-[55] bg-primary border-t border-emerald-500/30 lg:hidden overflow-y-auto overscroll-contain animate-in slide-in-from-top duration-200"
+      >
+        <div className="p-4 sm:p-6 pb-28 space-y-4 max-w-lg mx-auto">
+          <nav className="flex flex-col space-y-1">
+            {menuStructure.map((menu) => (
+              <div key={menu.label} className="border-b border-emerald-600/40 pb-1">
+                {menu.type === "link" && menu.href ? (
+                  <Link
+                    href={menu.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`px-4 py-3 rounded-xl text-base font-semibold transition-all block ${
+                      isActive(menu)
+                        ? "text-white bg-emerald-700/90"
+                        : "text-emerald-50/90 hover:bg-white/10"
+                    }`}
+                  >
+                    {menu.label}
+                  </Link>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => toggleMobileDropdown(menu.label)}
+                      className={`w-full px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center justify-between ${
                         isActive(menu)
                           ? "text-white bg-emerald-700/90"
                           : "text-emerald-50/90 hover:bg-white/10"
                       }`}
                     >
-                      {menu.label}
-                    </Link>
-                  ) : (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => toggleMobileDropdown(menu.label)}
-                        className={`w-full px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center justify-between ${
-                          isActive(menu)
-                            ? "text-white bg-emerald-700/90"
-                            : "text-emerald-50/90 hover:bg-white/10"
+                      <span>{menu.label}</span>
+                      <ChevronDown
+                        className={`h-5 w-5 text-emerald-200 transition-transform duration-200 ${
+                          openMobileDropdown === menu.label ? "rotate-180" : ""
                         }`}
-                      >
-                        <span>{menu.label}</span>
-                        <ChevronDown
-                          className={`h-5 w-5 text-emerald-200 transition-transform duration-200 ${
-                            openMobileDropdown === menu.label ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
+                      />
+                    </button>
 
-                      {openMobileDropdown === menu.label && (
-                        <div className="pl-4 pr-2 py-1 space-y-1 bg-emerald-700/40 rounded-xl mt-1">
-                          {menu.items?.map((item) => (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              onClick={() => setIsOpen(false)}
-                              className="block px-4 py-2.5 text-sm font-semibold text-emerald-100 hover:text-white transition-colors"
-                            >
-                              {item.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-
-              {/* Mobile CTA Buttons */}
-              <div className="pt-3 space-y-2">
-                <Link
-                  href="/admin/login"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10 text-base font-bold transition-all shadow-sm"
-                >
-                  <span>Masuk</span>
-                </Link>
-                <Link
-                  href="/repropedia"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-white hover:bg-emerald-50 text-primary text-base font-bold transition-all shadow-sm"
-                >
-                  <span>Jelajahi Repropedia</span>
-                </Link>
+                    {openMobileDropdown === menu.label && (
+                      <div className="pl-4 pr-2 py-1 space-y-1 bg-emerald-700/40 rounded-xl mt-1">
+                        {menu.items?.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setIsOpen(false)}
+                            className="block px-4 py-2.5 text-sm font-semibold text-emerald-100 hover:text-white transition-colors"
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-            </nav>
-          </div>
+            ))}
+
+            {/* Mobile CTA Buttons */}
+            <div className="pt-3 space-y-2">
+              <Link
+                href="/admin/login"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10 text-base font-bold transition-all shadow-sm"
+              >
+                <span>Masuk</span>
+              </Link>
+              <Link
+                href="/repropedia"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-white hover:bg-emerald-50 text-primary text-base font-bold transition-all shadow-sm"
+              >
+                <span>Jelajahi Repropedia</span>
+              </Link>
+            </div>
+          </nav>
         </div>
-      )}
-    </header>
+      </div>
+    )}
+  </>
   );
-}
+}
