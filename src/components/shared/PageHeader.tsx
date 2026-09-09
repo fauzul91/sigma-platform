@@ -531,7 +531,7 @@ export default function PageHeader({
   };
 
   return (
-    <section className="w-full bg-primary text-white relative overflow-hidden py-10 sm:py-12 md:py-14 shadow-xs border-b border-emerald-700/40">
+    <section className="w-full bg-primary text-white relative overflow-hidden -mt-[68px] md:-mt-[76px] pt-[108px] sm:pt-[116px] md:pt-[132px] pb-10 sm:pb-12 md:pb-14 shadow-xs border-b border-emerald-700/40">
       {/* 1. Geometric Interwoven Pattern Overlay (matching reference media_1788795321074.png) */}
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full opacity-15"

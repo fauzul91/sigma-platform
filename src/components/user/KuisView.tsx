@@ -20,7 +20,7 @@ export default function KuisView() {
 
       {/* 2. Main Content Container (Clean White Background, No Motifs) */}
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-14">
-        
+
         {/* Section Intro with Mascot (Inspired by Reference Image 1) */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 mb-8 border-b border-slate-100">
           <div className="max-w-2xl space-y-2">
@@ -36,7 +36,7 @@ export default function KuisView() {
           <div className="hidden md:flex items-center space-x-3 shrink-0">
             <div className="relative w-20 h-20">
               <Image
-                src="/assets/hero-cards/quiz.webp"
+                src="/assets/hero_section/quiz.webp"
                 alt="Maskot Kuis SIGMA"
                 fill
                 unoptimized

@@ -28,27 +28,36 @@ import { userService } from "@/services/user/userService";
 import { RepropediaItem, MediaItem } from "@/types";
 import { CardSkeleton } from "@/components/shared/Skeletons";
 import HeroCardsDeck from "@/components/user/HeroCardsDeck";
+import SigmaGallerySection from "@/components/user/SigmaGallerySection";
 
 const PARTNERS = [
   {
-    src: "/assets/logo_unej.png",
+    src: "/assets/mitra_partner/logo_jember.webp",
+    alt: "Pemerintah Kabupaten Jember",
+  },
+  {
+    src: "/assets/mitra_partner/logo_unej.webp",
     alt: "Universitas Jember",
   },
   {
-    src: "/assets/logo_kemendikbud.png",
+    src: "/assets/mitra_partner/logo_kemendikbud.webp",
     alt: "Kementerian Pendidikan dan Kebudayaan",
   },
   {
-    src: "/assets/logo_kemendikti.png",
+    src: "/assets/mitra_partner/logo_kemendikti.webp",
     alt: "Kementerian Pendidikan Tinggi, Sains, dan Teknologi",
   },
   {
-    src: "/assets/logo_lppm.jpg",
+    src: "/assets/mitra_partner/logo_kua.webp",
+    alt: "Kantor Urusan Agama",
+  },
+  {
+    src: "/assets/mitra_partner/logo_lppm.webp",
     alt: "LPPM Universitas Jember",
     className: "rounded-md",
   },
   {
-    src: "/assets/logo_blu.png",
+    src: "/assets/mitra_partner/logo_blu.webp",
     alt: "Badan Layanan Umum",
   },
 ];
@@ -344,7 +353,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/literasi.webp"
+                    src="/assets/misi_impact/literasi.webp"
                     alt="Literasi Digital"
                     fill
                     unoptimized
@@ -375,7 +384,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/konseling.webp"
+                    src="/assets/misi_impact/konseling.webp"
                     alt="Konseling & Ruang Aman"
                     fill
                     unoptimized
@@ -406,7 +415,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/dutakader.webp"
+                    src="/assets/misi_impact/dutakader.webp"
                     alt="15 Kader Aktif"
                     fill
                     unoptimized
@@ -437,7 +446,7 @@ export default function HomeView() {
                 {/* 3D Illustration SVG */}
                 <div className="relative w-30 h-30 mx-auto my-3 flex items-center justify-center">
                   <Image
-                    src="/assets/keterlibatan.webp"
+                    src="/assets/misi_impact/keterlibatan.webp"
                     alt="Keterlibatan Interaktif"
                     fill
                     unoptimized
@@ -563,7 +572,7 @@ export default function HomeView() {
               {/* 3D Illustration SVG Highlight */}
               <div className="relative w-48 sm:w-56 h-48 sm:h-56 mx-auto my-6 flex items-center justify-center">
                 <Image
-                  src="/assets/health.webp"
+                  src="/assets/hero_section/health.webp"
                   alt="Kesehatan Reproduksi"
                   fill
                   unoptimized
@@ -655,7 +664,7 @@ export default function HomeView() {
               {/* 3D Voxel Graphic Mascot */}
               <div className="mt-8 relative w-44 sm:w-52 h-44 sm:h-52 mx-auto md:mx-0">
                 <Image
-                  src="/assets/hero-cards/quiz.webp"
+                  src="/assets/hero_section/quiz.webp"
                   alt="Medical Quiz SIGMA"
                   fill
                   unoptimized
@@ -824,6 +833,9 @@ export default function HomeView() {
           </div>
         </div>
       </section>
+ 
+      {/* 5.5 INTERACTIVE SIGMA MOMENTS GALLERY (ORBIT / CONSTELLATION STYLE) */}
+      <SigmaGallerySection />
 
       {/* 6. INTERACTIVE FAQ & CONTACT SECTION (MATCHING REFERENCE WITH 3D MASCOTS) */}
       <section id="faq" className="py-16 relative overflow-hidden">
@@ -896,7 +908,7 @@ export default function HomeView() {
             <div className="lg:col-span-4 flex flex-col items-center justify-center relative order-1 lg:order-2 my-2 lg:my-0">
               <div className="relative w-64 sm:w-72 md:w-80 aspect-square">
                 <Image
-                  src="/assets/maskot_faq.webp"
+                  src="/assets/hero_section/maskot_faq.webp"
                   alt="Maskot Kader GARUDA SIGMA"
                   fill
                   className="object-contain filter rounded-3xl hover:scale-105 transition-transform duration-500"

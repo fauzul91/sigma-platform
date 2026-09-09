@@ -103,18 +103,21 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-100 py-3 md:py-3.5 ${isScrolled
-        ? "bg-white shadow-sm border-b border-slate-100"
-        : "bg-white md:bg-transparent"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-100 py-3 md:py-3.5 transition-all duration-200 ${
+        isScrolled
+          ? "bg-primary/95 backdrop-blur-md shadow-md shadow-emerald-950/15 border-b border-emerald-500/30"
+          : "bg-primary border-b border-transparent"
+      }`}
     >
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/beranda" className="flex items-center space-x-2.5 shrink-0 group">
-            <span className="text-4xl sm:text-5xl font-black tracking-tighter text-primary select-none lowercase drop-shadow-md group-hover:drop-shadow-lg transition-all duration-300">
-              sigma
-            </span>
+            <div className="relative z-10 flex items-center">
+              <span className="text-3xl sm:text-4xl font-black tracking-tighter text-white select-none lowercase">
+                sigma<span className="text-emerald-300">.</span>
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -124,10 +127,11 @@ export default function Navbar() {
                 {menu.type === "link" && menu.href ? (
                   <Link
                     href={menu.href}
-                    className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 block ${isActive(menu)
-                      ? "text-primary bg-primary-light"
-                      : "text-slate-600 hover:text-primary hover:bg-slate-50"
-                      }`}
+                    className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 block ${
+                      isActive(menu)
+                        ? "text-white bg-emerald-700/90 shadow-xs"
+                        : "text-emerald-50/90 hover:text-white hover:bg-white/10"
+                    }`}
                   >
                     {menu.label}
                   </Link>
@@ -135,13 +139,14 @@ export default function Navbar() {
                   <>
                     <button
                       type="button"
-                      className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-1 ${isActive(menu)
-                        ? "text-primary bg-primary-light"
-                        : "text-slate-600 hover:text-primary hover:bg-slate-50"
-                        }`}
+                      className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-1 ${
+                        isActive(menu)
+                          ? "text-white bg-emerald-700/90 shadow-xs"
+                          : "text-emerald-50/90 hover:text-white hover:bg-white/10"
+                      }`}
                     >
                       <span>{menu.label}</span>
-                      <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180 duration-200" />
+                      <ChevronDown className="h-4 w-4 text-emerald-200 transition-transform group-hover:rotate-180 duration-200" />
                     </button>
 
                     {/* Dropdown Menu */}
@@ -171,18 +176,18 @@ export default function Navbar() {
 
           {/* Action CTAs & Mobile Toggle */}
           <div className="flex items-center space-x-2.5 shrink-0">
-            {/* Masuk: Tombol Sekunder (Ghost/Text Only) */}
+            {/* Masuk: Tombol Sekunder (Outline White) */}
             <Link
               href="/admin/login"
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-600 hover:text-primary hover:border-emerald-300 text-xs sm:text-sm font-semibold transition-all group"
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/30 text-white hover:bg-white/10 hover:border-white/60 text-xs sm:text-sm font-semibold transition-all group"
             >
               <span>Masuk</span>
             </Link>
 
-            {/* Jelajahi Repropedia: Tombol Utama (Primary Green) */}
+            {/* Jelajahi Repropedia: Tombol Utama (Solid White Pop on Green) */}
             <Link
               href="/repropedia"
-              className="hidden sm:flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary-hover transition-all shadow-sm shadow-emerald-600/15"
+              className="hidden sm:flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-white text-primary text-sm font-bold hover:bg-emerald-50 transition-all shadow-sm shadow-emerald-950/20"
             >
               <span>Jelajahi Repropedia</span>
             </Link>
@@ -191,7 +196,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-neutral-dark lg:hidden transition-colors"
+              className="p-2 rounded-lg text-white hover:bg-white/10 lg:hidden transition-colors"
               aria-label="Toggle Menu"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -202,19 +207,20 @@ export default function Navbar() {
 
       {/* Mobile Drawer Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 top-15 z-30 bg-white border-t border-slate-100 lg:hidden overflow-y-auto animate-in slide-in-from-top duration-200">
+        <div className="fixed inset-0 top-[60px] md:top-[68px] z-30 bg-primary border-t border-emerald-500/30 lg:hidden overflow-y-auto animate-in slide-in-from-top duration-200">
           <div className="p-4 space-y-4">
             <nav className="flex flex-col space-y-1">
               {menuStructure.map((menu) => (
-                <div key={menu.label} className="border-b border-slate-50 pb-1">
+                <div key={menu.label} className="border-b border-emerald-600/40 pb-1">
                   {menu.type === "link" && menu.href ? (
                     <Link
                       href={menu.href}
                       onClick={() => setIsOpen(false)}
-                      className={`px-4 py-3 rounded-xl text-base font-semibold transition-all block ${isActive(menu)
-                        ? "text-primary bg-primary-light"
-                        : "text-slate-600 hover:bg-slate-50"
-                        }`}
+                      className={`px-4 py-3 rounded-xl text-base font-semibold transition-all block ${
+                        isActive(menu)
+                          ? "text-white bg-emerald-700/90"
+                          : "text-emerald-50/90 hover:bg-white/10"
+                      }`}
                     >
                       {menu.label}
                     </Link>
@@ -223,26 +229,28 @@ export default function Navbar() {
                       <button
                         type="button"
                         onClick={() => toggleMobileDropdown(menu.label)}
-                        className={`w-full px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center justify-between ${isActive(menu)
-                          ? "text-primary bg-primary-light"
-                          : "text-slate-600 hover:bg-slate-50"
-                          }`}
+                        className={`w-full px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center justify-between ${
+                          isActive(menu)
+                            ? "text-white bg-emerald-700/90"
+                            : "text-emerald-50/90 hover:bg-white/10"
+                        }`}
                       >
                         <span>{menu.label}</span>
                         <ChevronDown
-                          className={`h-5 w-5 text-slate-400 transition-transform duration-200 ${openMobileDropdown === menu.label ? "rotate-180" : ""
-                            }`}
+                          className={`h-5 w-5 text-emerald-200 transition-transform duration-200 ${
+                            openMobileDropdown === menu.label ? "rotate-180" : ""
+                          }`}
                         />
                       </button>
 
                       {openMobileDropdown === menu.label && (
-                        <div className="pl-4 pr-2 py-1 space-y-1 bg-slate-50/50 rounded-xl mt-1">
+                        <div className="pl-4 pr-2 py-1 space-y-1 bg-emerald-700/40 rounded-xl mt-1">
                           {menu.items?.map((item) => (
                             <Link
                               key={item.href}
                               href={item.href}
                               onClick={() => setIsOpen(false)}
-                              className="block px-4 py-2.5 text-sm font-semibold text-slate-500 hover:text-primary transition-colors"
+                              className="block px-4 py-2.5 text-sm font-semibold text-emerald-100 hover:text-white transition-colors"
                             >
                               {item.label}
                             </Link>
@@ -259,14 +267,14 @@ export default function Navbar() {
                 <Link
                   href="/admin/login"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl border border-slate-200 text-slate-600 hover:text-primary hover:border-emerald-300 text-base font-bold transition-all shadow-sm"
+                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10 text-base font-bold transition-all shadow-sm"
                 >
                   <span>Masuk</span>
                 </Link>
                 <Link
                   href="/repropedia"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white text-base font-bold transition-all shadow-sm"
+                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-white hover:bg-emerald-50 text-primary text-base font-bold transition-all shadow-sm"
                 >
                   <span>Jelajahi Repropedia</span>
                 </Link>
