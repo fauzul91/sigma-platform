@@ -37,8 +37,8 @@ export default function AdminSidebar({ onLogout, isOpen, onClose }: AdminSidebar
     {
       title: "KONTEN & EDUKASI",
       items: [
-        { href: "/admin/karya-kader", label: "Karya Kader", icon: Palette },
         { href: "/admin/edukasi", label: "Edukasi & Media", icon: FileText },
+        { href: "/admin/karya-kader", label: "Karya Kader", icon: Palette },
         { href: "/admin/kuis", label: "Kuis Interaktif", icon: HelpCircle },
       ],
     },

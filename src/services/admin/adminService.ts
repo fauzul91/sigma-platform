@@ -164,12 +164,14 @@ import { formatYouTubeEmbedUrl, formatImageUrl } from "@/utils/mediaUtils";
 export async function saveMedia(mediaData: Partial<MediaItem>): Promise<MediaItem | null> {
   await requireAdminSession(); // Security session check
 
-  const slug = mediaData.title
-    ? mediaData.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)+/g, "")
-    : `media-${Date.now()}`;
+  const slug =
+    mediaData.slug ||
+    (mediaData.title
+      ? mediaData.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, "")
+      : `media-${Date.now()}`);
 
   let processedMediaUrl = mediaData.mediaUrl || "";
   if (mediaData.type === "video") {
@@ -183,13 +185,19 @@ export async function saveMedia(mediaData: Partial<MediaItem>): Promise<MediaIte
     slug,
     type: mediaData.type || "article",
     category: mediaData.category || "edukasi",
-    tags: mediaData.tags || ["Remaja"],
+    tags: mediaData.tags && mediaData.tags.length > 0 ? mediaData.tags : ["Remaja"],
     content: mediaData.content || "",
     media_url:
       processedMediaUrl ||
       "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800",
-    read_time: mediaData.readTime,
-    duration: mediaData.duration,
+    read_time:
+      mediaData.type === "article"
+        ? mediaData.readTime || "3 Menit"
+        : null,
+    duration:
+      mediaData.type === "video"
+        ? mediaData.duration || "03:00"
+        : null,
     author: mediaData.author || "Tim Media GARUDA",
     date: mediaData.date || "Hari ini",
   };
@@ -199,15 +207,23 @@ export async function saveMedia(mediaData: Partial<MediaItem>): Promise<MediaIte
       .from("media")
       .update(payload)
       .eq("id", mediaData.id)
-      .select("id, media_url")
+      .select("id, title, slug, type, category, tags, content, media_url, read_time, duration, author, date")
       .single();
     if (error || !data) return null;
     return {
-      ...mediaData,
-      ...payload,
       id: data.id,
+      title: data.title,
+      slug: data.slug,
+      type: data.type,
+      category: data.category,
+      tags: data.tags || [],
+      content: data.content,
       mediaUrl: data.media_url,
-    } as MediaItem;
+      readTime: data.read_time,
+      duration: data.duration,
+      author: data.author,
+      date: data.date,
+    };
   } else {
     const { data, error } = await supabase
       .from("media")
@@ -221,7 +237,7 @@ export async function saveMedia(mediaData: Partial<MediaItem>): Promise<MediaIte
       slug: data.slug,
       type: data.type,
       category: data.category,
-      tags: data.tags,
+      tags: data.tags || [],
       content: data.content,
       mediaUrl: data.media_url,
       readTime: data.read_time,

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search, Play, FileText, ArrowLeft, Calendar, User, Tag, Sparkles, BookOpen } from "lucide-react";
+import { Search, Play, FileText, ArrowLeft, Calendar, User, Sparkles, BookOpen } from "lucide-react";
 import { userService } from "@/services/user/userService";
 import { MediaItem } from "@/types";
 import { CardSkeleton, DetailSkeleton } from "@/components/shared/Skeletons";
@@ -10,6 +10,7 @@ import UserPagination from "@/components/shared/UserPagination";
 import PageHeader from "@/components/shared/PageHeader";
 
 import { getYouTubeThumbnail } from "@/utils/mediaUtils";
+import { renderTiptapToHtml, getArticleExcerpt } from "@/utils/tiptapRenderer";
 
 export default function EdukasiView() {
   const searchParams = useSearchParams();
@@ -192,22 +193,36 @@ export default function EdukasiView() {
                 )}
 
                 {/* Body Content */}
-                <div className="text-slate-600 leading-relaxed text-sm md:text-base font-medium whitespace-pre-line border-t border-slate-100 pt-6">
-                  {selectedPost.content}
-                </div>
+                {selectedPost.type === "article" ? (
+                  <div
+                    className="prose prose-slate lg:prose-lg max-w-none text-slate-700 leading-relaxed font-sans border-t border-slate-100 pt-6 prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-h2:text-2xl prose-h3:text-xl prose-p:leading-relaxed prose-p:text-justify text-justify prose-a:text-emerald-600 prose-a:font-semibold hover:prose-a:text-emerald-700 prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:bg-emerald-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-xl prose-img:rounded-2xl prose-img:shadow-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: renderTiptapToHtml(selectedPost.content),
+                    }}
+                  />
+                ) : (
+                  <div className="text-slate-600 leading-relaxed text-sm md:text-base font-medium whitespace-pre-line border-t border-slate-100 pt-6 text-justify">
+                    {selectedPost.content}
+                  </div>
+                )}
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
-                  {selectedPost.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold"
-                    >
-                      <Tag className="h-3 w-3 text-slate-400" />
-                      <span>{tag}</span>
-                    </span>
-                  ))}
-                </div>
+                {selectedPost.tags && selectedPost.tags.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-slate-100">
+                    {selectedPost.tags.map((tag) => {
+                      const cleanTag = tag.trim().replace(/^#+/, "");
+                      if (!cleanTag) return null;
+                      return (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 text-xs font-bold transition-colors"
+                        >
+                          #{cleanTag}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Sidebar: Related Content Panel */}
@@ -396,7 +411,7 @@ export default function EdukasiView() {
                               {item.title}
                             </h3>
                             <p className="text-xs sm:text-sm text-slate-500 mt-2 line-clamp-2 leading-relaxed font-medium">
-                              {item.content}
+                              {getArticleExcerpt(item.content, 140)}
                             </p>
                           </div>
                         </div>

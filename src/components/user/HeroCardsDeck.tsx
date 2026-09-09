@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   BookOpen,
@@ -11,9 +11,7 @@ import {
   Award,
   Palette,
   HelpCircle,
-  ChevronLeft,
   ChevronRight,
-  ShieldCheck
 } from "lucide-react";
 
 export interface HeroCardData {
@@ -154,12 +152,57 @@ const HERO_CARDS: HeroCardData[] = [
 
 export default function HeroCardsDeck() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mobileActiveIndex, setMobileActiveIndex] = useState<number>(2); // Center card (Kader Garuda) default
+  const [activeMobileIndex, setActiveMobileIndex] = useState<number>(0);
+  const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+
+  // Cards separation for tablet layout
+  const garudaCard = HERO_CARDS.find((c) => c.isMain) || HERO_CARDS[2];
+  const otherCards = HERO_CARDS.filter((c) => !c.isMain);
+
+  // Scroll listener for mobile carousel to detect active center card
+  const handleMobileScroll = () => {
+    if (!mobileScrollRef.current) return;
+    const container = mobileScrollRef.current;
+    const cardElements = container.querySelectorAll<HTMLElement>(".mobile-snap-card");
+    if (!cardElements.length) return;
+
+    const centerPosition = container.scrollLeft + container.clientWidth / 2;
+    let closestIndex = 0;
+    let minDiff = Infinity;
+
+    cardElements.forEach((cardEl, idx) => {
+      const cardCenter = cardEl.offsetLeft + cardEl.offsetWidth / 2;
+      const diff = Math.abs(centerPosition - cardCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = idx;
+      }
+    });
+
+    if (closestIndex !== activeMobileIndex) {
+      setActiveMobileIndex(closestIndex);
+    }
+  };
+
+  // Scroll to card programmatically when dot is tapped
+  const scrollToCard = (index: number) => {
+    if (!mobileScrollRef.current) return;
+    const container = mobileScrollRef.current;
+    const cardElements = container.querySelectorAll<HTMLElement>(".mobile-snap-card");
+    if (cardElements[index]) {
+      const cardEl = cardElements[index];
+      const targetLeft = cardEl.offsetLeft - (container.clientWidth - cardEl.offsetWidth) / 2;
+      container.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+      setActiveMobileIndex(index);
+    }
+  };
 
   return (
     <div className="relative w-full pb-0 overflow-visible">
-      {/* Floating interactive peer badges (inspired by reference image) */}
-      <div className="hidden md:flex items-end justify-center w-full max-w-6xl mx-auto px-4 perspective-1000 min-h-[460px] lg:min-h-[500px]">
+      {/* ========================================================================= */}
+      {/* 1. DESKTOP VIEW (lg: 1024px+): 5-Card Fan-Out 3D Floating Deck             */}
+      {/* ========================================================================= */}
+      <div className="hidden lg:flex items-end justify-center w-full max-w-6xl mx-auto px-4 perspective-1000 min-h-[460px] lg:min-h-[500px]">
         {HERO_CARDS.map((card, index) => {
           const isHovered = hoveredIndex === index;
           const isAnyHovered = hoveredIndex !== null;
@@ -280,126 +323,225 @@ export default function HeroCardsDeck() {
         })}
       </div>
 
-      {/* MOBILE (< 768px): Touch-Friendly Carousel with Active Center Focus */}
-      <div className="block md:hidden w-full max-w-sm mx-auto px-4">
-        {/* Navigation Tabs */}
-        <div className="flex items-center justify-center gap-1.5 mb-4 overflow-x-auto pb-1 scrollbar-hide">
-          {HERO_CARDS.map((card, idx) => {
-            const isActive = mobileActiveIndex === idx;
+      {/* ========================================================================= */}
+      {/* 2. TABLET VIEW (sm to lg: 640px - 1023px): 1 Hero Banner + 2x2 Clean Grid  */}
+      {/* ========================================================================= */}
+      <div className="hidden sm:block lg:hidden w-full max-w-2xl md:max-w-3xl mx-auto px-4 sm:px-6">
+        {/* Top Hero Banner: Card 03 - Kader Garuda */}
+        <Link href={garudaCard.href} className="block group">
+          <div
+            className={`relative w-full rounded-3xl overflow-hidden border ${garudaCard.borderColor} bg-gradient-to-r ${garudaCard.bgGradient} p-5 md:p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.01]`}
+          >
+            {/* Ambient glow */}
+            <div
+              className="absolute inset-0 rounded-3xl blur-2xl opacity-40 -z-10 pointer-events-none"
+              style={{ backgroundColor: garudaCard.glowColor }}
+            />
+            {/* Sheen sweep effect */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/12 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+            <div className="relative z-10 flex items-center justify-between gap-5">
+              <div className="space-y-2 flex-1">
+                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-400/25 text-amber-200 border border-amber-300/40">
+                  <Award className="h-3.5 w-3.5 text-amber-300" />
+                  <span>03 · {garudaCard.tag}</span>
+                </div>
+
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                  {garudaCard.title}
+                </h3>
+
+                <p className="text-xs md:text-sm text-white/90 font-medium leading-relaxed">
+                  {garudaCard.subtitle}
+                </p>
+
+                <div className="pt-2">
+                  <span
+                    className={`inline-flex items-center space-x-1.5 px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-lg transition-transform duration-200 group-hover:scale-105 ${garudaCard.pillBg}`}
+                  >
+                    <span className={garudaCard.pillText}>{garudaCard.ctaText}</span>
+                    <ArrowUpRight className={`h-4 w-4 ${garudaCard.pillText}`} />
+                  </span>
+                </div>
+              </div>
+
+              {/* Mascot 3D Illustration */}
+              <div className="relative w-36 h-36 md:w-44 md:h-44 shrink-0 flex items-center justify-center">
+                <Image
+                  src={garudaCard.imageSrc}
+                  alt={garudaCard.imageAlt}
+                  fill
+                  unoptimized
+                  sizes="(max-width: 768px) 150px, 180px"
+                  priority
+                  className="object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+            </div>
+          </div>
+        </Link>
+
+        {/* 2x2 Grid for Other 4 Features */}
+        <div className="grid grid-cols-2 gap-3.5 md:gap-4 mt-3.5 md:mt-4">
+          {otherCards.map((card) => {
+            const IconComponent = card.icon;
             return (
-              <button
+              <Link key={card.id} href={card.href} className="block group">
+                <div
+                  className={`relative w-full h-[220px] md:h-[240px] rounded-2xl md:rounded-3xl overflow-hidden border ${card.borderColor} bg-gradient-to-b ${card.bgGradient} p-4 md:p-5 flex flex-col justify-between shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02]`}
+                >
+                  {/* Subtle Glow */}
+                  <div
+                    className="absolute inset-0 rounded-2xl md:rounded-3xl blur-xl opacity-30 -z-10 pointer-events-none"
+                    style={{ backgroundColor: card.glowColor }}
+                  />
+
+                  {/* Top Header */}
+                  <div className="relative z-10 w-full">
+                    <div className="flex items-center justify-between gap-1.5">
+                      <div className="inline-flex items-center space-x-1 text-xs font-mono font-bold text-white/80">
+                        <IconComponent className="h-3.5 w-3.5 text-white/90" />
+                        <span>{card.number}</span>
+                      </div>
+                      <div
+                        className={`shrink-0 flex items-center space-x-1 px-2.5 py-1 rounded-full text-[11px] md:text-xs font-bold shadow-sm transition-transform duration-200 group-hover:scale-105 ${card.pillBg}`}
+                      >
+                        <span className={card.pillText}>{card.ctaText}</span>
+                        <ArrowUpRight className={`h-3 w-3 ${card.pillText}`} />
+                      </div>
+                    </div>
+
+                    <h4 className="mt-1.5 text-base md:text-lg font-extrabold text-white leading-tight truncate">
+                      {card.title}
+                    </h4>
+                    <p className="text-[11px] md:text-xs text-white/85 font-medium truncate">
+                      {card.subtitle}
+                    </p>
+                  </div>
+
+                  {/* Center Illustration */}
+                  <div className="relative z-1 flex-1 flex items-center justify-center my-auto">
+                    <div className="relative w-24 h-24 md:w-28 md:h-28 flex items-center justify-center">
+                      <Image
+                        src={card.imageSrc}
+                        alt={card.imageAlt}
+                        fill
+                        unoptimized
+                        sizes="(max-width: 768px) 100px, 120px"
+                        className="object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover:scale-108"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3. MOBILE VIEW (< 640px): Smooth Snap Carousel with Peek Effect & Dots    */}
+      {/* ========================================================================= */}
+      <div className="block sm:hidden w-full overflow-hidden">
+        {/* Horizontal Snap Carousel */}
+        <div
+          ref={mobileScrollRef}
+          onScroll={handleMobileScroll}
+          className="flex overflow-x-auto snap-x snap-mandatory gap-3.5 px-6 py-2 scrollbar-hide"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {HERO_CARDS.map((card) => {
+            const IconComponent = card.icon;
+            return (
+              <div
                 key={card.id}
-                onClick={() => setMobileActiveIndex(idx)}
-                className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${isActive
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "bg-slate-200 text-slate-600 hover:bg-slate-300"
-                  }`}
+                className="mobile-snap-card shrink-0 snap-center w-[78vw] max-w-[285px] h-[370px] relative rounded-[28px] overflow-hidden group"
               >
-                {card.number}
-              </button>
+                <Link href={card.href} className="block w-full h-full">
+                  {/* Ambient Glow */}
+                  <div
+                    className="absolute inset-0 rounded-[28px] blur-xl opacity-60 -z-10 pointer-events-none"
+                    style={{ backgroundColor: card.glowColor }}
+                  />
+
+                  {/* Card Container */}
+                  <div
+                    className={`relative w-full h-full rounded-[28px] overflow-hidden border ${card.borderColor} bg-gradient-to-b ${card.bgGradient} p-5 flex flex-col justify-between shadow-xl`}
+                  >
+                    {/* Header */}
+                    <div className="relative z-20 w-full">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-sm">
+                          <IconComponent className="h-3 w-3" />
+                          <span>{card.number} · {card.tag}</span>
+                        </div>
+
+                        <div className={`shrink-0 flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-bold shadow-md ${card.pillBg}`}>
+                          <span className={card.pillText}>{card.ctaText}</span>
+                          <ArrowUpRight className={`h-3.5 w-3.5 ${card.pillText}`} />
+                        </div>
+                      </div>
+
+                      <h3 className="mt-2.5 text-lg font-extrabold text-white leading-tight truncate">
+                        {card.title}
+                      </h3>
+
+                      <p className="mt-0.5 text-xs text-white/90 font-medium leading-normal whitespace-nowrap overflow-hidden text-ellipsis">
+                        {card.subtitle}
+                      </p>
+                    </div>
+
+                    {/* 3D Illustration */}
+                    <div className="relative z-10 flex-1 flex items-center justify-center my-auto">
+                      <div className="relative w-[165px] h-[165px] flex items-center justify-center">
+                        <Image
+                          src={card.imageSrc}
+                          alt={card.imageAlt}
+                          fill
+                          unoptimized
+                          sizes="180px"
+                          priority={card.isMain}
+                          className="object-contain p-1 filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.35)]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="relative z-20 pt-2 flex items-center justify-between border-t border-white/15 text-white/75 text-xs font-medium">
+                      <span className="font-mono">{card.number} / 05</span>
+                      <span className="flex items-center">
+                        Buka fitur <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </div>
             );
           })}
         </div>
 
-        {/* Active Card Viewer */}
-        <div className="relative flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            {(() => {
-              const card = HERO_CARDS[mobileActiveIndex];
-              return (
-                <motion.div
-                  key={card.id}
-                  initial={{ opacity: 0, scale: 0.92, y: 15 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.92, y: -15 }}
-                  transition={{ duration: 0.25 }}
-                  className="w-full max-w-[290px] h-[400px] relative"
-                >
-                  <Link href={card.href} className="block w-full h-full">
-                    {/* Ambient Glow */}
-                    <div
-                      className="absolute inset-0 rounded-[28px] blur-xl opacity-60 -z-10"
-                      style={{ backgroundColor: card.glowColor }}
-                    />
-
-                    {/* Card container */}
-                    <div
-                      className={`relative w-full h-full rounded-[28px] overflow-hidden border ${card.borderColor} bg-gradient-to-b ${card.bgGradient} p-4 flex flex-col justify-between shadow-xl`}
-                    >
-                      {/* Top Header - Row 1: Title + CTA, Row 2: Subtitle (1 line) */}
-                      <div className="relative z-20 w-full">
-                        <div className="flex items-center justify-between gap-2">
-                          <h3 className="text-lg font-extrabold text-white leading-tight truncate">
-                            {card.title}
-                          </h3>
-
-                          <div className={`shrink-0 flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-bold shadow-md ${card.pillBg}`}>
-                            <span className={card.pillText}>{card.ctaText}</span>
-                            <ArrowUpRight className={`h-3.5 w-3.5 ${card.pillText}`} />
-                          </div>
-                        </div>
-
-                        <p className="mt-1 text-xs text-white/90 font-medium leading-normal whitespace-nowrap overflow-hidden text-ellipsis">
-                          {card.subtitle}
-                        </p>
-                      </div>
-
-                      {/* Illustration - Enlarged & Contained */}
-                      <div className="relative z-10 flex-1 flex items-center justify-center my-auto">
-                        <div className="relative w-[185px] h-[185px] flex items-center justify-center">
-                          <Image
-                            src={card.imageSrc}
-                            alt={card.imageAlt}
-                            fill
-                            unoptimized
-                            sizes="220px"
-                            priority
-                            className="object-contain p-1 filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.35)]"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Footer */}
-                      <div className="relative z-20 pt-2 flex items-center justify-between border-t border-white/10 text-white/70 text-xs">
-                        <span className="font-mono">{card.number} / 05</span>
-                        <span>Klik untuk membuka &rarr;</span>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })()}
-          </AnimatePresence>
-
-          {/* Previous / Next Arrows */}
-          <button
-            onClick={() =>
-              setMobileActiveIndex((prev) =>
-                prev === 0 ? HERO_CARDS.length - 1 : prev - 1
-              )
-            }
-            className="absolute -left-3 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-white/90 shadow-md text-slate-700 hover:bg-white"
-            aria-label="Previous card"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-
-          <button
-            onClick={() =>
-              setMobileActiveIndex((prev) =>
-                prev === HERO_CARDS.length - 1 ? 0 : prev + 1
-              )
-            }
-            className="absolute -right-3 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-white/90 shadow-md text-slate-700 hover:bg-white"
-            aria-label="Next card"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
+        {/* Carousel Pagination Dots */}
+        <div className="flex items-center justify-center gap-2 mt-4">
+          {HERO_CARDS.map((card, idx) => {
+            const isActive = activeMobileIndex === idx;
+            return (
+              <button
+                key={card.id}
+                onClick={() => scrollToCard(idx)}
+                aria-label={`Lihat fitur ${card.title}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  isActive
+                    ? "w-6 bg-emerald-600 shadow-sm"
+                    : "w-2 bg-slate-300 hover:bg-slate-400"
+                }`}
+              />
+            );
+          })}
         </div>
       </div>
 
-      {/* Ground Lighting / Rising Glow Base */}
-      <div className="relative -mt-10 h-10 w-full max-w-4xl mx-auto pointer-events-none">
+      {/* Ground Lighting / Rising Glow Base (Desktop Only) */}
+      <div className="hidden lg:block relative -mt-10 h-10 w-full max-w-4xl mx-auto pointer-events-none">
         <div className="h-full w-full bg-gradient-to-t from-emerald-100/40 via-transparent to-transparent blur-xl" />
       </div>
     </div>

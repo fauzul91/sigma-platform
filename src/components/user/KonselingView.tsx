@@ -227,15 +227,15 @@ export default function KonselingView() {
           </div>
 
           {/* Active Stage Detail Card */}
-          <div className="p-6 sm:p-7 rounded-2xl bg-[#FFFDF7] border border-amber-200/80 shadow-xs space-y-5 animate-in fade-in duration-200">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200/60 pb-4">
+          <div className="p-6 sm:p-7 rounded-2xl bg-emerald-50/40 border border-emerald-200/80 shadow-xs space-y-5 animate-in fade-in duration-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-200/60 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-black shadow-xs">
+                <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-black shadow-sm">
                   <ActiveIcon className="h-5 w-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded border border-amber-200">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded border border-emerald-200">
                       Tahap {activeNode.stepNum}
                     </span>
                     <h3 className="text-base sm:text-lg font-black text-slate-900">
@@ -260,7 +260,7 @@ export default function KonselingView() {
               </div>
 
               <div className="p-4 rounded-xl bg-white border border-slate-200/80 space-y-1.5 shadow-2xs">
-                <p className="font-extrabold text-slate-800 uppercase tracking-wide text-[10px] text-amber-800">
+                <p className="font-extrabold text-slate-800 uppercase tracking-wide text-[10px] text-emerald-800">
                   Tindakan &amp; Langkah Rujukan:
                 </p>
                 <p className="text-slate-600 font-medium leading-relaxed">

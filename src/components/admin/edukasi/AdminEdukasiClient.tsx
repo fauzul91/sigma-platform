@@ -32,17 +32,6 @@ export default function AdminEdukasiClient({
   const router = useRouter();
   const pathname = usePathname();
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const pageSize = 5;
-
-  const filteredMedia = media.filter((m) =>
-    m.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const slicedMedia = filteredMedia.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
-
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", newPage.toString());
@@ -60,7 +49,7 @@ export default function AdminEdukasiClient({
     <>
       <AdminToast toast={toast} />
       <AdminEdukasiView
-        media={slicedMedia}
+        media={media}
         searchTerm={searchTerm}
         setSearchTerm={handleSearchChange}
         editingMedia={editingMedia}
@@ -68,7 +57,7 @@ export default function AdminEdukasiClient({
         onSave={handleSaveMedia}
         onDelete={(id, title) => setDeleteTarget({ type: "media", id, title })}
         currentPage={page}
-        totalItems={filteredMedia.length}
+        totalItems={media.length}
         onPageChange={handlePageChange}
       />
       <AdminDeleteModal

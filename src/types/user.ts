@@ -26,6 +26,23 @@ export interface MediaItem {
   date: string;
 }
 
+export type ArticleStatus = "draft" | "published";
+
+export interface ArticleItem {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle?: string | null;
+  coverImage?: string | null;
+  content: any; // JSONB Tiptap Node Structure
+  status: ArticleStatus;
+  author?: string;
+  category?: string;
+  readTime?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface UgcItem {
   id: string;
   title: string;

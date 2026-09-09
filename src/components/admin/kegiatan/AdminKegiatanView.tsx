@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Search,
   Plus,
@@ -18,13 +18,14 @@ import {
 import { EventItem } from "@/types";
 import AdminPagination from "@/components/admin/shared/AdminPagination";
 import { uploadToCloudinary } from "@/lib/cloudinary";
+import { compressImage, runWithConcurrency } from "@/lib/imageCompression";
 
 interface AdminKegiatanViewProps {
   events: EventItem[];
   searchTerm: string;
   setSearchTerm: (val: string) => void;
   editingEvent: Partial<EventItem> | null;
-  setEditingEvent: (val: Partial<EventItem> | null) => void;
+  setEditingEvent: React.Dispatch<React.SetStateAction<Partial<EventItem> | null>>;
   onSave: () => void;
   onDelete: (id: string, title: string) => void;
   currentPage: number;
@@ -46,14 +47,31 @@ export default function AdminKegiatanView({
 }: AdminKegiatanViewProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
+  const [uploadStats, setUploadStats] = useState<{
+    completed: number;
+    total: number;
+    phase: "compressing" | "uploading";
+  } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isCustomWeek, setIsCustomWeek] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync isCustomWeek when editingEvent changes
+  useEffect(() => {
+    if (editingEvent?.week !== undefined) {
+      const isPreset = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 99].includes(editingEvent.week);
+      setIsCustomWeek(!isPreset);
+    } else {
+      setIsCustomWeek(false);
+    }
+  }, [editingEvent?.id, editingEvent?.week]);
 
   // Check if chosen week is already used by another event
   const targetWeek = editingEvent?.week ?? 1;
   const existingEventForWeek = events.find(
     (ev) => ev.week === targetWeek && ev.id !== editingEvent?.id
   );
+  const targetLabel = targetWeek === 99 ? "Penutupan Program" : `Minggu ke-${targetWeek}`;
 
   const handleValidateAndSave = () => {
     if (!editingEvent?.title?.trim()) {
@@ -62,7 +80,7 @@ export default function AdminKegiatanView({
     }
     if (existingEventForWeek) {
       alert(
-        `Gagal Simpan: Minggu ke-${targetWeek} sudah digunakan oleh kegiatan:\n"${existingEventForWeek.title}"\n\nUntuk menjaga keteraturan galeri (1 agenda highlight per minggu), silakan buka dan edit kegiatan tersebut untuk menambahkan foto dokumentasi baru.`
+        `Gagal Simpan: Agenda ${targetLabel} sudah digunakan oleh kegiatan:\n"${existingEventForWeek.title}"\n\nUntuk menjaga keteraturan galeri (1 agenda highlight per minggu/kategori), silakan buka dan edit kegiatan tersebut untuk menambahkan foto dokumentasi baru.`
       );
       return;
     }
@@ -70,35 +88,75 @@ export default function AdminKegiatanView({
   };
 
   const processFiles = async (fileList: FileList | File[]) => {
-    const files = Array.from(fileList).filter((f) => f.type.startsWith("image/"));
-    if (files.length === 0 || !editingEvent) return;
+    const rawFiles = Array.from(fileList).filter((f) => {
+      return f.type.startsWith("image/") || /\.(jpg|jpeg|png|webp|avif)$/i.test(f.name);
+    });
+    if (rawFiles.length === 0 || !editingEvent) return;
 
     setIsUploading(true);
-    const uploadedUrls: string[] = [];
-    let completed = 0;
+    setUploadStats({ completed: 0, total: rawFiles.length, phase: "compressing" });
+    setUploadProgress(`Mengompresi ${rawFiles.length} foto di browser...`);
 
     try {
-      // Process in batches of 3 concurrent uploads for speed & stability
-      const BATCH_SIZE = 3;
-      for (let i = 0; i < files.length; i += BATCH_SIZE) {
-        const batch = files.slice(i, i + BATCH_SIZE);
-        setUploadProgress(
-          `Mengunggah ${completed + 1} - ${Math.min(completed + batch.length, files.length)} dari ${files.length} foto...`
-        );
-        const batchUrls = await Promise.all(batch.map((f) => uploadToCloudinary(f)));
-        uploadedUrls.push(...batchUrls);
-        completed += batch.length;
-      }
+      // 1. Fase Kompresi Klien Cepat (Canvas Native)
+      // Memangkas foto 5-10MB menjadi ~300KB (pengurangan ukuran 90%+)
+      const compressedFiles = await Promise.all(
+        rawFiles.map((f) =>
+          compressImage(f, {
+            maxWidth: 1920,
+            maxHeight: 1920,
+            quality: 0.82,
+          })
+        )
+      );
 
-      const existingImages = (editingEvent.images || []).filter(Boolean);
-      setEditingEvent({
-        ...editingEvent,
-        images: [...existingImages, ...uploadedUrls],
-      });
+      // 2. Fase Unggah Simultan dengan Worker Pool non-blocking (3 slot konkuren)
+      setUploadStats({ completed: 0, total: compressedFiles.length, phase: "uploading" });
+      setUploadProgress(`Mengunggah 0 dari ${compressedFiles.length} foto ke Cloudinary...`);
+
+      const uploadedUrls: string[] = [];
+      const failedNames: string[] = [];
+
+      await runWithConcurrency(
+        compressedFiles,
+        3, // 3 koneksi paralel non-blocking
+        async (file) => {
+          return await uploadToCloudinary(file, {
+            folder: "sigma-assets/kegiatan",
+            skipCompression: true, // Sudah dikompresi di tahap 1
+          });
+        },
+        (completed, total, url, err, idx) => {
+          setUploadStats({ completed, total, phase: "uploading" });
+          setUploadProgress(`Mengunggah foto ${completed} dari ${total}...`);
+
+          if (url) {
+            uploadedUrls.push(url);
+            // Progresif real-time: langsung tampilkan foto di preview grid begitu selesai
+            setEditingEvent((prev) => {
+              if (!prev) return prev;
+              const currentImages = (prev.images || []).filter(Boolean);
+              return {
+                ...prev,
+                images: [...currentImages, url],
+              };
+            });
+          } else if (err && idx !== undefined) {
+            failedNames.push(rawFiles[idx]?.name || `Foto #${idx + 1}`);
+          }
+        }
+      );
+
+      if (failedNames.length > 0) {
+        alert(
+          `${uploadedUrls.length} foto berhasil diunggah.\n${failedNames.length} foto gagal diunggah: ${failedNames.join(", ")}`
+        );
+      }
     } catch (err: any) {
       alert("Gagal mengunggah foto ke Cloudinary: " + (err.message || "Error tidak diketahui"));
     } finally {
       setIsUploading(false);
+      setUploadStats(null);
       setUploadProgress("");
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
@@ -199,8 +257,8 @@ export default function AdminKegiatanView({
                   </div>
                 </td>
                 <td className="py-3.5 px-4">
-                  <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 font-extrabold text-[10px]">
-                    Minggu {item.week || 1}
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 font-extrabold text-[10px]">
+                    {item.week === 99 ? "Penutupan" : `Minggu ${item.week || 1}`}
                   </span>
                 </td>
                 <td className="py-3.5 px-4">{item.date}</td>
@@ -276,23 +334,29 @@ export default function AdminKegiatanView({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
-                    Minggu ke- (Week)
+                    Minggu ke- / Kategori Acara
                   </label>
                   <select
-                    value={editingEvent.week ?? 1}
-                    onChange={(e) =>
-                      setEditingEvent({
-                        ...editingEvent,
-                        week: Number(e.target.value),
-                      })
-                    }
+                    value={isCustomWeek ? "custom" : (editingEvent.week ?? 1)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === "custom") {
+                        setIsCustomWeek(true);
+                        if ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 99].includes(editingEvent.week ?? 1)) {
+                          setEditingEvent({ ...editingEvent, week: 11 });
+                        }
+                      } else {
+                        setIsCustomWeek(false);
+                        setEditingEvent({ ...editingEvent, week: Number(val) });
+                      }
+                    }}
                     className={`w-full px-3.5 py-2.5 rounded-xl border text-xs focus:outline-none focus:border-primary bg-white transition-colors ${
                       existingEventForWeek
                         ? "border-amber-400 bg-amber-50/30"
                         : "border-slate-200"
                     }`}
                   >
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((w) => {
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((w) => {
                       const isOccupied = events.some(
                         (ev) => ev.week === w && ev.id !== editingEvent?.id
                       );
@@ -302,7 +366,33 @@ export default function AdminKegiatanView({
                         </option>
                       );
                     })}
+                    <option value={99}>
+                      Penutupan Program (Closing) {events.some((ev) => ev.week === 99 && ev.id !== editingEvent?.id) ? "• (Sudah Terisi)" : "• (Tersedia)"}
+                    </option>
+                    <option value="custom">
+                      + Custom Nomor Minggu Lainnya...
+                    </option>
                   </select>
+
+                  {isCustomWeek && (
+                    <div className="mt-2 p-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2 animate-in fade-in">
+                      <span className="text-xs font-bold text-slate-500 shrink-0">Minggu ke-</span>
+                      <input
+                        type="number"
+                        min="1"
+                        max="999"
+                        placeholder="11"
+                        value={editingEvent.week ?? ""}
+                        onChange={(e) =>
+                          setEditingEvent({
+                            ...editingEvent,
+                            week: Math.max(1, parseInt(e.target.value, 10) || 1),
+                          })
+                        }
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:border-primary bg-white font-bold"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -347,13 +437,13 @@ export default function AdminKegiatanView({
                   <AlertCircle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                   <div className="space-y-1">
                     <p className="font-extrabold text-amber-950">
-                      Minggu ke-{targetWeek} Sudah Memiliki Agenda
+                      {targetLabel} Sudah Memiliki Agenda
                     </p>
                     <p className="text-[11px] text-amber-800">
                       Kegiatan yang sudah terdaftar: <strong className="font-semibold">"{existingEventForWeek.title}"</strong>.
                     </p>
                     <p className="text-[10px] text-amber-700">
-                      💡 <em>Saran:</em> Tutup form ini dan klik tombol <strong>Edit</strong> pada kegiatan Minggu ke-{targetWeek} untuk mengunggah foto dokumentasi tambahan.
+                      💡 <em>Saran:</em> Tutup form ini dan klik tombol <strong>Edit</strong> pada kegiatan {targetLabel} untuk mengunggah foto dokumentasi tambahan.
                     </p>
                   </div>
                 </div>
@@ -449,14 +539,40 @@ export default function AdminKegiatanView({
                   }`}
                 >
                   {isUploading ? (
-                    <div className="flex flex-col items-center space-y-2 py-2">
+                    <div className="flex flex-col items-center space-y-2.5 py-2 w-full max-w-sm mx-auto">
                       <Loader2 className="h-7 w-7 text-primary animate-spin" />
-                      <p className="text-xs font-bold text-emerald-800">
-                        {uploadProgress || "Mengunggah foto ke Cloudinary..."}
-                      </p>
-                      <p className="text-[10px] text-slate-400">
-                        Mohon tunggu, foto sedang diunggah secara bertahap...
-                      </p>
+                      <div className="text-center space-y-1.5 w-full">
+                        <p className="text-xs font-bold text-emerald-800">
+                          {uploadProgress || "Mengunggah foto ke Cloudinary..."}
+                        </p>
+                        {uploadStats && uploadStats.total > 0 && (
+                          <div className="w-full space-y-1.5 pt-1">
+                            <div className="w-full bg-emerald-100/70 rounded-full h-2 overflow-hidden">
+                              <div
+                                className="bg-primary h-2 rounded-full transition-all duration-300 ease-out"
+                                style={{
+                                  width: `${Math.round(
+                                    (uploadStats.completed / uploadStats.total) * 100
+                                  )}%`,
+                                }}
+                              />
+                            </div>
+                            <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 px-0.5">
+                              <span>
+                                {uploadStats.phase === "compressing"
+                                  ? "Kompresi Klien (Hemat Ukuran ~90%)"
+                                  : `${uploadStats.completed} dari ${uploadStats.total} foto selesai`}
+                              </span>
+                              <span className="text-emerald-700 font-extrabold">
+                                {Math.round((uploadStats.completed / uploadStats.total) * 100)}%
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                        <p className="text-[10px] text-slate-400">
+                          Foto otomatis dioptimasi agar proses upload instan &amp; foto langsung muncul di bawah.
+                        </p>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -472,7 +588,7 @@ export default function AdminKegiatanView({
                         </p>
                       </div>
                       <span className="inline-flex items-center gap-1 text-[11px] font-bold text-primary bg-white px-3 py-1 rounded-lg border border-emerald-200 shadow-2xs">
-                        <Plus className="h-3.5 w-3.5" /> Pilih Banyak Foto
+                        <Plus className="h-3.5 w-3.5" /> Pilih Banyak Foto (Auto-Compress)
                       </span>
                     </>
                   )}
