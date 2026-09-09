@@ -283,11 +283,6 @@ export default function SigmaGallerySection() {
       <div className="lg:hidden relative z-10 space-y-8 px-4 sm:px-6 max-w-3xl mx-auto">
         {/* Centerpiece Header on Mobile */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white/15 border border-white/25 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-emerald-100 shadow-xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-            <span>MOMEN &amp; DOKUMENTASI</span>
-          </div>
-
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
             Merekam Jejak, Merawat Harapan Bersama SIGMA
           </h2>
@@ -297,17 +292,10 @@ export default function SigmaGallerySection() {
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-2.5">
-            <Link
-              href="/kegiatan"
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs shadow-md active:scale-98"
-            >
-              <span>Semua Dokumentasi</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
             <button
               type="button"
               onClick={() => setActivePhotoIdx(0)}
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl border border-white/30 text-white font-bold text-xs active:scale-98 cursor-pointer"
+              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl cursor-pointer bg-amber-400 text-slate-950 font-black text-xs shadow-md active:scale-98"
             >
               <Camera className="h-3.5 w-3.5" />
               <span>Buka Galeri (12)</span>

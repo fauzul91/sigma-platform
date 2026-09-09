@@ -573,15 +573,7 @@ export default function PageHeader({
 
       {/* 2. Content Container */}
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-        {/* Left Column: Badge, Big Bold Title, Description */}
         <div className="max-w-2xl space-y-2.5 text-left">
-          {badge && (
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-xs text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-emerald-100 border border-white/20 shadow-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-              <span>{badge}</span>
-            </div>
-          )}
-
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-tight drop-shadow-xs">
             {title}
           </h1>

@@ -119,9 +119,6 @@ export default function HomeView() {
   // Simple counter animation trigger
   const [counts, setCounts] = useState({ modules: 0, articles: 0, users: 0 });
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const [showSplash, setShowSplash] = useState(true);
-  const [splashTransition, setSplashTransition] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     setIsDataLoading(true);
@@ -154,41 +151,6 @@ export default function HomeView() {
     });
   }, []);
 
-  useEffect(() => {
-    const hasSeen = sessionStorage.getItem("hasSeenSplash") === "true";
-    if (hasSeen) {
-      setShowSplash(false);
-    } else {
-      // Progress ticker interval
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            return 100;
-          }
-          return prev + 1; // tick 1% at a time
-        });
-      }, 18); // 18ms * 100 = 1800ms (1.8s)
-
-      // Start sliding up after 2.2 seconds
-      const slideTimer = setTimeout(() => {
-        setSplashTransition(true);
-      }, 2200);
-
-      // Unmount splash completely after 2.8 seconds
-      const unmountTimer = setTimeout(() => {
-        setShowSplash(false);
-        sessionStorage.setItem("hasSeenSplash", "true");
-      }, 2800);
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(slideTimer);
-        clearTimeout(unmountTimer);
-      };
-    }
-  }, []);
-
   const faqData = [
     {
       question: "Apa itu kesehatan reproduksi remaja dan mengapa itu penting?",
@@ -216,13 +178,6 @@ export default function HomeView() {
     }
   ];
 
-  const getLoadingMessage = (p: number) => {
-    if (p < 25) return "Menginisialisasi modul repropedia...";
-    if (p < 55) return "Memuat direktori kader GARUDA & Guru BK...";
-    if (p < 85) return "Sinkronisasi statistik perkawinan anak...";
-    return "Mempersiapkan antarmuka interaktif...";
-  };
-
   return (
     <div className="relative overflow-hidden bg-slate-50 min-h-screen">
 
@@ -235,23 +190,23 @@ export default function HomeView() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Hero text content */}
           <div className="lg:col-span-12 flex flex-col items-center text-center space-y-4 md:space-y-4 max-w-4xl mx-auto">
-            <div className="inline-flex items-center space-x-2 bg-emerald-50 border border-emerald-200/50 px-3.5 py-1.5 rounded-full text-primary text-xs font-bold uppercase tracking-wider shadow-sm">
+            <div className="hero-fade-up inline-flex items-center space-x-2 bg-emerald-50 border border-emerald-200/50 px-3.5 py-1.5 rounded-full text-primary text-xs font-bold uppercase tracking-wider shadow-sm">
               <span>Bersama Kader GARUDA Indonesia</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold text-neutral-dark tracking-tight leading-[1.15]">
+            <h1 className="hero-fade-up hero-delay-1 text-4xl sm:text-5xl lg:text-[54px] font-extrabold text-neutral-dark tracking-tight leading-[1.15]">
               Tumbuh Sehat, <br className="hidden sm:inline" />
               <span className="text-neutral-dark">
                 Melangkah Bersama SIGMA
               </span>
             </h1>
 
-            <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-normal font-medium">
+            <p className="hero-fade-up hero-delay-2 text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-normal font-medium">
               Platform interaktif dan ruang konseling aman bagi remaja untuk pahami diri serta lindungi masa depan.
             </p>
 
             {/* CTAs */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
+            <div className="hero-fade-up hero-delay-3 pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
               <Link
                 href="/konseling"
                 className="w-full sm:w-auto text-center px-8 py-3.5 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
@@ -999,87 +954,6 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* Opening Splash Screen Animation */}
-      {showSplash && (
-        <div
-          className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-transform duration-[850ms] ease-in-out bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.1),rgba(255,255,255,1))] ${splashTransition ? "-translate-y-full" : "translate-y-0"
-            }`}
-        >
-          {/* Subtle green grid lines background */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.04)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
-
-          <div className="space-y-12 text-center w-full max-w-lg px-6 relative z-10">
-
-            {/* 1. Green Bounding Box wrapper around main title */}
-            <div className="relative inline-block px-14 py-8 bg-white/40 backdrop-blur-[1px] select-none mx-auto">
-
-              {/* Dynamic SVG Animated Bounding Box Outline */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-                <rect
-                  x="1.5"
-                  y="1.5"
-                  width="calc(100% - 3px)"
-                  height="calc(100% - 3px)"
-                  fill="none"
-                  stroke="#10b981"
-                  strokeWidth="2"
-                  className="animate-draw-outline"
-                />
-              </svg>
-
-              {/* Bounding box Corner Handles (Emerald Anchor squares) */}
-              <div className="absolute -top-1.5 -left-1.5 w-3.5 h-3.5 bg-white border-2 border-emerald-500 rounded-sm z-20 shadow-sm" />
-              <div className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-white border-2 border-emerald-500 rounded-sm z-20 shadow-sm" />
-              <div className="absolute -bottom-1.5 -left-1.5 w-3.5 h-3.5 bg-white border-2 border-emerald-500 rounded-sm z-20 shadow-sm" />
-              <div className="absolute -bottom-1.5 -right-1.5 w-3.5 h-3.5 bg-white border-2 border-emerald-500 rounded-sm z-20 shadow-sm" />
-
-              {/* Coordinates Indicator Badge below bottom line */}
-              <div className="absolute -bottom-9 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-20">
-                <div className="w-[2px] h-4 bg-emerald-500" />
-                <div className="bg-emerald-500 text-white text-[9px] font-black font-mono px-2.5 py-0.5 rounded shadow-sm whitespace-nowrap tracking-wider">
-                  1280 × 198
-                </div>
-              </div>
-
-              {/* The Bold Logo Heading */}
-              <div className="text-5xl md:text-6xl font-black tracking-[0.25em] bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent leading-none select-none pl-4">
-                SIGMA
-              </div>
-            </div>
-
-            {/* 2. Loading State Information Section */}
-            <div className="space-y-4 pt-6 max-w-sm mx-auto">
-              <div className="space-y-1">
-                <p className="text-xs font-black tracking-[0.2em] text-slate-700 uppercase">
-                  Sistem Informasi Gender & Remaja
-                </p>
-                <p className="text-[10px] font-semibold text-slate-400">
-                  Garda Remaja Untuk Desa Aman (GARUDA)
-                </p>
-              </div>
-
-              {/* Game-like Loading Bar Container */}
-              <div className="space-y-2 pt-2">
-                <div className="flex justify-between items-center text-[9px] font-black tracking-widest text-slate-400">
-                  <span className="animate-pulse">{getLoadingMessage(progress)}</span>
-                  <span className="text-emerald-600 font-mono font-black">{progress}%</span>
-                </div>
-
-                {/* Outer Line */}
-                <div className="w-full bg-slate-100 rounded-full h-1 overflow-hidden border border-slate-200/20">
-                  {/* Inner Glowing Fill */}
-                  <div
-                    className="bg-gradient-to-r from-emerald-500 to-teal-500 h-full rounded-full transition-all duration-75 ease-out shadow-[0_0_8px_#10b981]"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      )}
-
     </div>
   );
-}
+}
