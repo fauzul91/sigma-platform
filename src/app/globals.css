@@ -144,3 +144,43 @@ select:focus {
 .form-input:focus-within {
   box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
 }
+
+/* ========================================================================= */
+/* GPU-Accelerated Micro-Entrance Animations for Hero Section                */
+/* Designed to be ultra-lightweight and smooth on low-end devices (< 400ms)  */
+/* ========================================================================= */
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hero-fade-up {
+  animation: heroFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.hero-delay-1 {
+  animation-delay: 60ms;
+}
+
+.hero-delay-2 {
+  animation-delay: 130ms;
+}
+
+.hero-delay-3 {
+  animation-delay: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
