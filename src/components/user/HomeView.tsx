@@ -1,6 +1,7 @@
 "use client";
 
 import { getYouTubeThumbnail } from "@/utils/mediaUtils";
+import { getArticleExcerpt } from "@/utils/tiptapRenderer";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -194,7 +195,7 @@ export default function HomeView() {
               <span>Bersama Kader GARUDA Indonesia</span>
             </div>
 
-            <h1 className="hero-fade-up hero-delay-1 text-4xl sm:text-5xl lg:text-[54px] font-extrabold text-neutral-dark tracking-tight leading-[1.15]">
+            <h1 className="hero-fade-up hero-delay-1 text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-neutral-dark tracking-tight leading-[1.15]">
               Tumbuh Sehat, <br className="hidden sm:inline" />
               <span className="text-neutral-dark">
                 Melangkah Bersama SIGMA
@@ -209,7 +210,7 @@ export default function HomeView() {
             <div className="hero-fade-up hero-delay-3 pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
               <Link
                 href="/konseling"
-                className="w-full sm:w-auto text-center px-8 py-3.5 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
+                className="w-full sm:w-auto text-center px-8 py-3.5 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 active:scale-98 transition-all duration-200 flex items-center justify-center space-x-2"
               >
                 <HeartHandshake className="h-5 w-5 text-white" />
                 <span>Butuh Konseling?</span>
@@ -219,7 +220,7 @@ export default function HomeView() {
         </div>
 
         {/* 5 Interactive Hero Cards Deck (Rising from below hero) */}
-        <div className="mt-8 md:mt-12 -mb-8 sm:-mb-10 md:-mb-14">
+        <div className="mt-8 md:mt-10 lg:mt-12 mb-4 sm:mb-6 lg:-mb-14">
           <HeroCardsDeck />
         </div>
       </section>
@@ -417,17 +418,18 @@ export default function HomeView() {
 
       {/* 3. FEATURED LITERACY (REPROPEDIA) PREVIEW - BENTO GRID 6 PILAR UTAMA */}
       <section className="py-12 md:py-16 max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
-        {/* Section Header (Centered on mobile, split on desktop) */}
-        <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12 md:mb-16 text-center md:text-left">
-          <div className="max-w-2xl space-y-2">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight">
-              Repropedia
+        {/* Section Header (Prominent typography on mobile, split on desktop) */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 mb-8 sm:mb-12 md:mb-16 text-left">
+          <div className="max-w-2xl space-y-2.5 sm:space-y-3">
+            <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-[40px] font-black text-neutral-dark tracking-tight leading-[1.15]">
+              Baca modul edukasi <br className="hidden sm:inline" />
+              <span className="text-primary">Repropedia</span>
             </h2>
-            <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl mx-auto md:mx-0 leading-relaxed">
-              Pelajari materi penting kesehatan reproduksi remaja & hak anak.
+            <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl leading-relaxed">
+              Pelajari materi penting kesehatan reproduksi remaja &amp; hak anak secara komprehensif.
             </p>
           </div>
-          <div className="shrink-0 flex justify-center md:block">
+          <div className="shrink-0 flex justify-start md:justify-end pt-1 md:pt-0">
             <Link
               href="/repropedia"
               className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-emerald-700 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all group"
@@ -438,8 +440,174 @@ export default function HomeView() {
           </div>
         </div>
 
-        {/* Bento Grid 6 Boxes (Neutral & Primary Green Tones: White, Soft Slate Gray, Light Emerald, and Deep Primary Emerald) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
+        {/* ============================================================ */}
+        {/* MOBILE & TABLET LAYOUT (< lg): HERO BANNER + 2-COL BALANCED GRID */}
+        {/* ============================================================ */}
+        <div className="block lg:hidden space-y-3.5 sm:space-y-4">
+
+          {/* 1. Top Featured Hero Banner: Bab 01 - Kesehatan Reproduksi */}
+          <Link
+            href="/repropedia?bab=1"
+            className="group relative bg-gradient-to-br from-emerald-800 via-emerald-900 to-slate-950 text-white rounded-3xl p-5 sm:p-7 shadow-lg border border-emerald-700/40 hover:border-emerald-500 transition-all duration-300 flex items-center justify-between gap-4 overflow-hidden"
+          >
+            {/* Ambient Background Glow */}
+            <div className="pointer-events-none absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/20 blur-2xl" />
+
+            {/* Content Left */}
+            <div className="flex-1 min-w-0 z-10">
+              <div className="flex items-center space-x-2 mb-1.5 sm:mb-2">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 text-[10px] sm:text-xs font-black uppercase tracking-wider">
+                  Modul Utama • Bab 01
+                </span>
+              </div>
+              <h3 className="text-lg sm:text-2xl font-black text-white leading-snug group-hover:text-emerald-300 transition-colors">
+                Kesehatan Reproduksi
+              </h3>
+              <p className="mt-1 text-xs sm:text-sm text-emerald-100/85 font-medium leading-relaxed line-clamp-2">
+                Panduan menyeluruh masa pubertas, sistem biologis, dan kebersihan diri tanpa rasa tabu.
+              </p>
+              <div className="mt-3 flex items-center space-x-1.5 text-xs font-black text-amber-300 group-hover:text-amber-200 transition-colors">
+                <span>Baca Modul Lengkap</span>
+                <ArrowRight className="h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* 3D Visual Mascot Right */}
+            <div className="relative w-24 h-24 sm:w-32 sm:h-32 shrink-0 flex items-center justify-center z-10">
+              <Image
+                src="/assets/hero_section/health.webp"
+                alt="Kesehatan Reproduksi"
+                fill
+                unoptimized
+                sizes="130px"
+                className="object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)] group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+          </Link>
+
+          {/* 2. Symmetrical 2-Column Grid (Bab 2, 4, 5, 6, & Bab 3 Full Width) */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+
+            {/* CARD 1: Bab 02 - Kenali Hak-Hak Anak */}
+            <Link
+              href="/repropedia?bab=2"
+              className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    Bab 02
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Kenali Hak-Hak Anak
+                </h4>
+                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 sm:line-clamp-3">
+                  Pahami hak perlindungan, tumbuh kembang, dan rasa amanmu.
+                </p>
+              </div>
+            </Link>
+
+            {/* CARD 2: Bab 04 - Bentuk Kekerasan Seksual */}
+            <Link
+              href="/repropedia?bab=4"
+              className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    Bab 04
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Bentuk Kekerasan Seksual
+                </h4>
+                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 sm:line-clamp-3">
+                  Pahami jenis verbal, fisik, hingga kekerasan digital (KBGO).
+                </p>
+              </div>
+            </Link>
+
+            {/* CARD 3: Bab 05 - Pencegahan Kekerasan Seksual */}
+            <Link
+              href="/repropedia?bab=5"
+              className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    Bab 05
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Pencegahan Kekerasan
+                </h4>
+                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 sm:line-clamp-3">
+                  Kenali batasan tubuh (consent) dan cara menjaga diri.
+                </p>
+              </div>
+            </Link>
+
+            {/* CARD 4: Bab 06 - Mengalami Kekerasan Seksual? */}
+            <Link
+              href="/repropedia?bab=6"
+              className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    Bab 06
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Mengalami Kekerasan?
+                </h4>
+                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 sm:line-clamp-3">
+                  Panduan aman mencari bantuan, darurat, dan alur konseling.
+                </p>
+              </div>
+            </Link>
+
+            {/* CARD 5 (SPAN 2 COLS): Bab 03 - Risiko & Dampak Perkawinan Anak */}
+            <Link
+              href="/repropedia?bab=3"
+              className="col-span-2 group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center space-x-2 mb-1.5">
+                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    Bab 03
+                  </span>
+                  <span className="inline-flex items-center space-x-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    <span>UU No. 16/2019 • Batas 19 Tahun</span>
+                  </span>
+                </div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Risiko &amp; Dampak Perkawinan Anak
+                </h4>
+                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2">
+                  Dampak kesiapan fisik, psikologis, pendidikan, dan masa depan remaja.
+                </p>
+              </div>
+              <div className="shrink-0 flex items-center space-x-1 text-xs font-bold text-emerald-700 group-hover:text-emerald-800">
+                <span className="hidden sm:inline">Pelajari Bab 03</span>
+                <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+          </div>
+
+        </div>
+
+        {/* ============================================================ */}
+        {/* DESKTOP LAYOUT (lg:grid): ORIGINAL BENTO GRID 12 KOLOM      */}
+        {/* ============================================================ */}
+        <div className="hidden lg:grid lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
 
           {/* ============================================================ */}
           {/* KLUSTER KIRI (5 KOLOM DI DESKTOP): BOX 1, BOX 2, & BOX 3     */}
@@ -684,16 +852,18 @@ export default function HomeView() {
       {/* 5. RECENT ARTIKEL & EDUKASI FEED */}
       <section className="py-16 md:py-20 bg-slate-50/60 border-b border-slate-200/50">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
-          <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12 md:mb-16 text-center md:text-left">
-            <div className="max-w-2xl space-y-2">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight">
-                Artikel & Edukasi
+          {/* Section Header (Prominent typography on mobile, split on desktop) */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 mb-8 sm:mb-12 md:mb-16 text-left">
+            <div className="max-w-2xl space-y-2.5 sm:space-y-3">
+              <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-[40px] font-black text-neutral-dark tracking-tight leading-[1.15]">
+                Baca artikel terbaru <br className="hidden sm:inline" />
+                dari <span className="text-primary">SIGMA</span>
               </h2>
-              <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl mx-auto md:mx-0 leading-relaxed">
-                Jelajahi Artikel kesehatan, berita, dan konten video kesehatan
+              <p className="text-slate-600 font-medium text-sm sm:text-base max-w-xl leading-relaxed">
+                Tips kesehatan reproduksi, panduan remaja, dan update materi edukasi terbaru. Semua ada di sini.
               </p>
             </div>
-            <div className="shrink-0 flex justify-center md:block">
+            <div className="shrink-0 flex justify-start md:justify-end pt-1 md:pt-0">
               <Link
                 href="/edukasi"
                 className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-emerald-700 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all group"
@@ -770,7 +940,7 @@ export default function HomeView() {
                           {item.title}
                         </h3>
                         <p className="text-xs sm:text-sm text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                          {item.content}
+                          {getArticleExcerpt(item.content, 140)}
                         </p>
                       </div>
                     </div>

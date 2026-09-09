@@ -295,9 +295,9 @@ export default function SigmaGallerySection() {
             <button
               type="button"
               onClick={() => setActivePhotoIdx(0)}
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl cursor-pointer bg-amber-400 text-slate-950 font-black text-xs shadow-md active:scale-98"
+              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl cursor-pointer bg-white hover:bg-emerald-50 text-emerald-950 font-bold text-xs shadow-md border border-emerald-200/60 active:scale-98 transition-all"
             >
-              <Camera className="h-3.5 w-3.5" />
+              <Camera className="h-3.5 w-3.5 text-emerald-700" />
               <span>Buka Galeri (12)</span>
             </button>
           </div>

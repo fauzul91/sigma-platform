@@ -46,19 +46,20 @@ export default function KegiatanView() {
     });
   }, []);
 
-  // Compute available weeks from events
+  // Compute available weeks strictly from real existing events in DB
   const availableWeeks = useMemo(() => {
     const weeksSet = new Set<number>();
     eventItems.forEach((ev) => {
-      if (ev.week !== undefined && ev.week !== null) {
-        weeksSet.add(Number(ev.week));
+      if (typeof ev.week === "number" && !isNaN(ev.week)) {
+        weeksSet.add(ev.week);
       }
     });
-    // Ensure at least weeks 1 to 6 or sorted existing
-    if (weeksSet.size === 0) {
-      return [1, 2, 3, 4, 5, 6];
-    }
-    return Array.from(weeksSet).sort((a, b) => a - b);
+    // Sort weeks: normal weeks ascending, and week 99 (Penutupan) at the very end
+    return Array.from(weeksSet).sort((a, b) => {
+      if (a === 99) return 1;
+      if (b === 99) return -1;
+      return a - b;
+    });
   }, [eventItems]);
 
   // Flatten event photos into individual photo moments
@@ -223,81 +224,67 @@ export default function KegiatanView() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 md:py-12">
-        {/* Title Header matching the reference: "Galeri Momen PIONIR Gadjah Mada 2026" */}
+        {/* Title Header */}
         <div className="mb-6 sm:mb-8 text-left">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-amber-500 tracking-tight leading-tight">
-            Galeri Momen Kegiatan SIGMA 2026
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-dark tracking-tight leading-tight">
+            Galeri Momen Kegiatan <span className="text-primary">SIGMA 2026</span>
           </h2>
-          <p className="mt-1.5 text-xs sm:text-sm font-semibold text-slate-700">
+          <p className="mt-1.5 text-xs sm:text-sm font-semibold text-slate-600">
             Tangkap semangat, keceriaan, dan dedikasi aksi Kader GARUDA di lapangan!
           </p>
         </div>
 
-        {/* 2. Outer White Container (Exact Reference Aesthetic) */}
+        {/* 2. Outer White Container */}
         <div className="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-8 md:p-10 shadow-xs space-y-6 sm:space-y-8">
-          
-          {/* Top Filter Pills: "Hari ke-1, Hari ke-2" -> "Minggu ke-1, Minggu ke-2" */}
-          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200">
-            {/* All tab */}
-            <button
-              onClick={() => handleTabChange("all")}
-              className={`px-4 py-2 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer shadow-xs border ${
-                activeTab === "all"
-                  ? "bg-amber-400 text-slate-950 border-amber-500 shadow-md ring-2 ring-amber-400/40"
-                  : "bg-amber-100/70 hover:bg-amber-200/80 text-amber-950 border-amber-200/80"
-              }`}
-            >
-              Semua Momen
-            </button>
 
-            {/* Week Pills */}
-            {availableWeeks.map((weekNum) => {
-              const isActive = activeTab === weekNum.toString();
-              return (
-                <button
-                  key={weekNum}
-                  onClick={() => handleTabChange(weekNum.toString())}
-                  className={`px-4 py-2 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer shadow-xs border ${
-                    isActive
-                      ? "bg-amber-400 text-slate-950 border-amber-500 shadow-md ring-2 ring-amber-400/40"
-                      : "bg-amber-100/70 hover:bg-amber-200/80 text-amber-950 border-amber-200/80"
+          {/* Top Filter Pills: Clean Emerald & Neutral Style */}
+          {isLoading ? (
+            <div className="flex items-center gap-2.5 pb-2">
+              <div className="h-8 w-28 bg-slate-100 animate-pulse rounded-xl" />
+              <div className="h-8 w-24 bg-slate-100 animate-pulse rounded-xl" />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200">
+              {/* All tab */}
+              <button
+                onClick={() => handleTabChange("all")}
+                className={`px-4 py-2 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer shadow-xs border ${activeTab === "all"
+                  ? "bg-primary text-white border-primary shadow-sm ring-2 ring-emerald-500/20"
+                  : "bg-slate-100 hover:bg-emerald-50/80 text-slate-700 hover:text-emerald-900 border-slate-200/80 hover:border-emerald-200"
                   }`}
-                >
-                  Minggu ke-{weekNum}
-                </button>
-              );
-            })}
+              >
+                Semua Momen
+              </button>
 
-            {/* Special category tabs */}
-            <button
-              onClick={() => handleTabChange("action")}
-              className={`px-4 py-2 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer shadow-xs border ${
-                activeTab === "action"
-                  ? "bg-amber-400 text-slate-950 border-amber-500 shadow-md ring-2 ring-amber-400/40"
-                  : "bg-amber-100/70 hover:bg-amber-200/80 text-amber-950 border-amber-200/80"
-              }`}
-            >
-              Action Plan
-            </button>
-            <button
-              onClick={() => handleTabChange("closing")}
-              className={`px-4 py-2 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer shadow-xs border ${
-                activeTab === "closing"
-                  ? "bg-amber-400 text-slate-950 border-amber-500 shadow-md ring-2 ring-amber-400/40"
-                  : "bg-amber-100/70 hover:bg-amber-200/80 text-amber-950 border-amber-200/80"
-              }`}
-            >
-              Penutupan
-            </button>
-          </div>
+              {/* Dynamic Week / Category Pills - Strictly from actual database events */}
+              {availableWeeks.map((weekNum) => {
+                const isActive = activeTab === weekNum.toString();
+                const label = weekNum === 99 ? "Penutupan" : `Minggu ke-${weekNum}`;
+                return (
+                  <button
+                    key={weekNum}
+                    onClick={() => handleTabChange(weekNum.toString())}
+                    className={`px-4 py-2 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer shadow-xs border ${isActive
+                      ? "bg-primary text-white border-primary shadow-sm ring-2 ring-emerald-500/20"
+                      : "bg-slate-100 hover:bg-emerald-50/80 text-slate-700 hover:text-emerald-900 border-slate-200/80 hover:border-emerald-200"
+                      }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {/* Week Highlight Banner Card (1 info per week as requested) */}
           {currentWeekEvent ? (
-            <div className="bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-amber-50/60 rounded-2xl p-5 sm:p-6 border border-emerald-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 animate-in fade-in duration-200">
+            <div className="bg-gradient-to-r from-emerald-50 via-teal-50/40 to-slate-50 rounded-2xl p-5 sm:p-6 border border-emerald-200/80 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-5 animate-in fade-in duration-200">
               <div className="space-y-2 max-w-2xl">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="px-2.5 py-0.5 rounded-md bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider shadow-2xs">
-                    Highlight Agenda Minggu ke-{currentWeekEvent.week}
+                    {currentWeekEvent.week === 99
+                      ? "Highlight Agenda Acara Penutupan"
+                      : `Highlight Agenda Minggu ke-${currentWeekEvent.week}`}
                   </span>
                   <span className="text-xs text-slate-500 font-semibold flex items-center gap-1">
                     <Calendar className="h-3.5 w-3.5 text-emerald-600" />
@@ -321,8 +308,8 @@ export default function KegiatanView() {
                   <Users className="h-4 w-4 text-emerald-600 shrink-0" />
                   <span>{currentWeekEvent.attendees} Peserta Terlibat</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-xl bg-amber-100/70 border border-amber-200/80 shadow-2xs flex items-center gap-2 text-xs text-amber-950 font-black">
-                  <Camera className="h-4 w-4 text-amber-600 shrink-0" />
+                <div className="px-3 py-1.5 rounded-xl bg-emerald-100/80 border border-emerald-200/90 shadow-2xs flex items-center gap-2 text-xs text-emerald-950 font-bold">
+                  <Camera className="h-4 w-4 text-emerald-700 shrink-0" />
                   <span>{filteredMoments.length} Foto Dokumentasi</span>
                 </div>
               </div>
@@ -330,9 +317,6 @@ export default function KegiatanView() {
           ) : activeTab === "all" ? (
             <div className="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-600">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                  <Sparkles className="h-4 w-4" />
-                </div>
                 <div>
                   <p className="font-extrabold text-slate-800 text-sm">
                     Seluruh Galeri Dokumentasi Aksi Kader GARUDA SIGMA 2026
@@ -376,9 +360,13 @@ export default function KegiatanView() {
                     onClick={() => openLightbox(absoluteIndex)}
                     className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer"
                   >
-                    {/* Distinctive Folder Notch Tab in Top-Left (Exact Reference Style) */}
-                    <div className="absolute top-0 left-4 z-20 px-3.5 py-1 bg-white/95 rounded-b-lg border-x border-b border-slate-200 text-[10px] font-black tracking-wider uppercase text-slate-700 shadow-2xs backdrop-blur-xs">
-                      {moment.event.week ? `Minggu ${moment.event.week}` : "Momen"}
+                    {/* Distinctive Folder Notch Tab in Top-Left */}
+                    <div className="absolute top-0 left-4 z-20 px-3.5 py-1 bg-white/95 rounded-b-lg border-x border-b border-slate-200 text-[10px] font-black tracking-wider uppercase text-emerald-800 shadow-2xs backdrop-blur-xs">
+                      {moment.event.week === 99
+                        ? "Penutupan"
+                        : moment.event.week
+                        ? `Minggu ${moment.event.week}`
+                        : "Momen"}
                     </div>
 
                     {/* High Quality Photo */}
@@ -394,21 +382,21 @@ export default function KegiatanView() {
                       <h4 className="font-extrabold text-xs sm:text-sm leading-snug line-clamp-2 drop-shadow-sm">
                         {moment.event.title}
                       </h4>
-                      <div className="flex items-center space-x-2 text-[11px] text-amber-300 font-bold mt-1.5 drop-shadow-sm">
+                      <div className="flex items-center space-x-2 text-[11px] text-emerald-300 font-bold mt-1.5 drop-shadow-sm">
                         <span>{moment.event.date}</span>
                         <span>•</span>
                         <span>{moment.event.attendees} Peserta</span>
                       </div>
                     </div>
 
-                    {/* Signature Purple/Violet Action Button `>` in Bottom-Right Corner (Exact Reference Style) */}
+                    {/* Emerald Action Button `>` in Bottom-Right Corner */}
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         openLightbox(absoluteIndex);
                       }}
-                      className="absolute bottom-3.5 right-3.5 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center shadow-lg transition-transform group-hover:scale-110 active:scale-95 cursor-pointer"
+                      className="absolute bottom-3.5 right-3.5 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center shadow-lg border border-emerald-400/40 transition-transform group-hover:scale-110 active:scale-95 cursor-pointer"
                       title="Buka Foto Penuh"
                     >
                       <ChevronRight className="h-5 w-5 font-black" />
@@ -428,11 +416,10 @@ export default function KegiatanView() {
                   <button
                     key={pageNum}
                     onClick={() => setCurrentPage(pageNum)}
-                    className={`w-9 h-9 rounded-xl font-extrabold text-xs flex items-center justify-center transition-all cursor-pointer shadow-xs border ${
-                      isActive
-                        ? "bg-amber-400 text-slate-950 border-amber-500 shadow-sm ring-2 ring-amber-400/40"
-                        : "bg-amber-200/90 hover:bg-amber-300 text-slate-900 border-amber-300"
-                    }`}
+                    className={`w-9 h-9 rounded-xl font-extrabold text-xs flex items-center justify-center transition-all cursor-pointer shadow-xs border ${isActive
+                      ? "bg-primary text-white border-primary shadow-sm ring-2 ring-emerald-500/20"
+                      : "bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-900 border-slate-200 hover:border-emerald-200"
+                      }`}
                   >
                     {pageNum}
                   </button>
@@ -444,32 +431,34 @@ export default function KegiatanView() {
         </div>
       </div>
 
-      {/* 5. FLOATING CARD PHOTO VIEWER (Exact Match to Reference Screenshot) */}
+      {/* 5. PHOTO VIEWER MODAL (MATCHING HOMEPAGE SIGMA GALLERY UX) */}
       {currentMoment && lightboxIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-3 sm:p-6 md:p-8 animate-in fade-in duration-200 select-none"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-3 sm:p-6 animate-in fade-in duration-200 select-none overflow-y-auto"
           onClick={closeModal}
         >
-          {/* Main Card Container */}
+          {/* Main Modal Box (Prevent click bubbling) */}
           <div
-            className="bg-[#FFFDF7] w-full max-w-4xl lg:max-w-5xl rounded-3xl border border-amber-200/90 shadow-2xl p-4 sm:p-6 md:p-8 flex flex-col relative animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-4xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 text-slate-800 animate-in zoom-in-95 duration-200 my-auto flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header: Title Left, Actions Right */}
-            <div className="flex items-center justify-between pb-3 sm:pb-5">
-              <div>
-                <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
-                  {currentMoment.event.week
+            {/* Top Bar of Modal */}
+            <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+              <div className="flex items-center space-x-2.5">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase tracking-wider">
+                  {currentMoment.event.week === 99
+                    ? "Penutupan Program"
+                    : currentMoment.event.week
                     ? `Minggu ke-${currentMoment.event.week}`
                     : "Momen Kegiatan"}
-                </h3>
-                <p className="text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5 truncate max-w-xs sm:max-w-md md:max-w-xl">
-                  {currentMoment.event.title}
-                </p>
+                </span>
+                <span className="text-xs text-slate-400 font-semibold">
+                  Foto {lightboxIndex + 1} dari {filteredMoments.length}
+                </span>
               </div>
 
-              {/* Action Buttons: Yellow [Unduh] & Purple [✕] */}
-              <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+              {/* Top Actions: Unduh & Close */}
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() =>
@@ -479,44 +468,41 @@ export default function KegiatanView() {
                       currentMoment.event.week
                     )
                   }
-                  className="px-3.5 py-1.5 sm:px-5 sm:py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shadow-xs border border-amber-500/80 active:scale-95 transition-all cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs flex items-center gap-1.5 shadow-xs border border-emerald-700/30 active:scale-95 transition-all cursor-pointer"
                   title="Unduh foto resolusi asli"
                 >
-                  <Download className="h-4 w-4 stroke-[2.5]" />
+                  <Download className="h-3.5 w-3.5 stroke-[2.5]" />
                   <span>Unduh</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center shadow-xs border border-purple-700/40 active:scale-95 transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
+                  aria-label="Tutup"
                   title="Tutup (ESC)"
                 >
-                  <X className="h-5 w-5 stroke-[2.5]" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             </div>
 
-            {/* Photo Stage Frame with Yellow Side Chevrons */}
+            {/* Photo Preview Canvas */}
             <div
-              className="relative w-full rounded-2xl overflow-hidden bg-slate-950 flex items-center justify-center aspect-[4/3] sm:aspect-[16/10] max-h-[66vh] sm:max-h-[72vh] border border-slate-200/80 shadow-inner group"
+              className="relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[56vh] sm:max-h-[62vh] bg-slate-950 flex items-center justify-center overflow-hidden group"
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
-              {/* Folder Notch Tab in Top-Left */}
-              <div className="absolute top-0 left-5 z-20 px-3.5 py-1 bg-[#FFFDF7]/95 rounded-b-lg border-x border-b border-amber-200/80 text-[10px] font-black tracking-wider uppercase text-slate-700 shadow-2xs backdrop-blur-xs hidden sm:block">
-                {currentMoment.event.week ? `Minggu ${currentMoment.event.week}` : "Momen"}
-              </div>
-
-              {/* Left Yellow Arrow Button */}
+              {/* Prev & Next Floating Buttons on Image */}
               {filteredMoments.length > 1 && (
                 <button
                   type="button"
                   onClick={handlePrevImage}
-                  className="absolute left-2.5 sm:left-4 z-30 w-8 h-10 sm:w-10 sm:h-12 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 border border-amber-500/80 flex items-center justify-center shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer"
-                  title="Foto Sebelumnya"
+                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/80 hover:bg-white text-slate-900 flex items-center justify-center shadow-lg backdrop-blur-xs transition-all cursor-pointer active:scale-95"
+                  title="Foto Sebelumnya (←)"
+                  aria-label="Sebelumnya"
                 >
-                  <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 stroke-[3]" />
+                  <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
                 </button>
               )}
 
@@ -524,30 +510,45 @@ export default function KegiatanView() {
               <img
                 src={currentMoment.photoUrl}
                 alt={currentMoment.event.title}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain select-none"
               />
 
-              {/* Right Yellow Arrow Button */}
               {filteredMoments.length > 1 && (
                 <button
                   type="button"
                   onClick={handleNextImage}
-                  className="absolute right-2.5 sm:right-4 z-30 w-8 h-10 sm:w-10 sm:h-12 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 border border-amber-500/80 flex items-center justify-center shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer"
-                  title="Foto Selanjutnya"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/80 hover:bg-white text-slate-900 flex items-center justify-center shadow-lg backdrop-blur-xs transition-all cursor-pointer active:scale-95"
+                  title="Foto Selanjutnya (→)"
+                  aria-label="Selanjutnya"
                 >
-                  <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 stroke-[3]" />
+                  <ChevronRight className="h-5 w-5 stroke-[2.5]" />
                 </button>
               )}
             </div>
 
-            {/* Bottom Subtle Photo Counter & Meta */}
-            <div className="flex items-center justify-between pt-3 px-1 text-[11px] sm:text-xs text-slate-500 font-bold">
-              <span className="truncate max-w-[200px] sm:max-w-md">
-                {currentMoment.event.date} • {currentMoment.event.location}
-              </span>
-              <span className="shrink-0 font-extrabold text-amber-600 bg-amber-100/60 px-2.5 py-0.5 rounded-md border border-amber-200">
-                Foto {lightboxIndex + 1} dari {filteredMoments.length}
-              </span>
+            {/* Bottom Caption & Meta Details */}
+            <div className="p-4 sm:p-5 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-t border-slate-100">
+              <div className="min-w-0">
+                <h3 className="text-base sm:text-lg font-black text-slate-900 leading-tight truncate">
+                  {currentMoment.event.title}
+                </h3>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 mt-1 font-medium">
+                  <span className="flex items-center gap-1 text-slate-600">
+                    <MapPin className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span className="truncate max-w-[200px] sm:max-w-xs">{currentMoment.event.location}</span>
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span className="flex items-center gap-1 text-slate-600">
+                    <Calendar className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span>{currentMoment.event.date}</span>
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span className="flex items-center gap-1 text-slate-600">
+                    <Users className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span>{currentMoment.event.attendees} Peserta</span>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

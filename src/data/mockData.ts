@@ -7,6 +7,7 @@ import type {
   StatRecord,
   QuizQuestion,
   OrgMember,
+  ArticleItem,
 } from "@/types";
 
 // Re-export types for backward compatibility
@@ -549,3 +550,173 @@ export const orgMembers: OrgMember[] = [
     sortOrder: 7,
   },
 ];
+
+// 10. ARTICLES (TIPTAP FORMAT)
+export const initialArticles: ArticleItem[] = [
+  {
+    id: "art-1",
+    title: "Mengenal Kesehatan Reproduksi Remaja Secara Ilmiah & Menyeluruh",
+    slug: "mengenal-kesehatan-reproduksi-remaja",
+    subtitle:
+      "Panduan komprehensif memahami perubahan fisik, psikologis, dan organ reproduksi saat memasuki masa pubertas tanpa rasa canggung.",
+    coverImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=1200",
+    content: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Masa remaja merupakan fase transisi krusial dari masa anak-anak menuju kedewasaan. Selama periode ini, tubuh mengalami lonjakan hormon pertumbuhan yang memicu perubahan fisik, emosional, dan biologis yang signifikan.",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          attrs: { level: 2 },
+          content: [
+            {
+              type: "text",
+              text: "1. Mengapa Edukasi Reproduksi Itu Penting?",
+            },
+          ],
+        },
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Banyak remaja merasa tabu atau malu untuk menanyakan perubahan pada tubuh mereka. Akibatnya, banyak yang mencari informasi dari sumber yang keliru di internet atau teman sebaya yang belum tentu benar secara medis.",
+            },
+          ],
+        },
+        {
+          type: "blockquote",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "Kesehatan reproduksi bukan sekadar tentang organ biologis, melainkan kondisi sehat secara fisik, mental, dan sosial dalam segala hal yang berkaitan dengan sistem dan fungsi reproduksi (WHO).",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "heading",
+          attrs: { level: 3 },
+          content: [
+            {
+              type: "text",
+              text: "Langkah Sederhana Merawat Kebersihan Diri:",
+            },
+          ],
+        },
+        {
+          type: "bulletList",
+          content: [
+            {
+              type: "listItem",
+              content: [
+                {
+                  type: "paragraph",
+                  content: [
+                    {
+                      type: "text",
+                      text: "Mengganti pakaian dalam minimal dua kali sehari dengan bahan katun yang menyerap keringat.",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: "listItem",
+              content: [
+                {
+                  type: "paragraph",
+                  content: [
+                    {
+                      type: "text",
+                      text: "Membasuh organ genital dengan air bersih yang mengalir dari arah depan ke belakang.",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: "listItem",
+              content: [
+                {
+                  type: "paragraph",
+                  content: [
+                    {
+                      type: "text",
+                      text: "Tidak menggunakan produk sabun pembersih berpewangi tajam yang dapat merusak pH alami.",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    status: "published",
+    author: "dr. Siti Rahmawati, Sp.A",
+    category: "Kesehatan Reproduksi",
+    readTime: "4 Menit",
+    createdAt: "2026-03-01T08:00:00.000Z",
+    updatedAt: "2026-03-01T08:00:00.000Z",
+  },
+  {
+    id: "art-2",
+    title: "Batasan Tubuh (Consent) & Cara Berani Menolak Perlakuan Tidak Pantas",
+    slug: "mengenal-batasan-tubuh-dan-consent",
+    subtitle:
+      "Kenali hak atas tubuhmu sendiri, tanda-tanda bahaya dalam pergaulan (red flags), serta nomor kontak darurat pendampingan.",
+    coverImage: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=1200",
+    content: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Setiap anak dan remaja berhak atas rasa aman dan perlindungan dari segala bentuk perlakuan salah, kekerasan fisik, maupun non-fisik. Mengetahui batasan tubuh (body boundaries) adalah benteng pertahanan pertama setiap remaja.",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          attrs: { level: 2 },
+          content: [
+            {
+              type: "text",
+              text: "Bagian Tubuh yang Bersifat Pribadi",
+            },
+          ],
+        },
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Secara umum, bagian tubuh yang tertutup pakaian renang (bibir, dada, area genital/antara paha, dan pantat) adalah area privat yang tidak boleh disentuh, difoto, atau dilihat oleh orang lain tanpa persetujuan medis resmi dengan didampingi orang tua.",
+            },
+          ],
+        },
+      ],
+    },
+    status: "published",
+    author: "Tim Konselor SIGMA",
+    category: "Pencegahan Kekerasan",
+    readTime: "3 Menit",
+    createdAt: "2026-03-05T09:30:00.000Z",
+    updatedAt: "2026-03-05T09:30:00.000Z",
+  },
+];
+

@@ -146,6 +146,33 @@ export default function RepropediaView() {
   const [showThumbnails, setShowThumbnails] = useState<boolean>(false);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth < 768 ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      );
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Resolve PDF viewer URL: on mobile use Google Docs Viewer for seamless in-page rendering
+  const getPdfViewerUrl = useCallback(() => {
+    if (typeof window === "undefined") return PDF_FILE_PATH;
+    if (!isMobile) {
+      return `${PDF_FILE_PATH}#page=${currentPage}&toolbar=1&navpanes=0`;
+    }
+    const origin = window.location.origin;
+    const isLocal = origin.includes("localhost") || origin.includes("127.0.0.1");
+    const fullPdfUrl = isLocal
+      ? `https://ruangsigma.site${PDF_FILE_PATH}`
+      : `${origin}${PDF_FILE_PATH}`;
+    return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(fullPdfUrl)}`;
+  }, [isMobile, currentPage]);
 
   // Active bab resolved dynamically from current page
   const activeBab = getBabForPage(currentPage);
@@ -283,25 +310,25 @@ export default function RepropediaView() {
 
       {/* 2. Document Summary Banner Bar */}
       <div className="border-b border-slate-200/80 bg-white sticky top-0 z-20 shadow-2xs backdrop-blur-md bg-white/95">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-3.5 sm:py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-10 lg:px-12 py-2.5 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-[11px] font-extrabold text-emerald-700 uppercase tracking-wider mb-0.5">
+            <div className="hidden sm:flex items-center space-x-2 text-[11px] font-extrabold text-emerald-700 uppercase tracking-wider mb-0.5">
               <span>E-Book Resmi SIGMA Platform</span>
             </div>
-            <h2 className="text-base sm:text-lg font-black text-slate-900 leading-snug">
+            <h2 className="text-sm sm:text-lg font-black text-slate-900 leading-snug">
               Repropedia: Modul Kesehatan Reproduksi Remaja
             </h2>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">
+            <p className="hidden sm:block text-xs text-slate-500 font-medium mt-0.5">
               7 Sub-Bab Utama • {TOTAL_PAGES} Halaman • Resolusi Tinggi WebP • PDF Lengkap 3.8 MB
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 w-full sm:w-auto">
             {/* Mode Switcher Pills */}
             <div className="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200/80">
               <button
                 onClick={() => setViewMode("interactive")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${viewMode === "interactive"
+                className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${viewMode === "interactive"
                     ? "bg-white text-emerald-800 shadow-xs border border-slate-200"
                     : "text-slate-600 hover:text-slate-900"
                   }`}
@@ -312,11 +339,11 @@ export default function RepropediaView() {
               </button>
               <button
                 onClick={() => setViewMode("pdf")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${viewMode === "pdf"
+                className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${viewMode === "pdf"
                     ? "bg-white text-emerald-800 shadow-xs border border-slate-200"
                     : "text-slate-600 hover:text-slate-900"
                   }`}
-                title="Mode PDF Asli"
+                title="Mode Dokumen PDF"
               >
                 <FileText className="h-3.5 w-3.5 text-slate-500" />
                 <span>Dokumen PDF</span>
@@ -337,7 +364,7 @@ export default function RepropediaView() {
             <a
               href={PDF_FILE_PATH}
               download="Buku_Repropedia_SIGMA.pdf"
-              className="inline-flex items-center space-x-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-primary hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs hover:shadow-sm active:scale-98 transition-all"
+              className="inline-flex items-center space-x-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-primary hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs hover:shadow-sm active:scale-98 transition-all"
               title="Unduh file PDF"
             >
               <Download className="h-3.5 w-3.5" />
@@ -348,34 +375,34 @@ export default function RepropediaView() {
       </div>
 
       {/* 3. Main Content Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-8 lg:px-12 py-3 sm:py-6 lg:py-8">
         {/* Mobile Quick Selector */}
-        <div className="lg:hidden mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+        <div className="lg:hidden mb-3">
+          <div className="flex items-center justify-between mb-1.5 px-0.5">
+            <span className="text-[11px] font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
               <Layers className="h-3.5 w-3.5 text-emerald-600" />
-              Pilih Sub-Bab Materi:
+              Daftar Sub-Bab:
             </span>
-            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-              Hal. {currentPage} / {TOTAL_PAGES}
+            <span className="text-[10px] font-bold text-slate-400">
+              Geser untuk memilih bab →
             </span>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200">
+          <div className="flex gap-2 overflow-x-auto pb-1.5 scrollbar-none">
             {REPROPEDIA_SUB_BABS.map((bab) => {
               const isActive = bab.id === activeBab.id;
               return (
                 <button
                   key={bab.id}
                   onClick={() => handleSelectBab(bab)}
-                  className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 border cursor-pointer ${isActive
+                  className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 border cursor-pointer ${isActive
                       ? "bg-primary text-white border-primary shadow-sm"
                       : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                     }`}
                 >
-                  <span>{bab.babNumber}</span>
+                  <span className="font-mono text-[11px]">{bab.babNumber}</span>
                   <span className="opacity-60">•</span>
-                  <span className="max-w-[130px] truncate">{bab.title}</span>
+                  <span className="max-w-[140px] truncate">{bab.title}</span>
                 </button>
               );
             })}
@@ -385,9 +412,9 @@ export default function RepropediaView() {
         {/* 2-Column Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* ============================================================ */}
-          {/* PANEL KIRI: DAFTAR ISI (lg:col-span-5)                       */}
+          {/* PANEL KIRI: DAFTAR ISI (lg:col-span-5) - HIDDEN ON MOBILE   */}
           {/* ============================================================ */}
-          <div className="lg:col-span-5 space-y-4">
+          <div className="hidden lg:block lg:col-span-5 space-y-4">
             <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center space-x-2">
@@ -486,26 +513,26 @@ export default function RepropediaView() {
           </div>
 
           {/* ============================================================ */}
-          {/* PANEL KANAN: OPTIMIZED READER (lg:col-span-7)               */}
+          {/* PANEL KANAN: OPTIMIZED READER (lg:col-span-7, full on mobile)*/}
           {/* ============================================================ */}
-          <div ref={viewerRef} className="lg:col-span-7 lg:sticky lg:top-20 space-y-3">
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-md overflow-hidden flex flex-col">
+          <div ref={viewerRef} className="w-full lg:col-span-7 lg:sticky lg:top-20 space-y-3">
+            <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md overflow-hidden flex flex-col">
               {/* Reader Header Toolbar */}
-              <div className="px-4 sm:px-6 py-3 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-2 border-b border-slate-800">
-                <div className="flex items-center space-x-2.5 min-w-0">
+              <div className="px-3 sm:px-6 py-2 sm:py-3 bg-slate-900 text-white flex items-center justify-between gap-2 border-b border-slate-800">
+                <div className="flex items-center space-x-2 sm:space-x-2.5 min-w-0">
                   <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                  <span className="text-xs font-black tracking-wide uppercase text-emerald-300 shrink-0">
+                  <span className="text-[11px] sm:text-xs font-black tracking-wide uppercase text-emerald-300 shrink-0">
                     {currentPage >= 4 ? activeBab.babNumber : "Pengantar"}
                   </span>
-                  <span className="text-slate-400 text-xs">•</span>
-                  <span className="text-xs font-bold text-slate-200 truncate max-w-[140px] sm:max-w-xs">
+                  <span className="text-slate-500 text-xs">•</span>
+                  <span className="text-xs font-bold text-slate-200 truncate max-w-[120px] sm:max-w-xs">
                     {getPageSectionTitle(currentPage)}
                   </span>
                 </div>
 
-                <div className="flex items-center space-x-2 shrink-0">
+                <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
                   {/* Page Indicator */}
-                  <span className="text-[11px] font-extrabold text-slate-200 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                  <span className="text-[10px] sm:text-[11px] font-extrabold text-slate-200 bg-slate-800 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg border border-slate-700">
                     Hal. {currentPage} / {TOTAL_PAGES}
                   </span>
 
@@ -567,108 +594,124 @@ export default function RepropediaView() {
                 </div>
               </div>
 
-              {/* Reader Main Stage */}
+              {/* Reader Main Stage - Maximized Page Focus */}
               <div
                 ref={readerStageRef}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                className="relative w-full h-[540px] sm:h-[640px] lg:h-[75vh] bg-slate-800/95 overflow-auto flex items-center justify-center p-2 sm:p-4 select-none"
+                className="relative w-full h-[68vh] sm:h-[74vh] lg:h-[78vh] min-h-[480px] sm:min-h-[600px] bg-slate-950 overflow-hidden flex items-center justify-center p-1 sm:p-3 select-none"
               >
                 {viewMode === "interactive" ? (
                   <>
-                    {/* Floating Navigation Chevron - Left */}
+                    {/* Floating Navigation Chevron - Left (Hidden on small mobile to not cover book text) */}
                     <button
                       onClick={goToPrevPage}
                       disabled={currentPage <= 1}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg backdrop-blur-xs border border-white/10 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-95 cursor-pointer"
+                      className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white items-center justify-center shadow-lg backdrop-blur-xs border border-white/10 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-95 cursor-pointer"
                       title="Halaman Sebelumnya (Panah Kiri)"
                     >
                       <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                     </button>
 
-                    {/* Page Image Container with Zoom Transform */}
+                    {/* Page Image Container with Zoom Transform - Maximized on Screen */}
                     <div
-                      className="transition-transform duration-200 ease-out flex items-center justify-center"
+                      className="w-full h-full flex items-center justify-center transition-transform duration-200 ease-out"
                       style={{
                         transform: `scale(${zoom})`,
                         transformOrigin: "center center",
                       }}
                     >
-                      <div className="relative shadow-2xl rounded-lg overflow-hidden bg-white max-w-full max-h-[500px] sm:max-h-[600px] lg:max-h-[70vh] aspect-[1191/1685]">
+                      <div className="relative shadow-2xl rounded-sm sm:rounded-md overflow-hidden bg-white w-full h-full max-w-full max-h-full aspect-[1191/1685] flex items-center justify-center">
                         <img
                           src={`/assets/repropedia/pages/page_${currentPage}.webp`}
                           alt={`Halaman ${currentPage} - ${getPageSectionTitle(currentPage)}`}
-                          className="w-full h-full object-contain block"
+                          className="w-auto h-auto max-w-full max-h-full object-contain block mx-auto"
                           onLoad={() => setIsImageLoading(false)}
                           loading="eager"
                         />
                       </div>
                     </div>
 
-                    {/* Floating Navigation Chevron - Right */}
+                    {/* Floating Navigation Chevron - Right (Hidden on small mobile) */}
                     <button
                       onClick={goToNextPage}
                       disabled={currentPage >= TOTAL_PAGES}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg backdrop-blur-xs border border-white/10 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-95 cursor-pointer"
+                      className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white items-center justify-center shadow-lg backdrop-blur-xs border border-white/10 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-95 cursor-pointer"
                       title="Halaman Selanjutnya (Panah Kanan)"
                     >
                       <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
                     </button>
-
-                    {/* Mobile Swipe Hint */}
-                    <div className="sm:hidden absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-950/70 text-slate-300 px-3 py-1 rounded-full text-[10px] font-medium backdrop-blur-xs pointer-events-none">
-                      Usap layar untuk ganti halaman ↔
-                    </div>
                   </>
                 ) : (
-                  /* Mode PDF Asli (Iframe) */
-                  <iframe
-                    src={`${PDF_FILE_PATH}#page=${currentPage}&toolbar=1&navpanes=0`}
-                    title={`Buku Repropedia - ${activeBab.title}`}
-                    className="w-full h-full border-0 bg-white"
-                  />
+                  /* Mode PDF Asli (Native Desktop or Google Docs Viewer on Mobile) */
+                  <div className="w-full h-full flex flex-col bg-slate-900">
+                    {isMobile && (
+                      <div className="px-3 py-1.5 bg-slate-800 text-slate-300 text-[10px] flex items-center justify-between border-b border-slate-700">
+                        <span className="font-semibold text-emerald-300">Viewer PDF Mobile (Google Docs)</span>
+                        <a
+                          href={PDF_FILE_PATH}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1"
+                        >
+                          <span>Buka Asli</span>
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                      </div>
+                    )}
+                    <iframe
+                      src={getPdfViewerUrl()}
+                      title={`Buku Repropedia - ${activeBab.title}`}
+                      className="w-full h-full border-0 bg-white flex-1"
+                    />
+                  </div>
                 )}
               </div>
 
               {/* Interactive Mode Bottom Controls & Page Slider */}
               {viewMode === "interactive" && (
-                <div className="px-4 py-3 bg-white border-t border-slate-100 flex flex-col gap-2">
-                  <div className="flex items-center justify-between gap-3">
+                <div className="px-3 sm:px-4 py-2 sm:py-3 bg-white border-t border-slate-100 flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between gap-2 sm:gap-3">
                     {/* Previous Button */}
                     <button
                       onClick={goToPrevPage}
                       disabled={currentPage <= 1}
-                      className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 disabled:opacity-30 disabled:pointer-events-none text-xs font-bold flex items-center space-x-1 transition-all cursor-pointer"
+                      className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 disabled:opacity-30 disabled:pointer-events-none text-xs font-bold flex items-center space-x-1 transition-all cursor-pointer"
                     >
                       <ChevronLeft className="h-4 w-4" />
                       <span className="hidden sm:inline">Sebelumnya</span>
                     </button>
 
                     {/* Interactive Page Slider */}
-                    <div className="flex-1 flex items-center space-x-3 max-w-md mx-auto">
-                      <span className="text-[11px] font-bold text-slate-400">1</span>
+                    <div className="flex-1 flex items-center space-x-2 sm:space-x-3 max-w-md mx-auto">
+                      <span className="text-[10px] sm:text-[11px] font-bold text-slate-400">1</span>
                       <input
                         type="range"
                         min="1"
                         max={TOTAL_PAGES}
                         value={currentPage}
                         onChange={(e) => goToPage(parseInt(e.target.value, 10))}
-                        className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                        className="w-full h-1.5 sm:h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                         title={`Geser Halaman (Saat ini: ${currentPage})`}
                       />
-                      <span className="text-[11px] font-bold text-slate-400">{TOTAL_PAGES}</span>
+                      <span className="text-[10px] sm:text-[11px] font-bold text-slate-400">{TOTAL_PAGES}</span>
                     </div>
 
                     {/* Next Button */}
                     <button
                       onClick={goToNextPage}
                       disabled={currentPage >= TOTAL_PAGES}
-                      className="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-emerald-700 text-white disabled:opacity-30 disabled:pointer-events-none text-xs font-bold flex items-center space-x-1 transition-all shadow-xs cursor-pointer"
+                      className="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-primary hover:bg-emerald-700 text-white disabled:opacity-30 disabled:pointer-events-none text-xs font-bold flex items-center space-x-1 transition-all shadow-xs cursor-pointer"
                     >
                       <span className="hidden sm:inline">Selanjutnya</span>
                       <ChevronRight className="h-4 w-4" />
                     </button>
+                  </div>
+
+                  {/* Discrete Mobile Swipe Cue underneath slider without blocking book */}
+                  <div className="sm:hidden text-center text-[10px] text-slate-400 font-medium pt-0.5">
+                    💡 Usap layar buku untuk ganti halaman
                   </div>
 
                   {/* Collapsible Filmstrip / Thumbnail Grid */}
@@ -720,8 +763,8 @@ export default function RepropediaView() {
                 </div>
               )}
 
-              {/* Reader Footer Info Bar */}
-              <div className="px-4 py-3 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-2">
+              {/* Reader Footer Info Bar - Hidden on mobile to keep focus on reading */}
+              <div className="hidden md:flex px-4 py-2.5 bg-slate-50 border-t border-slate-100 flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-2">
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                   <span className="font-semibold text-slate-700">
