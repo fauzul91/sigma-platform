@@ -303,7 +303,7 @@ export default function PageHeader({
               <div className="bg-emerald-600 -mx-3.5 -mt-3.5 px-3.5 py-2 rounded-t-2xl flex items-center justify-between text-white">
                 <div className="flex items-center space-x-1.5">
                   <Calendar className="h-3.5 w-3.5" />
-                  <span className="text-[11px] font-black uppercase tracking-wider">KEGIATAN &amp; EVENT</span>
+                  <span className="text-[11px] font-black uppercase tracking-wider">GALERI KEGIATAN</span>
                 </div>
                 <span className="text-[9px] font-bold bg-white/20 px-1.5 py-0.5 rounded">Aksi Nyata</span>
               </div>

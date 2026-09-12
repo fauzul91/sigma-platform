@@ -26,9 +26,9 @@ export default function AdminTopbar({
     if (path.includes("/edukasi/edit")) return "Edukasi & Media / Edit Konten";
     if (path.includes("/edukasi")) return "Edukasi & Media";
 
-    if (path.includes("/kegiatan/baru")) return "Kegiatan & Event / Agenda Baru";
-    if (path.includes("/kegiatan/edit")) return "Kegiatan & Event / Edit Agenda";
-    if (path.includes("/kegiatan")) return "Kegiatan & Event";
+    if (path.includes("/kegiatan/baru")) return "Galeri Kegiatan / Agenda Baru";
+    if (path.includes("/kegiatan/edit")) return "Galeri Kegiatan / Edit Agenda";
+    if (path.includes("/kegiatan")) return "Galeri Kegiatan";
 
     if (path.includes("/repropedia")) return "Repropedia";
     if (path.includes("/karya-kader")) return "Karya Kader";

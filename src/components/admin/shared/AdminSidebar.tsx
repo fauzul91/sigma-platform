@@ -60,7 +60,7 @@ export default function AdminSidebar({
     {
       title: "EVENT",
       items: [
-        { href: "/admin/kegiatan", label: "Kegiatan & Event", icon: Calendar },
+        { href: "/admin/kegiatan", label: "Galeri Kegiatan", icon: Calendar },
       ],
     },
     {

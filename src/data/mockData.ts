@@ -9,6 +9,7 @@ import type {
   OrgMember,
   ArticleItem,
 } from "@/types";
+import { QUIZ_TOPICS } from "./quizTopics";
 
 // Re-export types for backward compatibility
 export type {
@@ -410,79 +411,17 @@ export const statisticsCases: StatRecord[] = [
   },
 ];
 
-// 8. QUIZ QUESTIONS
-export const quizQuestions: QuizQuestion[] = [
-  {
-    id: "q1",
-    category: "pubertas",
-    questionText:
-      "Manakah hormon utama yang memicu perkembangan fisik sekunder pada remaja perempuan selama masa pubertas?",
-    options: [
-      "Testosteron",
-      "Estrogen dan Progesteron",
-      "Adrenalin",
-      "Melatonin",
-    ],
-    correctAnswer: 1,
-    explanation:
-      "Hormon estrogen dan progesteron diproduksi oleh indung telur (ovarium) perempuan saat pubertas dan memicu pembentukan payudara, pinggul, serta siklus menstruasi.",
-  },
-  {
-    id: "q2",
-    category: "pernikahan-anak",
-    questionText:
-      "Berapakah batas usia minimal untuk melangsungkan pernikahan baik bagi laki-laki maupun perempuan sesuai UU No. 16 Tahun 2019?",
-    options: ["16 tahun", "17 tahun", "18 tahun", "19 tahun"],
-    correctAnswer: 3,
-    explanation:
-      "Undang-Undang No. 16 Tahun 2019 menetapkan bahwa perkawinan hanya diizinkan apabila pria dan wanita sudah mencapai umur 19 tahun demi meminimalkan bahaya perkawinan anak.",
-  },
-  {
-    id: "q3",
-    category: "kekerasan-seksual",
-    questionText:
-      "Jika ada seseorang yang kamu kenal menyentuh area tubuh sensitifmu dan memintamu untuk merahasiakannya, tindakan terbaik apa yang harus segera kamu lakukan?",
-    options: [
-      "Diam saja karena takut dia marah",
-      "Mematuhinya agar tidak terjadi keributan",
-      "Menolak tegas, pergi, dan segera laporkan kepada orang tua, guru, atau kader kesehatan tepercaya",
-      "Menunggu sampai dia mengulanginya baru melapor",
-    ],
-    correctAnswer: 2,
-    explanation:
-      "Area sensitif tubuhmu adalah hak pribadimu. Setiap sentuhan tidak nyaman atau rahasia yang mencurigakan wajib ditolak keras dan segera dilaporkan demi keselamatanmu.",
-  },
-  {
-    id: "q4",
-    category: "hak-anak",
-    questionText:
-      "Berikut ini adalah empat hak dasar anak berdasarkan Konvensi Hak Anak PBB, KECUALI...",
-    options: [
-      "Hak kelangsungan hidup",
-      "Hak perlindungan",
-      "Hak memiliki kekayaan pribadi",
-      "Hak tumbuh kembang",
-    ],
-    correctAnswer: 2,
-    explanation:
-      "Empat hak dasar anak adalah hak kelangsungan hidup, hak tumbuh kembang, hak perlindungan, dan hak berpartisipasi. Memiliki kekayaan pribadi bukan salah satu hak dasar anak.",
-  },
-  {
-    id: "q5",
-    category: "kesehatan-mental",
-    questionText:
-      "Saat kamu merasa cemas berlebihan dan tertekan secara emosional karena cyberbullying, langkah awal yang paling bijak untuk self-care adalah...",
-    options: [
-      "Membalas pelaku dengan kata-kata kasar",
-      "Menghapus media sosial sementara (digital detox), bercerita kepada sahabat/keluarga, atau menghubungi konselor sebaya SIGMA",
-      "Menyimpan kesedihan sendirian di kamar",
-      "Mencari pelarian dengan begadang semalaman bermain game",
-    ],
-    correctAnswer: 1,
-    explanation:
-      "Melakukan digital detox membantu menenangkan pikiran dari paparan intimidasi siber. Bercerita kepada pendengar tepercaya/konselor SIGMA memberikan dukungan emosional yang sehat.",
-  },
-];
+// 8. QUIZ QUESTIONS (Sinkron 10 soal per kategori untuk siswa SMP)
+export const quizQuestions: QuizQuestion[] = QUIZ_TOPICS.flatMap((topic) =>
+  topic.fallbackQuestions.map((q) => ({
+    id: q.id,
+    category: topic.slug,
+    questionText: q.questionText,
+    options: q.options,
+    correctAnswer: q.correctAnswer,
+    explanation: q.explanation,
+  }))
+);
 
 // 9. ORGANIZATION MEMBERS (Badan Organisasi Kader GARUDA)
 export const orgMembers: OrgMember[] = [

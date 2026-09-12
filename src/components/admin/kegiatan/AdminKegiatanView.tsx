@@ -44,7 +44,7 @@ export default function AdminKegiatanView({
         <div>
           <div className="flex items-center space-x-2">
             <h1 className="text-xl sm:text-2xl font-black text-neutral-dark dark:text-slate-100 tracking-tight">
-              Manajemen Kegiatan &amp; Event
+              Manajemen Galeri Kegiatan
             </h1>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border dark:border-emerald-800/60 text-[11px] font-black">
               Agenda &amp; Galeri

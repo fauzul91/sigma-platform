@@ -125,26 +125,34 @@ export default function KaryaKaderView() {
         type="karya-kader"
       />
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-8 md:py-12">
         {/* Filters */}
-        <div className="flex items-center space-x-2 border-b border-slate-200 pb-4 mb-8 overflow-x-auto scrollbar-none">
+        <div className="flex items-center space-x-2.5 border-b border-slate-200 pb-4 mb-8 overflow-x-auto scrollbar-none">
           <Filter className="h-4 w-4 text-slate-400 shrink-0 hidden sm:inline" />
-          <div className="flex space-x-1.5">
-            {(["semua", "poster", "infografis", "video"] as const).map(
-              (type) => (
+          <div className="flex space-x-2">
+            {(
+              [
+                { key: "semua", label: "Semua" },
+                { key: "poster", label: "Poster" },
+                { key: "infografis", label: "Infografis" },
+                { key: "video", label: "Video" },
+              ] as const
+            ).map((tab) => {
+              const isActive = activeFilter === tab.key;
+              return (
                 <button
-                  key={type}
-                  onClick={() => setActiveFilter(type)}
-                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all uppercase tracking-wider whitespace-nowrap cursor-pointer ${
-                    activeFilter === type
-                      ? "bg-neutral-dark text-white shadow-sm"
-                      : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-50"
+                  key={tab.key}
+                  onClick={() => setActiveFilter(tab.key)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer border ${
+                    isActive
+                      ? "bg-primary text-white border-primary shadow-sm ring-2 ring-emerald-500/20"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-emerald-50/60 hover:text-emerald-800 hover:border-emerald-200"
                   }`}
                 >
-                  {type}
+                  {tab.label}
                 </button>
-              ),
-            )}
+              );
+            })}
           </div>
         </div>
 
