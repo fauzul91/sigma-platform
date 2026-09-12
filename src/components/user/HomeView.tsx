@@ -69,8 +69,8 @@ const QUIZ_PREVIEWS = [
     slug: "pubertas",
     title: "Kesehatan Reproduksi",
     description: "Pahami pubertas, perubahan biologis, dan kebersihan diri harian.",
-    duration: "3 Menit",
-    xp: "45 XP",
+    duration: "5 Menit",
+    xp: "100 XP",
     image: "/assets/quiz/reproduksi_pubertas.webp",
   },
   {
@@ -78,8 +78,8 @@ const QUIZ_PREVIEWS = [
     slug: "pernikahan-anak",
     title: "Pencegahan Perkawinan Anak",
     description: "Ketahui batas usia legal 19 tahun dan risiko medis kehamilan dini.",
-    duration: "3 Menit",
-    xp: "45 XP",
+    duration: "5 Menit",
+    xp: "100 XP",
     image: "/assets/quiz/perkawinan_anak.webp",
   },
   {
@@ -87,8 +87,8 @@ const QUIZ_PREVIEWS = [
     slug: "kesehatan-mental",
     title: "Kesehatan Mental",
     description: "Identifikasi kecemasan berlebih, cyberbullying, dan cara mengelola stress.",
-    duration: "2 Menit",
-    xp: "30 XP",
+    duration: "5 Menit",
+    xp: "100 XP",
     image: "/assets/quiz/kesehatan_mental.webp",
   },
   {
@@ -96,8 +96,8 @@ const QUIZ_PREVIEWS = [
     slug: "kekerasan-seksual",
     title: "Pencegahan Kekerasan Seksual",
     description: "Kenali batasan tubuh, consent, dan langkah pelaporan darurat.",
-    duration: "2 Menit",
-    xp: "30 XP",
+    duration: "5 Menit",
+    xp: "100 XP",
     image: "/assets/quiz/batasan_diri.webp",
   },
   {
@@ -105,8 +105,8 @@ const QUIZ_PREVIEWS = [
     slug: "hak-anak",
     title: "Hak-Hak Dasar Anak",
     description: "Ketahui 4 hak dasar anak berdasarkan Konvensi PBB dan hukum Indonesia.",
-    duration: "2 Menit",
-    xp: "30 XP",
+    duration: "5 Menit",
+    xp: "100 XP",
     image: "/assets/quiz/hak_anak.webp",
   },
 ];
@@ -441,54 +441,33 @@ export default function HomeView() {
         </div>
 
         {/* ============================================================ */}
-        {/* MOBILE & TABLET LAYOUT (< lg): HERO BANNER + 2-COL BALANCED GRID */}
+        {/* MOBILE & TABLET LAYOUT (< lg): 2-COLUMN BALANCED SEQUENTIAL GRID */}
         {/* ============================================================ */}
-        <div className="block lg:hidden space-y-3.5 sm:space-y-4">
-
-          {/* 1. Top Featured Hero Banner: Bab 01 - Kesehatan Reproduksi */}
-          <Link
-            href="/repropedia?bab=1"
-            className="group relative bg-gradient-to-br from-emerald-800 via-emerald-900 to-slate-950 text-white rounded-3xl p-5 sm:p-7 shadow-lg border border-emerald-700/40 hover:border-emerald-500 transition-all duration-300 flex items-center justify-between gap-4 overflow-hidden"
-          >
-            {/* Ambient Background Glow */}
-            <div className="pointer-events-none absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/20 blur-2xl" />
-
-            {/* Content Left */}
-            <div className="flex-1 min-w-0 z-10">
-              <div className="flex items-center space-x-2 mb-1.5 sm:mb-2">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 text-[10px] sm:text-xs font-black uppercase tracking-wider">
-                  Modul Utama • Bab 01
-                </span>
-              </div>
-              <h3 className="text-lg sm:text-2xl font-black text-white leading-snug group-hover:text-emerald-300 transition-colors">
-                Kesehatan Reproduksi
-              </h3>
-              <p className="mt-1 text-xs sm:text-sm text-emerald-100/85 font-medium leading-relaxed line-clamp-2">
-                Panduan menyeluruh masa pubertas, sistem biologis, dan kebersihan diri tanpa rasa tabu.
-              </p>
-              <div className="mt-3 flex items-center space-x-1.5 text-xs font-black text-amber-300 group-hover:text-amber-200 transition-colors">
-                <span>Baca Modul Lengkap</span>
-                <ArrowRight className="h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-
-            {/* 3D Visual Mascot Right */}
-            <div className="relative w-24 h-24 sm:w-32 sm:h-32 shrink-0 flex items-center justify-center z-10">
-              <Image
-                src="/assets/hero_section/health.webp"
-                alt="Kesehatan Reproduksi"
-                fill
-                unoptimized
-                sizes="130px"
-                className="object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)] group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          </Link>
-
-          {/* 2. Symmetrical 2-Column Grid (Bab 2, 4, 5, 6, & Bab 3 Full Width) */}
+        <div className="block lg:hidden">
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
 
-            {/* CARD 1: Bab 02 - Kenali Hak-Hak Anak */}
+            {/* CARD 1: Bab 01 - Kesehatan Reproduksi */}
+            <Link
+              href="/repropedia?bab=1"
+              className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    Bab 01
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Kesehatan Reproduksi
+                </h4>
+                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 sm:line-clamp-3">
+                  Panduan pubertas, sistem biologis, dan kebersihan diri.
+                </p>
+              </div>
+            </Link>
+
+            {/* CARD 2: Bab 02 - Kenali Hak-Hak Anak */}
             <Link
               href="/repropedia?bab=2"
               className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
@@ -509,7 +488,28 @@ export default function HomeView() {
               </div>
             </Link>
 
-            {/* CARD 2: Bab 04 - Bentuk Kekerasan Seksual */}
+            {/* CARD 3: Bab 03 - Risiko & Dampak Perkawinan Anak */}
+            <Link
+              href="/repropedia?bab=3"
+              className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    Bab 03
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
+                  Perkawinan Anak
+                </h4>
+                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 sm:line-clamp-3">
+                  Dampak kesiapan fisik, mental, pendidikan, dan masa depan.
+                </p>
+              </div>
+            </Link>
+
+            {/* CARD 4: Bab 04 - Bentuk Kekerasan Seksual */}
             <Link
               href="/repropedia?bab=4"
               className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
@@ -522,7 +522,7 @@ export default function HomeView() {
                   <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
-                  Bentuk Kekerasan Seksual
+                  Bentuk Kekerasan
                 </h4>
                 <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 sm:line-clamp-3">
                   Pahami jenis verbal, fisik, hingga kekerasan digital (KBGO).
@@ -530,7 +530,7 @@ export default function HomeView() {
               </div>
             </Link>
 
-            {/* CARD 3: Bab 05 - Pencegahan Kekerasan Seksual */}
+            {/* CARD 5: Bab 05 - Pencegahan Kekerasan Seksual */}
             <Link
               href="/repropedia?bab=5"
               className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
@@ -551,7 +551,7 @@ export default function HomeView() {
               </div>
             </Link>
 
-            {/* CARD 4: Bab 06 - Mengalami Kekerasan Seksual? */}
+            {/* CARD 6: Bab 06 - Mengalami Kekerasan Seksual? */}
             <Link
               href="/repropedia?bab=6"
               className="group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
@@ -572,36 +572,7 @@ export default function HomeView() {
               </div>
             </Link>
 
-            {/* CARD 5 (SPAN 2 COLS): Bab 03 - Risiko & Dampak Perkawinan Anak */}
-            <Link
-              href="/repropedia?bab=3"
-              className="col-span-2 group bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
-            >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-2 mb-1.5">
-                  <span className="text-[10px] sm:text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                    Bab 03
-                  </span>
-                  <span className="inline-flex items-center space-x-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                    <span>UU No. 16/2019 • Batas 19 Tahun</span>
-                  </span>
-                </div>
-                <h4 className="text-xs sm:text-sm font-extrabold text-neutral-dark group-hover:text-emerald-700 transition-colors leading-snug">
-                  Risiko &amp; Dampak Perkawinan Anak
-                </h4>
-                <p className="mt-1 text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2">
-                  Dampak kesiapan fisik, psikologis, pendidikan, dan masa depan remaja.
-                </p>
-              </div>
-              <div className="shrink-0 flex items-center space-x-1 text-xs font-bold text-emerald-700 group-hover:text-emerald-800">
-                <span className="hidden sm:inline">Pelajari Bab 03</span>
-                <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
           </div>
-
         </div>
 
         {/* ============================================================ */}
@@ -674,9 +645,7 @@ export default function HomeView() {
 
           </div>
 
-          {/* ============================================================ */}
           {/* KOLOM TENGAH (4 KOLOM DI DESKTOP): BOX 4 (CARD HERO TERTINGGI)*/}
-          {/* ============================================================ */}
           <div className="md:col-span-1 lg:col-span-4 flex flex-col">
             <Link
               href="/repropedia?bab=1"
@@ -687,7 +656,7 @@ export default function HomeView() {
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-tight">
                   Kesehatan Reproduksi
                 </h3>
-                <p className="mt-3 text-xs sm:text-sm text-white/90 font-medium leading-relaxed">
+                <p className="mt-3 text-xs sm:text-sm text-emerald-100/90 font-medium leading-relaxed">
                   Panduan menyeluruh mengenal perubahan tubuh masa pubertas, sistem biologis, dan kebersihan diri tanpa rasa malu.
                 </p>
               </div>
@@ -700,7 +669,7 @@ export default function HomeView() {
                   fill
                   unoptimized
                   sizes="(max-width: 768px) 200px, 240px"
-                  className="object-contain filter drop-shadow-[0_16px_32px_rgba(0,0,0,0.3)] group-hover:scale-105 group-hover:-rotate-1 transition-all duration-300"
+                  className="object-contain filter drop-shadow-[0_16px_32px_rgba(0,0,0,0.3)] group-hover:scale-105 transition-all duration-300"
                 />
               </div>
 
@@ -796,14 +765,23 @@ export default function HomeView() {
               </div>
             </div>
 
-            {/* Right Column: 2x2 Grid of Quiz Categories from Quiz Page */}
+            {/* Right Column: 2x2 Grid of Quiz Categories (Horizontal Snap on Mobile, 2-Col on Desktop) */}
             <div className="lg:col-span-7">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+              {/* Mobile swipe hint */}
+              <div className="flex sm:hidden items-center justify-between text-xs text-emerald-100/80 font-medium mb-3">
+                <span>Pilih kuis interaktif</span>
+                <span className="flex items-center gap-1 text-amber-300 font-bold">
+                  <span>Geser</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
+
+              <div className="flex sm:grid overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none scrollbar-hide pb-4 sm:pb-0 -mx-6 px-6 sm:mx-0 sm:px-0 sm:grid-cols-2 gap-4 sm:gap-5">
                 {QUIZ_PREVIEWS.map((quiz) => (
                   <Link
                     key={quiz.id}
                     href={`/kuis/${quiz.slug}`}
-                    className="group relative bg-white rounded-3xl p-5 shadow-lg border border-white/80 hover:shadow-2xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                    className="group relative bg-white rounded-3xl p-5 shadow-lg border border-white/80 hover:shadow-2xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between w-[80vw] max-w-[300px] sm:w-auto sm:max-w-none shrink-0 snap-start"
                   >
                     <div>
                       <div className="flex items-start gap-3.5 mb-2">
@@ -873,12 +851,21 @@ export default function HomeView() {
               </Link>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* Mobile swipe hint */}
+          <div className="flex md:hidden items-center justify-between text-xs text-slate-400 font-medium mb-3">
+            <span>Geser untuk artikel lainnya</span>
+            <span className="flex items-center gap-1 text-emerald-700 font-bold">
+              <span>Geser</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </span>
+          </div>
+
+          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 pt-1 -mx-6 px-6 sm:-mx-10 sm:px-10 md:mx-0 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
             {isDataLoading ? (
               <>
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
+                <div className="w-[82vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none"><CardSkeleton /></div>
+                <div className="w-[82vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none"><CardSkeleton /></div>
+                <div className="w-[82vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none"><CardSkeleton /></div>
               </>
             ) : (
               mediaList.slice(0, 3).map((item) => {
@@ -887,7 +874,7 @@ export default function HomeView() {
                   <Link
                     key={item.id}
                     href={`/edukasi?post=${item.slug}`}
-                    className="group flex flex-col justify-between transition-all duration-300"
+                    className="group flex flex-col justify-between transition-all duration-300 w-[82vw] max-w-[320px] sm:w-[320px] md:w-auto md:max-w-none shrink-0 snap-start bg-white md:bg-transparent p-4 md:p-0 rounded-3xl md:rounded-none border border-slate-200/90 md:border-0 shadow-xs md:shadow-none hover:border-emerald-300 hover:shadow-md md:hover:shadow-none"
                   >
                     <div>
                       {/* Media Image / Thumbnail Container */}
@@ -946,7 +933,7 @@ export default function HomeView() {
                     </div>
 
                     {/* Meta Footer: Author · Date */}
-                    <div className="mt-4 pt-3 flex items-center text-xs text-slate-400 font-medium">
+                    <div className="mt-4 pt-3 border-t border-slate-100 md:border-transparent flex items-center text-xs text-slate-400 font-medium">
                       <span>{item.author}</span>
                       <span className="mx-1.5 font-bold">·</span>
                       <span>{item.date}</span>

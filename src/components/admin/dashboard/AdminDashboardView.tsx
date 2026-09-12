@@ -91,7 +91,7 @@ export default function AdminDashboardView({
       dotBg: "bg-emerald-500",
     },
     {
-      title: "Kegiatan & Event",
+      title: "Galeri Kegiatan",
       count: stats.totalEvents,
       subtitle: "Agenda Sosialisasi",
       icon: Calendar,

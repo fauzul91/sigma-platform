@@ -17,7 +17,8 @@ import {
   ChevronLeft,
   Check,
   Award,
-  X
+  X,
+  AlertTriangle,
 } from "lucide-react";
 import { QuizTopic } from "@/data/quizTopics";
 import { userService } from "@/services/user/userService";
@@ -37,9 +38,10 @@ export default function QuizSessionView({ topic }: QuizSessionViewProps) {
   const [selectedOptionIdx, setSelectedOptionIdx] = useState<number | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  const [showExitModal, setShowExitModal] = useState(false);
 
-  // Timer countdown (e.g. 3 minutes = 180 seconds)
-  const [secondsRemaining, setSecondsRemaining] = useState(180);
+  // Timer countdown (e.g. 5 minutes = 300 seconds for 10 questions)
+  const [secondsRemaining, setSecondsRemaining] = useState(300);
 
   useEffect(() => {
     userService.getQuizQuestions().then((dbQuestions: QuizQuestion[]) => {
@@ -88,7 +90,7 @@ export default function QuizSessionView({ topic }: QuizSessionViewProps) {
     setSelectedOptionIdx(null);
     setIsSubmitted(false);
     setCorrectCount(0);
-    setSecondsRemaining(180);
+    setSecondsRemaining(300);
     setScreen("play");
   };
 
@@ -124,14 +126,24 @@ export default function QuizSessionView({ topic }: QuizSessionViewProps) {
   };
 
   const handleExitQuiz = () => {
-    if (screen === "play" && !isSubmitted) {
-      const confirmExit = window.confirm(
-        "Yakin ingin keluar dari kuis? Progres jawaban Anda tidak akan tersimpan."
-      );
-      if (!confirmExit) return;
+    if (screen === "play") {
+      setShowExitModal(true);
+      return;
     }
     router.push("/kuis");
   };
+
+  // Close exit modal on ESC key
+  useEffect(() => {
+    if (!showExitModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowExitModal(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showExitModal]);
 
   const currentQ = questions[currentIdx] || questions[0];
   const progressPercent = Math.round(((currentIdx + 1) / questions.length) * 100);
@@ -153,7 +165,16 @@ export default function QuizSessionView({ topic }: QuizSessionViewProps) {
         </button>
 
         {/* Center: Brand logo */}
-        <Link href="/beranda" className="flex items-center space-x-1.5 group">
+        <Link
+          href="/beranda"
+          onClick={(e) => {
+            if (screen === "play") {
+              e.preventDefault();
+              setShowExitModal(true);
+            }
+          }}
+          className="flex items-center space-x-1.5 group"
+        >
           <span className="text-2xl sm:text-3xl font-black tracking-tighter text-primary select-none lowercase">
             sigma<span className="text-emerald-500">.</span>
           </span>
@@ -533,6 +554,50 @@ export default function QuizSessionView({ topic }: QuizSessionViewProps) {
       )}
 
       </div>
+
+      {/* Exit Confirmation Modal (Polished UI/UX for SMP Students) */}
+      {showExitModal && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={() => setShowExitModal(false)}
+        >
+          <div
+            className="relative bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl border border-slate-200/90 text-center animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Warning Icon */}
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/80 text-amber-600 mx-auto flex items-center justify-center mb-3.5 shadow-2xs">
+              <AlertTriangle className="h-6 w-6" />
+            </div>
+
+            {/* Title & Description */}
+            <h3 className="text-lg font-black text-slate-900 leading-snug">
+              Keluar dari Kuis?
+            </h3>
+            <p className="mt-2 text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+              Progres jawaban dan sisa waktumu saat ini tidak akan tersimpan jika keluar sekarang.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="mt-6 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowExitModal(false)}
+                className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold transition-all cursor-pointer"
+              >
+                Lanjut Kuis
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push("/kuis")}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold transition-all shadow-xs hover:shadow-sm active:scale-98 cursor-pointer"
+              >
+                Ya, Keluar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

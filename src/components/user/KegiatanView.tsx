@@ -217,7 +217,7 @@ export default function KegiatanView() {
     <div className="bg-slate-50 min-h-screen font-sans">
       {/* 1. Page Header */}
       <PageHeader
-        title="KEGIATAN & EVENT"
+        title="GALERI KEGIATAN"
         description="Menelusuri jejak kampanye, seminar sosialisasi, dan pelatihan pendampingan sebaya yang dilaksanakan oleh Kader GARUDA secara berkala."
         badge="DOKUMENTASI AKSI"
         type="kegiatan"
