@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import { usePathname } from "next/navigation";
@@ -18,25 +18,17 @@ function UserLayoutContent({ children }: { children: React.ReactNode }) {
     (pathname.startsWith("/kuis/") && pathname !== "/kuis") ||
     (pathname.startsWith("/permainan/kuis/") && pathname !== "/permainan/kuis");
 
-  // In fullscreen game mode or active quiz session: No Navbar, No Footer, No SosButton
-  if (isFullscreenGame || isQuizSession) {
-    return (
-      <main className="min-h-screen flex flex-col bg-[#faf8f5]">
-        {children}
-      </main>
-    );
-  }
+  const hideChrome = isFullscreenGame || isQuizSession;
 
-  // Standard website view with Navbar and Footer
   return (
-    <>
-      <Navbar />
-      <main className="flex-grow pt-[68px] md:pt-[76px]">
+    <div className="min-h-screen flex flex-col bg-[#faf8f5]">
+      {!hideChrome && <Navbar />}
+      <main className={`flex-grow flex flex-col ${hideChrome ? "" : "pt-[68px] md:pt-[76px]"}`}>
         {children}
       </main>
-      <Footer />
-      <SosButton />
-    </>
+      {!hideChrome && <Footer />}
+      {!hideChrome && <SosButton />}
+    </div>
   );
 }
 

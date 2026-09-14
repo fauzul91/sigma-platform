@@ -26,15 +26,17 @@ export default function DetectiveGameView() {
 
   // Fullscreen only during active investigation, verdict, or final result
   useEffect(() => {
-    if (phase === "investigate" || phase === "verdict" || phase === "result-final") {
-      setIsFullscreenGame(true);
-    } else {
-      setIsFullscreenGame(false);
-    }
-    return () => setIsFullscreenGame(false);
+    const isFullscreen = phase === "investigate" || phase === "verdict" || phase === "result-final";
+    setIsFullscreenGame(isFullscreen);
   }, [phase, setIsFullscreenGame]);
 
-  const currentCase = cases[caseIndex];
+  useEffect(() => {
+    return () => {
+      setIsFullscreenGame(false);
+    };
+  }, [setIsFullscreenGame]);
+
+  const currentCase = cases[caseIndex] || cases[0];
   const totalCases = cases.length;
   const isLastCase = caseIndex === totalCases - 1;
   const progressPercent = Math.round(((caseIndex + (phase === "verdict" ? 1 : 0)) / totalCases) * 100);
@@ -166,6 +168,7 @@ export default function DetectiveGameView() {
         relatedTopicLabel="Tingkatkan Literasi Digital di Repropedia"
         relatedTopicHref="/repropedia"
         playAgainHref="/permainan/detektif"
+        onPlayAgain={handleStartGame}
         backHref="/permainan"
       />
     );

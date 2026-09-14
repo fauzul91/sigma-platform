@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
@@ -24,13 +24,15 @@ export default function MythOrFactGameView() {
 
   // Fullscreen only when playing, feedback, or results
   useEffect(() => {
-    if (phase === "playing" || phase === "feedback" || phase === "result") {
-      setIsFullscreenGame(true);
-    } else {
-      setIsFullscreenGame(false);
-    }
-    return () => setIsFullscreenGame(false);
+    const isFullscreen = phase === "playing" || phase === "feedback" || phase === "result";
+    setIsFullscreenGame(isFullscreen);
   }, [phase, setIsFullscreenGame]);
+
+  useEffect(() => {
+    return () => {
+      setIsFullscreenGame(false);
+    };
+  }, [setIsFullscreenGame]);
 
   const answeredRef = useRef(false);
 
@@ -50,7 +52,7 @@ export default function MythOrFactGameView() {
 
   const handleAnswer = useCallback(
     (answer: "myth" | "fact") => {
-      if (answeredRef.current || phase !== "playing") return;
+      if (answeredRef.current || phase !== "playing" || !currentCard) return;
       answeredRef.current = true;
 
       const isCorrect = answer === currentCard.answer;
@@ -167,6 +169,7 @@ export default function MythOrFactGameView() {
         relatedTopicLabel="Pelajari Fakta Lengkap di Repropedia"
         relatedTopicHref="/repropedia"
         playAgainHref="/permainan/mitos-fakta"
+        onPlayAgain={handleStartGame}
         backHref="/permainan"
       />
     );

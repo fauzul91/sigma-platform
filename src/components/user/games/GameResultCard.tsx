@@ -13,6 +13,7 @@ interface GameResultCardProps {
   relatedTopicHref: string;
   playAgainHref: string;
   backHref: string;
+  onPlayAgain?: () => void;
 }
 
 function getEvaluation(score: number, total: number) {
@@ -54,6 +55,7 @@ export default function GameResultCard({
   relatedTopicHref,
   playAgainHref,
   backHref,
+  onPlayAgain,
 }: GameResultCardProps) {
   const percentage = Math.round((score / total) * 100);
   const evaluation = getEvaluation(score, total);
@@ -169,13 +171,24 @@ export default function GameResultCard({
 
           {/* 3D Tactile Action Buttons */}
           <div className="pt-2 flex flex-col sm:flex-row gap-3">
-            <Link
-              href={playAgainHref}
-              className="flex-1 py-3.5 px-5 rounded-2xl bg-[#facc15] hover:bg-[#fde047] border-b-[4px] border-[#ca8a04] active:border-b-0 active:translate-y-1 text-slate-950 font-black text-sm shadow-md hover:shadow-lg transition-all duration-150 flex items-center justify-center space-x-2"
-            >
-              <RotateCcw className="h-4 w-4 stroke-[2.5]" />
-              <span>Mainkan Lagi</span>
-            </Link>
+            {onPlayAgain ? (
+              <button
+                type="button"
+                onClick={onPlayAgain}
+                className="flex-1 py-3.5 px-5 rounded-2xl bg-[#facc15] hover:bg-[#fde047] border-b-[4px] border-[#ca8a04] active:border-b-0 active:translate-y-1 text-slate-950 font-black text-sm shadow-md hover:shadow-lg transition-all duration-150 flex items-center justify-center space-x-2 cursor-pointer"
+              >
+                <RotateCcw className="h-4 w-4 stroke-[2.5]" />
+                <span>Mainkan Lagi</span>
+              </button>
+            ) : (
+              <Link
+                href={playAgainHref}
+                className="flex-1 py-3.5 px-5 rounded-2xl bg-[#facc15] hover:bg-[#fde047] border-b-[4px] border-[#ca8a04] active:border-b-0 active:translate-y-1 text-slate-950 font-black text-sm shadow-md hover:shadow-lg transition-all duration-150 flex items-center justify-center space-x-2"
+              >
+                <RotateCcw className="h-4 w-4 stroke-[2.5]" />
+                <span>Mainkan Lagi</span>
+              </Link>
+            )}
             <Link
               href={backHref}
               className="flex-1 py-3.5 px-5 rounded-2xl bg-white hover:bg-slate-50 border-2 border-slate-300 active:translate-y-1 text-slate-700 font-black text-sm shadow-xs transition-all flex items-center justify-center space-x-2"

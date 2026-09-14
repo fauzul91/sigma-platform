@@ -37,40 +37,18 @@ export default function MythCard({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onSwipe]);
 
-  // Touch handlers
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    startX.current = e.touches[0].clientX;
-    setIsDragging(true);
-  }, []);
-
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (startX.current === null) return;
-    const delta = e.touches[0].clientX - startX.current;
-    setDragX(delta);
-  }, []);
-
-  const handleTouchEnd = useCallback(() => {
-    setIsDragging(false);
-    const threshold = 85;
-    if (dragX < -threshold) {
-      onSwipe("myth");
-    } else if (dragX > threshold) {
-      onSwipe("fact");
-    } else {
-      setDragX(0);
-    }
-    startX.current = null;
-    setTimeout(() => setDragX(0), 160);
-  }, [dragX, onSwipe]);
-
-  // Mouse drag handlers
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  // Unified Pointer handlers (works flawlessly across desktop mouse & mobile touch)
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
     startX.current = e.clientX;
     setIsDragging(true);
   }, []);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
       if (!isDragging || startX.current === null) return;
       const delta = e.clientX - startX.current;
       setDragX(delta);
@@ -78,20 +56,39 @@ export default function MythCard({
     [isDragging]
   );
 
-  const handleMouseUp = useCallback(() => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    const threshold = 85;
-    if (dragX < -threshold) {
-      onSwipe("myth");
-    } else if (dragX > threshold) {
-      onSwipe("fact");
-    } else {
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging) return;
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {}
+      setIsDragging(false);
+      const threshold = 70;
+      if (dragX < -threshold) {
+        onSwipe("myth");
+      } else if (dragX > threshold) {
+        onSwipe("fact");
+      } else {
+        setDragX(0);
+      }
+      startX.current = null;
+      setTimeout(() => setDragX(0), 160);
+    },
+    [dragX, isDragging, onSwipe]
+  );
+
+  const handlePointerCancel = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging) return;
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {}
+      setIsDragging(false);
       setDragX(0);
-    }
-    startX.current = null;
-    setTimeout(() => setDragX(0), 160);
-  }, [dragX, isDragging, onSwipe]);
+      startX.current = null;
+    },
+    [isDragging]
+  );
 
   const rotation = Math.max(-14, Math.min(14, dragX * 0.09));
   const leftOpacity = Math.max(0, Math.min(1, -dragX / 70));
@@ -114,13 +111,10 @@ export default function MythCard({
           touchAction: "none",
           willChange: "transform",
         }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
       >
         {/* 4 Corner Tab Accents (Gamified Quest Frame) */}
         <div className="absolute top-0 left-0 w-0 h-0 border-t-[16px] border-r-[16px] border-t-emerald-600 border-r-transparent pointer-events-none z-10" />

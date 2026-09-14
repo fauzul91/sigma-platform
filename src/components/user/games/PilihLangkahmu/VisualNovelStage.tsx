@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
@@ -50,9 +50,11 @@ export default function VisualNovelStage({
   const [history, setHistory] = useState<DecisionHistoryEntry[]>([]);
 
   const currentScene: ScenarioScene =
-    scenario.scenes[currentSceneId] || scenario.scenes[scenario.startSceneId];
+    scenario.scenes[currentSceneId] ||
+    scenario.scenes[scenario.startSceneId] ||
+    Object.values(scenario.scenes)[0];
   const currentMessage: ChatMessage | undefined =
-    currentScene.messages[messageIndex];
+    currentScene?.messages?.[messageIndex] || currentScene?.messages?.[0];
 
   // Replace {name} placeholder with user's name
   const formatText = (text: string): string => {
@@ -95,13 +97,13 @@ export default function VisualNovelStage({
     }
 
     // If more messages in current scene, advance message
-    if (messageIndex < currentScene.messages.length - 1) {
+    if (messageIndex < (currentScene?.messages?.length || 1) - 1) {
       setMessageIndex((prev) => prev + 1);
       return;
     }
 
     // If at end of messages and this is an ending scene with no choices
-    if (currentScene.isEnding || !currentScene.choices || currentScene.choices.length === 0) {
+    if (currentScene?.isEnding || !currentScene?.choices || currentScene.choices.length === 0) {
       onFinishScenario(history);
     }
   };

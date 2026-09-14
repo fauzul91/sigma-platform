@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useMemo } from "react";
 import {
@@ -22,19 +22,22 @@ export default function PilihLangkahmuView() {
   const [viewState, setViewState] = useState<ViewState>("select_scenario");
   const [activeScenario, setActiveScenario] = useState<Scenario>(ALL_SCENARIOS[0]);
   const [history, setHistory] = useState<DecisionHistoryEntry[]>([]);
+  const [stageKey, setStageKey] = useState<number>(0);
   const [isClient, setIsClient] = useState<boolean>(false);
 
   const { setIsFullscreenGame } = useGameFullscreen();
 
-  // Fullscreen controller: only fullscreen during actual gameplay, name input modal, or reflection
+  // Fullscreen controller: only fullscreen during actual gameplay and reflection
   useEffect(() => {
-    if (viewState === "playing" || viewState === "reflection" || viewState === "enter_name") {
-      setIsFullscreenGame(true);
-    } else {
-      setIsFullscreenGame(false);
-    }
-    return () => setIsFullscreenGame(false);
+    const isFullscreen = viewState === "playing" || viewState === "reflection";
+    setIsFullscreenGame(isFullscreen);
   }, [viewState, setIsFullscreenGame]);
+
+  useEffect(() => {
+    return () => {
+      setIsFullscreenGame(false);
+    };
+  }, [setIsFullscreenGame]);
 
   // Load player name from localStorage on mount
   useEffect(() => {
@@ -59,6 +62,7 @@ export default function PilihLangkahmuView() {
   const handleSelectScenario = (scenario: Scenario) => {
     setActiveScenario(scenario);
     setHistory([]);
+    setStageKey((k) => k + 1);
     setViewState("playing");
   };
 
@@ -71,6 +75,7 @@ export default function PilihLangkahmuView() {
   // Restart current scenario
   const handleRestartScenario = () => {
     setHistory([]);
+    setStageKey((k) => k + 1);
     setViewState("playing");
   };
 
@@ -112,8 +117,8 @@ export default function PilihLangkahmuView() {
     );
   }
 
-  // 1. Regular View (Select Scenario): Normal website page with Navbar and Footer
-  if (viewState === "select_scenario") {
+  // 1. Regular View (Select Scenario & Enter Name): Normal website page with Navbar and Footer
+  if (viewState === "select_scenario" || viewState === "enter_name") {
     return (
       <div className="bg-[#faf8f5] min-h-screen font-sans relative selection:bg-emerald-100 selection:text-emerald-900 flex flex-col justify-between">
         {/* Subtle Diamond Pattern Overlay */}
@@ -126,21 +131,35 @@ export default function PilihLangkahmuView() {
         />
 
         <main className="relative z-10 w-full flex-1 flex flex-col justify-center py-6 sm:py-10">
-          <ScenarioSelectHub
-            playerName={playerName}
-            scenarios={ALL_SCENARIOS}
-            onSelectScenario={handleSelectScenario}
-            onChangeName={() => setViewState("enter_name")}
-            onBackToHub={() => {
-              window.location.href = "/permainan";
-            }}
-          />
+          {viewState === "enter_name" ? (
+            <PlayerNameModal
+              initialName={playerName === "Kawan" ? "" : playerName}
+              onSubmitName={handleNameSubmit}
+              onBackToHub={() => {
+                if (playerName && playerName !== "Kawan") {
+                  setViewState("select_scenario");
+                } else {
+                  window.location.href = "/permainan";
+                }
+              }}
+            />
+          ) : (
+            <ScenarioSelectHub
+              playerName={playerName}
+              scenarios={ALL_SCENARIOS}
+              onSelectScenario={handleSelectScenario}
+              onChangeName={() => setViewState("enter_name")}
+              onBackToHub={() => {
+                window.location.href = "/permainan";
+              }}
+            />
+          )}
         </main>
       </div>
     );
   }
 
-  // 2. Fullscreen Immersive Canvas (Playing, Enter Name, Reflection)
+  // 2. Fullscreen Immersive Canvas (Playing, Reflection)
   return (
     <div className="bg-[#08150f] min-h-screen font-sans relative selection:bg-emerald-500 selection:text-white flex flex-col justify-between overflow-x-hidden">
       {/* Rich Forest / Emerald Ambient Radial Gradient matching visual novel stage */}
@@ -156,23 +175,9 @@ export default function PilihLangkahmuView() {
       />
 
       <main className="relative z-10 w-full flex-1 flex flex-col justify-center">
-        {viewState === "enter_name" && (
-          <PlayerNameModal
-            initialName={playerName === "Kawan" ? "" : playerName}
-            onSubmitName={handleNameSubmit}
-            onBackToHub={() => {
-              if (playerName && playerName !== "Kawan") {
-                setViewState("select_scenario");
-              } else {
-                window.location.href = "/permainan";
-              }
-            }}
-          />
-        )}
-
         {viewState === "playing" && (
           <VisualNovelStage
-            key={activeScenario.id}
+            key={`${activeScenario.id}-${stageKey}`}
             scenario={activeScenario}
             playerName={playerName || "Kawan"}
             onFinishScenario={handleFinishScenario}
