@@ -30,6 +30,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `https://sigmaplatform.vercel.app/permainan/kuis/${topic.slug}`,
     },
+    openGraph: {
+      title: `Kuis: ${topic.title} | SIGMA`,
+      description: topic.description,
+      url: `https://sigmaplatform.vercel.app/permainan/kuis/${topic.slug}`,
+      type: "website",
+      images: [
+        {
+          url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: `Kuis: ${topic.title}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Kuis: ${topic.title} | SIGMA`,
+      description: topic.description,
+      images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
+    },
   };
 }
 

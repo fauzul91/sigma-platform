@@ -3,11 +3,31 @@ import React from "react";
 import KegiatanView from "@/components/user/KegiatanView";
 
 export const metadata: Metadata = {
-  title: "Kegiatan GARUDA",
+  title: "Galeri Kegiatan GARUDA | SIGMA",
   description: "Jelajahi aktivitas sosialisasi, seminar kesehatan, dan pelatihan kader sebaya dalam upaya pencegahan pernikahan usia anak di desa.",
   alternates: {
     canonical: "https://sigmaplatform.vercel.app/kegiatan",
-  }
+  },
+  openGraph: {
+    title: "Galeri Kegiatan GARUDA | SIGMA",
+    description: "Jelajahi aktivitas sosialisasi, seminar kesehatan, dan pelatihan kader sebaya dalam upaya pencegahan pernikahan usia anak di desa.",
+    url: "https://sigmaplatform.vercel.app/kegiatan",
+    type: "website",
+    images: [
+      {
+        url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Kegiatan GARUDA SIGMA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Galeri Kegiatan GARUDA | SIGMA",
+    description: "Aktivitas sosialisasi, seminar kesehatan, dan pelatihan kader sebaya SIGMA.",
+    images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
+  },
 };
 
 export default function KegiatanPage() {

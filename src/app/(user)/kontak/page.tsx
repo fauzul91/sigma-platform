@@ -3,11 +3,31 @@ import React from "react";
 import KontakView from "@/components/user/KontakView";
 
 export const metadata: Metadata = {
-  title: "Hubungi Kami",
+  title: "Hubungi Kami | SIGMA",
   description: "Hubungi tim pengurus Program SIGMA dan Kader GARUDA untuk saran, masukan, kerjasama instansi, atau undangan sosialisasi.",
   alternates: {
     canonical: "https://sigmaplatform.vercel.app/kontak",
-  }
+  },
+  openGraph: {
+    title: "Hubungi Kami | SIGMA",
+    description: "Hubungi tim pengurus Program SIGMA dan Kader GARUDA untuk saran, masukan, kerjasama instansi, atau undangan sosialisasi.",
+    url: "https://sigmaplatform.vercel.app/kontak",
+    type: "website",
+    images: [
+      {
+        url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Hubungi Tim Program SIGMA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hubungi Kami | SIGMA",
+    description: "Kader GARUDA terbuka terhadap kolaborasi instansi dan masukan platform.",
+    images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
+  },
 };
 
 export default function KontakPage() {

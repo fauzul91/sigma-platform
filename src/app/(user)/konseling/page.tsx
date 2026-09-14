@@ -3,11 +3,31 @@ import React from "react";
 import KonselingView from "@/components/user/KonselingView";
 
 export const metadata: Metadata = {
-  title: "Bantuan & Konseling",
+  title: "Bantuan & Konseling Sebaya | SIGMA",
   description: "Jaringan rujukan pendampingan psikologis, medis, dan konseling sebaya Kader GARUDA untuk remaja di wilayah Jember.",
   alternates: {
     canonical: "https://sigmaplatform.vercel.app/konseling",
-  }
+  },
+  openGraph: {
+    title: "Bantuan & Konseling Sebaya | SIGMA",
+    description: "Jaringan rujukan pendampingan psikologis, medis, dan konseling sebaya Kader GARUDA untuk remaja di wilayah Jember.",
+    url: "https://sigmaplatform.vercel.app/konseling",
+    type: "website",
+    images: [
+      {
+        url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Layanan Konseling Sebaya SIGMA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bantuan & Konseling Sebaya | SIGMA",
+    description: "Layanan bantuan konseling sebaya, Guru BK, dan bidan Puskesmas SIGMA.",
+    images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
+  },
 };
 
 export default function KonselingPage() {

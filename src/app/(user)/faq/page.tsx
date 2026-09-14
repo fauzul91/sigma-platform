@@ -3,10 +3,30 @@ import React from "react";
 import FaqView from "@/components/user/FaqView";
 
 export const metadata: Metadata = {
-  title: "FAQ Umum",
+  title: "Tanya Jawab (FAQ) | SIGMA",
   description: "Pertanyaan yang sering diajukan seputar kesehatan reproduksi remaja, pencegahan perkawinan usia anak, dan layanan konseling Program SIGMA.",
   alternates: {
     canonical: "https://sigmaplatform.vercel.app/faq",
+  },
+  openGraph: {
+    title: "Tanya Jawab (FAQ) | SIGMA",
+    description: "Pertanyaan yang sering diajukan seputar kesehatan reproduksi remaja, pencegahan perkawinan usia anak, dan layanan konseling Program SIGMA.",
+    url: "https://sigmaplatform.vercel.app/faq",
+    type: "website",
+    images: [
+      {
+        url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "FAQ Program SIGMA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tanya Jawab (FAQ) | SIGMA",
+    description: "Tanya jawab kesehatan reproduksi dan pencegahan pernikahan anak di platform SIGMA.",
+    images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
   },
 };
 

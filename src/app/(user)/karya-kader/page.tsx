@@ -3,11 +3,31 @@ import React from "react";
 import KaryaKaderView from "@/components/user/KaryaKaderView";
 
 export const metadata: Metadata = {
-  title: "Komunitas GARUDA",
+  title: "Karya Siswa & Kader GARUDA | SIGMA",
   description: "Galeri karya poster, cerita, dan ekspresi kreasi siswa dalam kampanye anti-pernikahan dini dan kepedulian gender.",
   alternates: {
     canonical: "https://sigmaplatform.vercel.app/karya-kader",
-  }
+  },
+  openGraph: {
+    title: "Karya Siswa & Kader GARUDA | SIGMA",
+    description: "Galeri karya poster, cerita, dan ekspresi kreasi siswa dalam kampanye anti-pernikahan dini dan kepedulian gender.",
+    url: "https://sigmaplatform.vercel.app/karya-kader",
+    type: "website",
+    images: [
+      {
+        url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Karya Siswa & Kader GARUDA SIGMA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Karya Siswa & Kader GARUDA | SIGMA",
+    description: "Galeri karya poster, cerita, dan ekspresi kreasi siswa dalam kampanye anti-pernikahan dini.",
+    images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
+  },
 };
 
 export default function KaryaKaderPage() {

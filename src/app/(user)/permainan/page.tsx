@@ -3,11 +3,33 @@ import React from "react";
 import GamesHubView from "@/components/user/games/GamesHubView";
 
 export const metadata: Metadata = {
-  title: "Permainan | SIGMA",
+  title: "Permainan Edukasi Interaktif | SIGMA",
   description:
-    "Tiga cara belajar interaktif: Mitos atau Fakta, Detektif Informasi, dan Kuis Pemahaman. Asah wawasan dan daya kritis lewat pengalaman yang menyenangkan.",
+    "Ruang simulasi dan eksplorasi interaktif: Pilih Langkahmu (Visual Novel Keputusan), Mitos atau Fakta, Detektif Informasi Medsos, dan Kuis Pemahaman Remaja.",
   alternates: {
     canonical: "https://sigmaplatform.vercel.app/permainan",
+  },
+  openGraph: {
+    title: "Permainan Edukasi Interaktif | SIGMA",
+    description:
+      "Ruang simulasi dan eksplorasi interaktif: Pilih Langkahmu, Mitos atau Fakta, Detektif Informasi, dan Kuis Pemahaman Remaja.",
+    url: "https://sigmaplatform.vercel.app/permainan",
+    type: "website",
+    images: [
+      {
+        url: "https://sigmaplatform.vercel.app/assets/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Permainan Edukasi SIGMA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Permainan Edukasi Interaktif | SIGMA",
+    description:
+      "Ruang simulasi dan eksplorasi interaktif: Pilih Langkahmu, Mitos atau Fakta, Detektif Informasi, dan Kuis Pemahaman Remaja.",
+    images: ["https://sigmaplatform.vercel.app/assets/og-image.jpg"],
   },
 };
 
@@ -17,9 +39,9 @@ export default function PermainanPage() {
     "@type": "WebPage",
     "@id": "https://sigmaplatform.vercel.app/permainan/#webpage",
     url: "https://sigmaplatform.vercel.app/permainan",
-    name: "Permainan | SIGMA",
+    name: "Permainan Edukasi Interaktif | SIGMA",
     description:
-      "Ruang belajar interaktif SIGMA dengan tiga cara belajar: Mitos atau Fakta, Detektif Informasi, dan Kuis Pemahaman.",
+      "Ruang simulasi dan eksplorasi interaktif SIGMA: Pilih Langkahmu, Mitos atau Fakta, Detektif Informasi, dan Kuis Pemahaman.",
   };
 
   return (
