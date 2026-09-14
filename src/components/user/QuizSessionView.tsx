@@ -149,9 +149,18 @@ export default function QuizSessionView({ topic }: QuizSessionViewProps) {
   const progressPercent = Math.round(((currentIdx + 1) / questions.length) * 100);
 
   return (
-    <div className="bg-slate-50/70 min-h-screen flex flex-col font-sans text-slate-800 selection:bg-emerald-100">
+    <div className="bg-[#faf8f5] min-h-screen flex flex-col font-sans text-slate-800 selection:bg-emerald-100 relative">
+      {/* Subtle Diamond Pattern Overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035] z-0"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='44' height='44' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M22 0 L44 22 L22 44 L0 22 Z' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E")`,
+          backgroundSize: "36px 36px",
+        }}
+      />
+
       {/* Minimalist Dedicated Quiz Header Bar (Focus Mode Safety Hatch) */}
-      <header className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between shrink-0">
+      <header className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between shrink-0 relative z-10">
         {/* Left: Exit button */}
         <button
           type="button"
@@ -192,7 +201,7 @@ export default function QuizSessionView({ topic }: QuizSessionViewProps) {
       </header>
 
       {/* Main Content Area: Centered vertically in remaining height */}
-      <div className="flex-1 flex flex-col justify-center items-center w-full px-4 sm:px-6 pb-6 sm:pb-8">
+      <div className="flex-1 flex flex-col justify-center items-center w-full px-4 sm:px-6 pb-6 sm:pb-8 relative z-10">
         {/* ================================================================ */}
         {/* SCREEN 1: PRE-QUIZ OVERVIEW (ELEGAN & MINIMALIS, TIDAK AI SLOP)   */}
         {/* ================================================================ */}

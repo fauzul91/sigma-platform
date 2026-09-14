@@ -29,7 +29,7 @@ export const QUIZ_TOPICS: QuizTopic[] = [
     shortTitle: "Pubertas & Higienitas",
     categoryName: "Pubertas",
     description:
-      "Pahami masa pubertas, perubahan fisik dan hormon tubuh, serta panduan praktis merawat kebersihan organ reproduksi harian tanpa rasa canggung.",
+      "Pahami fase masa pubertas, perubahan fisik dan emosional remaja, pola hidup bersih dan sehat (PHBS), serta pentingnya menjaga kesehatan diri secara menyeluruh.",
     duration: "5 Menit",
     image: "/assets/quiz/reproduksi_pubertas.webp",
     accentColor: "emerald",
@@ -37,137 +37,142 @@ export const QUIZ_TOPICS: QuizTopic[] = [
       {
         id: "rep1",
         questionText:
-          "Hormon utama yang memicu perkembangan fisik dan kematangan reproduksi pada remaja perempuan saat pubertas adalah...",
+          "Apa yang dimaksud dengan masa pubertas pada seorang remaja?",
         options: [
-          "Testosteron",
-          "Estrogen dan Progesteron",
-          "Adrenalin",
-          "Melatonin",
+          "Masa ketika seseorang mulai berhenti belajar di sekolah",
+          "Masa peralihan alami dari anak-anak menuju dewasa yang ditandai perubahan fisik, psikologis, dan kematangan organ reproduksi",
+          "Kondisi saat tubuh mengalami penurunan daya tahan fisik secara drastis",
+          "Masa di mana seseorang tidak lagi membutuhkan bimbingan keluarga",
         ],
         correctAnswer: 1,
         explanation:
-          "Hormon estrogen dan progesteron diproduksi oleh ovarium (indung telur) saat pubertas dan memicu perkembangan payudara, pinggul, serta siklus menstruasi.",
+          "Pubertas adalah fase transisi alami yang dialami setiap manusia dari masa anak-anak menuju dewasa. Pada masa ini, terjadi pematangan fisik, perubahan emosional, serta perkembangan sistem reproduksi secara bertahap.",
       },
       {
         id: "rep2",
         questionText:
-          "Apa istilah medis untuk menstruasi pertama yang dialami oleh remaja perempuan?",
-        options: ["Menarche", "Menopause", "Ovulasi", "Pubarke"],
-        correctAnswer: 0,
+          "Menurut Organisasi Kesehatan Dunia (WHO), apa yang dimaksud dengan kesehatan reproduksi?",
+        options: [
+          "Keadaan di mana seseorang tidak pernah mengalami demam atau flu",
+          "Kemampuan fisik untuk berolahraga berat tanpa memerlukan istirahat",
+          "Keharusan untuk selalu berada di dalam ruangan agar terhindar dari debu",
+          "Keadaan sehat seutuhnya secara fisik, mental, dan sosial dalam segala hal yang berkaitan dengan sistem serta fungsi reproduksi",
+        ],
+        correctAnswer: 3,
         explanation:
-          "Menarche adalah peristiwa menstruasi pertama pada perempuan, menandakan organ reproduksi mulai aktif memproduksi sel telur secara alami.",
+          "Kesehatan reproduksi tidak hanya diartikan sebagai bebas dari penyakit atau kecacatan, melainkan mencakup kesejahteraan fisik, mental, dan sosial yang utuh dalam merawat serta memahami fungsi tubuh.",
       },
       {
         id: "rep3",
         questionText:
-          "Berapa kali minimal kita sebaiknya mengganti pakaian dalam setiap hari agar area intim tetap sehat?",
+          "Perubahan fisik umum yang dialami oleh remaja laki-laki maupun perempuan saat memasuki masa pubertas adalah...",
         options: [
-          "1 kali sehari",
-          "Minimal 2 kali sehari",
-          "Tiga hari sekali",
-          "Hanya saat pakaian kotor saja",
+          "Pertumbuhan tinggi dan berat badan yang pesat (growth spurt) serta perkembangan proporsi tubuh",
+          "Penurunan kebutuhan jam tidur secara otomatis menjadi hanya 2 jam per hari",
+          "Perubahan warna pigmen kulit secara menyeluruh setiap pekan",
+          "Berhentinya proses metabolisme dan pembentukan energi di dalam tubuh",
         ],
-        correctAnswer: 1,
+        correctAnswer: 0,
         explanation:
-          "Mengganti pakaian dalam minimal 2 kali sehari (terutama setelah beraktivitas atau berkeringat) mencegah kelembapan berlebih yang memicu jamur dan bakteri.",
+          "Selama pubertas, hormon pertumbuhan bekerja aktif sehingga remaja mengalami lonjakan pertumbuhan (growth spurt), seperti bertambahnya tinggi badan, menguatnya otot dan tulang, serta perubahan bentuk tubuh.",
       },
       {
         id: "rep4",
         questionText:
-          "Saat remaja perempuan sedang mengalami menstruasi, berapa jam sekali pembalut sebaiknya diganti secara teratur?",
+          "Mengapa menjaga kebersihan diri (personal hygiene) menjadi sangat penting saat memasuki masa pubertas?",
         options: [
-          "1 kali sehari saat malam hari",
-          "Setiap 3 sampai 4 jam sekali atau saat sudah terasa penuh",
-          "Dua hari sekali",
-          "Hanya saat mandi pagi saja",
+          "Supaya tidak perlu mengonsumsi makanan bergizi setiap hari",
+          "Karena aktivitas kelenjar keringat dan minyak meningkat, sehingga tubuh butuh perawatan ekstra agar tetap bersih dan sehat",
+          "Karena remaja dilarang membasuh tubuh dengan air mengalir",
+          "Agar pakaian yang dikenakan tidak perlu dicuci dalam waktu lama",
         ],
         correctAnswer: 1,
         explanation:
-          "Mengganti pembalut tiap 3-4 jam menjaga kebersihan area kewanitaan, mencegah penumpukan kuman, dan menjaga rasa nyaman selama beraktivitas di sekolah.",
+          "Saat pubertas, aktivitas kelenjar keringat dan kelenjar minyak meningkat. Mandi teratur minimal dua kali sehari dan memakai pakaian bersih membantu mencegah timbulnya bau badan, jerawat, serta iritasi kulit.",
       },
       {
         id: "rep5",
         questionText:
-          "Peristiwa alami keluarnya cairan sperma saat tidur pada remaja laki-laki yang sedang pubertas biasa disebut...",
+          "Selain perubahan fisik, perubahan emosional apa yang wajar dirasakan oleh remaja selama masa pubertas?",
         options: [
-          "Mengigau",
-          "Mimpi basah",
-          "Sleepwalking",
-          "Insomnia",
+          "Hilangnya memori masa kecil secara permanen",
+          "Rasa cemas yang membuat seseorang tidak bisa diajak berkomunikasi sama sekali",
+          "Suasana hati yang lebih dinamis (mood swing) serta proses pencarian identitas diri dan kemandirian",
+          "Ketiadaan perasaan empati terhadap sesama teman",
         ],
-        correctAnswer: 1,
+        correctAnswer: 2,
         explanation:
-          "Mimpi basah adalah hal yang wajar, normal, dan sehat bagi remaja laki-laki, menandakan testis sudah mulai aktif memproduksi cairan sperma.",
+          "Fluktuasi hormon dan perkembangan kognitif di masa pubertas wajar membuat suasana hati remaja lebih dinamis. Hal ini adalah proses normal menuju kedewasaan dan pembentukan karakter diri yang matang.",
       },
       {
         id: "rep6",
         questionText:
-          "Perubahan fisik yang umumnya terjadi pada remaja laki-laki saat memasuki masa pubertas adalah...",
+          "Apa peran asupan gizi seimbang dalam mendukung masa pertumbuhan remaja saat pubertas?",
         options: [
-          "Suara menjadi lebih berat dan jakun mulai terlihat",
-          "Mengalami siklus menstruasi",
-          "Pinggul melebar secara drastis",
-          "Tinggi badan berhenti bertambah",
+          "Menggantikan seluruh kebutuhan tidur malam dan waktu istirahat tubuh",
+          "Membatasi pertumbuhan tinggi badan agar tidak bertambah terlalu cepat",
+          "Menyediakan energi dan nutrisi yang dibutuhkan tulang, otot, serta organ tubuh yang sedang berkembang",
+          "Menghilangkan kebutuhan cairan sehingga tidak perlu banyak minum air putih",
         ],
-        correctAnswer: 0,
+        correctAnswer: 2,
         explanation:
-          "Saat pubertas, hormon testosteron pada laki-laki memicu penebalan pita suara (suara memberat), tumbuhnya jakun di leher, serta pelebaran bahu dada.",
+          "Gizi seimbang yang kaya akan protein, kalsium, zat besi, vitamin, dan serat sangat dibutuhkan untuk memaksimalkan pertumbuhan tulang, perkembangan otot, dan menjaga daya tahan tubuh remaja tetap prima.",
       },
       {
         id: "rep7",
         questionText:
-          "Cara yang benar membersihkan area kemaluan bagi perempuan setelah buang air kecil adalah...",
+          "Bagaimana sikap yang bijak dalam menyikapi perbedaan waktu dan kecepatan pubertas antarteman sebaya?",
         options: [
-          "Dari arah belakang ke depan",
-          "Dari arah depan ke belakang menuju anus",
-          "Menggunakan sabun mandi berbusa tebal",
-          "Cukup diusap tanpa dibilas air bersih",
+          "Membanding-bandingkan dan mengejek teman yang pertumbuhan fisiknya berbeda",
+          "Menghargai dan menerima perbedaan karena setiap orang memiliki proses tumbuh kembang alami yang unik",
+          "Memaksa teman mengonsumsi suplemen tanpa anjuran dokter",
+          "Menghindari bergaul dengan teman yang tubuhnya bertambah tinggi lebih cepat",
         ],
         correctAnswer: 1,
         explanation:
-          "Membasuh dari arah depan ke belakang mencegah kuman dan bakteri dari anus berpindah ke saluran kencing yang dapat menyebabkan infeksi kandung kemih.",
+          "Setiap individu memiliki jadwal biologis dan genetik yang berbeda. Menghargai proses tumbuh kembang diri sendiri dan orang lain menciptakan lingkungan pergaulan yang sehat, positif, dan bebas perundungan (bullying).",
       },
       {
         id: "rep8",
         questionText:
-          "Saat pubertas, kelenjar keringat dan minyak bekerja lebih aktif. Cara terbaik agar tidak bau badan dan tidak mudah berjerawat adalah...",
+          "Manfaat utama dari rutin berolahraga dan aktif bergerak bagi remaja di masa pubertas adalah...",
         options: [
-          "Memakai parfum sebanyak-banyaknya tanpa mandi",
-          "Mandi teratur 2 kali sehari dan mencuci wajah dengan sabun yang lembut",
-          "Memencet jerawat yang baru tumbuh",
-          "Menghindari minum air putih",
+          "Memperkuat struktur tulang dan otot, menjaga kebugaran tubuh, serta membantu mengelola stres",
+          "Menghilangkan kebutuhan mandi dan membersihkan badan setelah beraktivitas",
+          "Membuat tubuh tidak memerlukan asupan makanan sehat lagi",
+          "Menyebabkan tubuh berhenti memproduksi hormon pertumbuhan",
         ],
-        correctAnswer: 1,
+        correctAnswer: 0,
         explanation:
-          "Mandi teratur dan mencuci muka dengan lembut membersihkan debu serta minyak berlebih di pori-pori kulit secara sehat tanpa memicu iritasi.",
+          "Olahraga teratur merangsang hormon pertumbuhan, meningkatkan kepadatan tulang dan kekuatan otot, serta memicu pelepasan hormon endorfin yang membantu pikiran lebih rileks dan bersemangat.",
       },
       {
         id: "rep9",
         questionText:
-          "Setelah buang air atau mandi, apa yang harus dilakukan sebelum memakai celana dalam kembali?",
+          "Penerapan Pola Hidup Bersih dan Sehat (PHBS) yang dianjurkan bagi remaja dalam keseharian adalah...",
         options: [
-          "Membiarkannya basah dan langsung memakai celana tebal",
-          "Mengeringkan area kemaluan dengan handuk atau tisu bersih",
-          "Mengoleskan bedak tabur tebal",
-          "Memakai pakaian yang masih lembap",
+          "Mengurangi minum air putih agar terhindar dari berkeringat",
+          "Hanya mencuci tangan jika terlihat noda tebal di telapak tangan",
+          "Menggunakan wewangian secara berlebihan sebagai pengganti mandi pagi",
+          "Mandi teratur minimal dua kali sehari, memakai pakaian bersih, dan rajin mencuci tangan",
         ],
-        correctAnswer: 1,
+        correctAnswer: 3,
         explanation:
-          "Mengeringkan area intim dengan handuk atau tisu bersih memastikan pakaian dalam tidak basah atau lembap, sehingga bebas dari rasa gatal dan iritasi.",
+          "Pola Hidup Bersih dan Sehat (PHBS) seperti mandi dua kali sehari, menjaga pakaian tetap bersih dan kering, serta mencuci tangan dengan sabun secara berkala merupakan kunci menjaga kesehatan kulit dan daya tahan tubuh.",
       },
       {
         id: "rep10",
         questionText:
-          "Jika kamu memiliki pertanyaan atau kebingungan seputar perubahan tubuhmu saat puber, kepada siapa sebaiknya kamu bertanya?",
+          "Jika kamu merasa bingung atau memiliki kekhawatiran tentang perubahan tubuhmu saat puber, tindakan apa yang paling tepat?",
         options: [
-          "Orang tua, guru BK, atau tenaga kesehatan/konselor sebaya tepercaya",
-          "Orang asing yang baru dikenal di media sosial",
-          "Membaca forum gosip acak di internet",
-          "Memendamnya sendirian karena merasa malu",
+          "Berkonsultasi dan bercerita secara terbuka kepada orang tua, guru BK, atau konselor/tenaga medis tepercaya",
+          "Memendam rasa khawatir sendirian karena merasa canggung atau takut",
+          "Mencari jawaban di forum internet tanpa memeriksa kebenaran informasinya",
+          "Mengikuti kabar burung dan mitos yang beredar di media sosial",
         ],
         correctAnswer: 0,
         explanation:
-          "Orang tua, guru BK, dan konselor kesehatan sebaya adalah sumber informasi yang tepat, aman, ilmiah, dan tepercaya untuk diajak berdiskusi tentang pubertas.",
+          "Orang tua, guru bimbingan konseling (BK), dan tenaga kesehatan merupakan sumber informasi yang aman, ilmiah, dan tepercaya untuk diajak berdiskusi tentang masa pubertas dan kesehatan diri.",
       },
     ],
   },

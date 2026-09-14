@@ -240,3 +240,25 @@ select:focus {
     transform: none !important;
   }
 }
+
+/* Hide website navbar, footer, and floating SOS button during Repropedia Reading Mode */
+body.repropedia-reading-active header,
+body.repropedia-reading-active footer,
+body.repropedia-reading-active .fixed.bottom-6.right-6 {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* Prevent double-tap-to-zoom lag and unintended zoom on interactive controls */
+button,
+input,
+select,
+textarea,
+a,
+[role="button"],
+.touch-manipulation {
+  touch-action: manipulation;
+}
+

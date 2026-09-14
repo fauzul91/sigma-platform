@@ -96,7 +96,7 @@ export default function KuisView() {
                   </div>
 
                   <Link
-                    href={`/kuis/${topic.slug}`}
+                    href={`/permainan/kuis/${topic.slug}`}
                     className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-primary hover:bg-emerald-700 text-white text-xs font-bold shadow-xs hover:shadow-sm active:scale-98 transition-all shrink-0"
                   >
                     <span>Mulai Kuis</span>
