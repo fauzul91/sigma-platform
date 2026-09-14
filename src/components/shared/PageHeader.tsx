@@ -20,12 +20,14 @@ import {
   CheckCircle2,
   Trophy,
   MessageCircle,
+  Search,
 } from "lucide-react";
 
 export type PageHeaderType =
   | "repropedia"
   | "edukasi"
   | "kuis"
+  | "permainan"
   | "karya-kader"
   | "kegiatan"
   | "konseling"
@@ -213,6 +215,71 @@ export default function PageHeader({
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
                 <span>3-5 Pertanyaan</span>
                 <span className="text-amber-600 font-bold">Mulai Kuis</span>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "permainan":
+        return (
+          <div className="relative w-72 sm:w-80 h-44 sm:h-48 select-none">
+            {/* Left Card - Detektif */}
+            <div className="absolute left-2 bottom-2 w-44 h-36 bg-white/90 rounded-2xl shadow-lg transform -rotate-8 border border-white/60 p-3 hidden sm:flex flex-col justify-between">
+              <div className="flex items-center space-x-1.5 pb-2 border-b border-slate-100">
+                <Search className="h-3 w-3 text-amber-500" />
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Detektif Fakta</span>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center space-x-1 text-[10px] font-bold text-slate-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                  <span>Cek Fakta Medsos</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+                <div className="h-1.5 w-3/4 bg-slate-100 rounded-full" />
+              </div>
+              <span className="text-[9px] font-bold text-amber-600">3 Petunjuk</span>
+            </div>
+
+            {/* Right Card - Mitos/Fakta */}
+            <div className="absolute right-2 bottom-2 w-44 h-36 bg-white/90 rounded-2xl shadow-lg transform rotate-8 border border-white/60 p-3 hidden sm:flex flex-col justify-between">
+              <div className="flex items-center space-x-1.5 pb-2 border-b border-slate-100">
+                <Sparkles className="h-3 w-3 text-violet-500" />
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Mitos / Fakta</span>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center space-x-1 text-[10px] font-bold text-slate-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
+                  <span>Swipe Interaktif</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+                <div className="h-1.5 w-4/5 bg-slate-100 rounded-full" />
+              </div>
+              <span className="text-[9px] font-bold text-violet-600">10 Pernyataan</span>
+            </div>
+
+            {/* Center Main Card */}
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-56 sm:w-60 h-40 bg-white rounded-2xl shadow-2xl border border-white/90 p-3.5 flex flex-col justify-between z-10">
+              <div className="bg-emerald-600 -mx-3.5 -mt-3.5 px-3.5 py-2 rounded-t-2xl flex items-center justify-between text-white">
+                <div className="flex items-center space-x-1.5">
+                  <Gamepad2 className="h-3.5 w-3.5" />
+                  <span className="text-[11px] font-black uppercase tracking-wider">PERMAINAN SIGMA</span>
+                </div>
+                <span className="text-[9px] font-bold bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded">Interaktif</span>
+              </div>
+              <div className="space-y-1.5 my-auto">
+                <span className="text-xs font-extrabold text-slate-800 block">Ruang Belajar Seru</span>
+                <div className="flex items-center space-x-2 text-[11px] text-slate-600">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <span>Asah Daya Kritis</span>
+                </div>
+                <div className="flex items-center space-x-2 text-[11px] text-slate-600">
+                  <span className="h-2 w-2 rounded-full bg-violet-500" />
+                  <span>Edukasi Humanis</span>
+                </div>
+              </div>
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
+                <span>3 Pilihan Aktivitas</span>
+                <span className="text-emerald-700 font-bold">Mulai Belajar</span>
               </div>
             </div>
           </div>

@@ -52,7 +52,7 @@ export default function RepropediaPage() {
         bookFormat: "https://schema.org/EBook",
         numberOfPages: 24,
         inLanguage: "id",
-        url: "https://sigmaplatform.vercel.app/assets/buku_repropedia.pdf",
+        url: "https://sigmaplatform.vercel.app/assets/BUKU%20REPROPEDIA_SIGMA.pdf",
       },
     ],
   };
