@@ -51,10 +51,10 @@ export default function AdminSidebar({
       ],
     },
     {
-      title: "SDM & ORGANISASI",
+      title: "SDM & KONSELING",
       items: [
         { href: "/admin/konseling", label: "Kader & Konselor", icon: UserCheck },
-        { href: "/admin/organisasi", label: "Badan Organisasi", icon: Building2 },
+        // { href: "/admin/organisasi", label: "Badan Organisasi", icon: Building2 }, // Disembunyikan sementara
       ],
     },
     {
